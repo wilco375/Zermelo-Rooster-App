@@ -11,21 +11,42 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            
-            <Button
+
+            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save"
-                android:id="@+id/saveButton"/>
-            
+                android:checked="true"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/showNotificationCheckbox"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Geef meldingen"
+                android:layout_toRightOf="@+id/showNotificationCheckbox"
+                android:layout_alignBaseline="@+id/showNotificationCheckbox"/>
+            <ImageView
+                android:layout_below="@+id/showNotificationCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="#000000"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/showNotificationCheckbox"
+                android:id="@+id/explanation"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:text="Je kan de checkbox na het uur aanvinken als het uur uitvalt, zodat je er geen melding van ontvangt"/>
             <!-- Maandag -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/explanation"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Maandag"
-                android:id="@+id/textView"
-                android:layout_below="@+id/saveButton" />
+                android:id="@+id/textView"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

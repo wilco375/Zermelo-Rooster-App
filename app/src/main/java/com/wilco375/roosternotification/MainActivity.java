@@ -1,18 +1,18 @@
 package com.wilco375.roosternotification;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     CheckBox a12;
     EditText a13;
@@ -134,10 +134,13 @@ public class MainActivity extends ActionBarActivity {
     CheckBox e82;
     EditText e83;
     EditText e84;
+    CheckBox notify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sendBroadcast(new Intent(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_HOME));
         setContentView(R.layout.activity_main);
 
         //Intent serviceIntent = new Intent(this, AutoStartUp.class);
@@ -268,18 +271,20 @@ public class MainActivity extends ActionBarActivity {
         e83 = (EditText) findViewById(R.id.e83);
         e84 = (EditText) findViewById(R.id.e84);
 
+        notify = (CheckBox) findViewById(R.id.showNotificationCheckbox);
+
         final SharedPreferences sp = getSharedPreferences("Main",MODE_PRIVATE);
 
         if(sp.getBoolean("RoosterSaved",false)){
             fillEditTextFields(sp);
         }
-        Button saveButton = (Button) findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveEditTextFields(sp);
-            }
-        });
+        //Button saveButton = (Button) findViewById(R.id.saveButton);
+        //saveButton.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        saveEditTextFields(sp);
+        //    }
+        //});
     }
 
     private void fillEditTextFields(SharedPreferences sp){
@@ -364,7 +369,7 @@ public class MainActivity extends ActionBarActivity {
         e83.setText(sp.getString("e83",""));
         e84.setText(sp.getString("e84", ""));
 
-        a12.setChecked(sp.getBoolean("a12",false));
+        a12.setChecked(sp.getBoolean("a12", false));
         a22.setChecked(sp.getBoolean("a22",false));
         a32.setChecked(sp.getBoolean("a32",false));
         a42.setChecked(sp.getBoolean("a42",false));
@@ -404,6 +409,8 @@ public class MainActivity extends ActionBarActivity {
         e62.setChecked(sp.getBoolean("e62",false));
         e72.setChecked(sp.getBoolean("e72",false));
         e82.setChecked(sp.getBoolean("e82",false));
+
+        notify.setChecked(sp.getBoolean("notify",true));
     }
 
     private void saveEditTextFields(SharedPreferences sp){
@@ -531,34 +538,22 @@ public class MainActivity extends ActionBarActivity {
         spe.putBoolean("e72",e72.isChecked());
         spe.putBoolean("e82", e82.isChecked());
 
+        spe.putBoolean("notify",notify.isChecked());
+
         if(!sp.getBoolean("RoosterSaved",false)){
             spe.putBoolean("RoosterSaved",true);
         }
 
         spe.apply();
 
-        Toast.makeText(this,"Saved",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,getResources().getString(R.string.saved),Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    protected void onPause() {
+        saveEditTextFields(getSharedPreferences("Main", MODE_PRIVATE));
+        super.onPause();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
