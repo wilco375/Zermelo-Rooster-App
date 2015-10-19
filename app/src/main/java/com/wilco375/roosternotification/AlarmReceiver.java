@@ -80,7 +80,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if(!subject.equals("") && !classroom.equals("") && !sp.getBoolean(string+"2",false) && sp.getBoolean("notify",true)){
             builder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.jfc)
+                    .setSmallIcon(R.drawable.notification_logo)
                     .setContentTitle(String.valueOf(uur) + ": " + subject)
                     .setContentText(classroom);
 
