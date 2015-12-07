@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="#FFFFFF"
+    android:orientation="vertical" android:id="@+id/app_widget_lesdag_layout">
+
+    <!--
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:id="@+id/bar"
+        android:src="@drawable/ab_solid_appstyle" /> -->
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="#fff"
+        android:background="@drawable/ab_solid_appstyle"
+        android:layout_alignBottom="@+id/app_widget_lesdag_layout"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/app_widget_lesdag_dag"
+        android:paddingLeft="5dp"
+        android:paddingTop="8dp"
+        android:paddingRight="5dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:layout_below="@+id/app_widget_lesdag_dag"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/app_widget_lesdag_firstHour"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/app_widget_lesdag_secondHour"
+        android:layout_below="@+id/app_widget_lesdag_firstHour"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/app_widget_lesdag_thirdHour"
+        android:layout_below="@+id/app_widget_lesdag_secondHour"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/app_widget_lesdag_fourthHour"
+        android:layout_below="@+id/app_widget_lesdag_thirdHour"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/app_widget_lesdag_fifthHour"
+        android:layout_marginBottom="20dp"
+        android:layout_below="@+id/app_widget_lesdag_fourthHour"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/app_widget_lesdag_sixthHour"
+        android:layout_below="@+id/app_widget_lesdag_fifthHour"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/app_widget_lesdag_seventhHour"
+        android:layout_below="@+id/app_widget_lesdag_sixthHour"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:id="@+id/app_widget_lesdag_eighthHour"
+        android:layout_below="@+id/app_widget_lesdag_seventhHour"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="8dp"
+        android:id="@+id/app_widget_lesdag_ninthHour"
+        android:layout_below="@+id/app_widget_lesdag_eighthHour"/>
+</RelativeLayout>

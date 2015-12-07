@@ -1,0 +1,1899 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"  tools:context=".MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/zermeloTitle"
+                android:layout_marginBottom="5dp"
+                android:text="Zermelo sychronisatie"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vul hier een Zermelo 'Link App' code in om te synchroniseren met Zermelo:"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/zermeloTitle"
+                android:id="@+id/zermelotext"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:id="@+id/zermelocode"
+                android:layout_below="@id/zermelotext"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/zermelocode"
+                android:id="@+id/zermeloconfirm"
+                android:text="Ok"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Waar is deze code?"
+                android:layout_below="@+id/zermelocode"
+                android:layout_toRightOf="@+id/zermeloconfirm"
+                android:layout_toEndOf="@+id/zermeloconfirm"
+                android:layout_marginTop="3dp"
+                android:id="@+id/zermelocodehelp"
+                android:textColor="#004bff" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/zermeloconfirm"
+                android:id="@+id/zermelosync"
+                android:layout_marginTop="-1dp"
+                android:text="Forceer synchronisatie"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="2px"
+                android:id="@+id/divider2"
+                android:background="#000000"
+                android:layout_below="@id/zermelosync"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/settingsTitle"
+                android:layout_marginTop="5dp"
+                android:text="Instellingen"
+                android:layout_below="@id/divider2"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:layout_marginTop="5dp"
+                android:id="@+id/showNotificationCheckbox"
+                android:layout_below="@id/settingsTitle"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Geef meldingen van lesuren"
+                android:id="@+id/showNotificationText"
+                android:layout_toRightOf="@+id/showNotificationCheckbox"
+                android:layout_alignBaseline="@+id/showNotificationCheckbox"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:id="@+id/showCancelledNotificationCheckbox"
+                android:layout_below="@id/showNotificationCheckbox"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Geef meldingen van uitval"
+                android:id="@+id/showCancelledNotificationText"
+                android:layout_toRightOf="@+id/showCancelledNotificationCheckbox"
+                android:layout_alignBaseline="@+id/showCancelledNotificationCheckbox"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:id="@+id/showGroupCheckbox"
+                android:layout_below="@id/showCancelledNotificationCheckbox"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Laat clusters/klassen zien (voor leraren)"
+                android:id="@+id/showGroupText"
+                android:layout_toRightOf="@+id/showGroupCheckbox"
+                android:layout_alignBaseline="@+id/showGroupCheckbox"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:id="@+id/fourtyMinuteCheckbox"
+                android:layout_below="@id/showGroupCheckbox"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="40-minuten rooster"
+                android:id="@+id/fourtyMinuteText"
+                android:layout_toRightOf="@+id/fourtyMinuteCheckbox"
+                android:layout_alignBaseline="@+id/fourtyMinuteCheckbox"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/syncZermeloCheckbox"
+                android:layout_below="@id/fourtyMinuteCheckbox"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Synchroniseer met Zermelo"
+                android:layout_toRightOf="@+id/syncZermeloCheckbox"
+                android:layout_alignBaseline="@+id/syncZermeloCheckbox"
+                android:id="@+id/syncZermeloText" />
+
+
+
+            <ImageView
+                android:layout_below="@+id/syncZermeloCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:id="@+id/divider1"
+                android:background="#000000"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/roosterTitle"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/divider1"
+                android:text="Rooster"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/roosterTitle"
+                android:id="@+id/explanation"
+                android:layout_marginBottom="5dp"
+                android:text="Je kan een checkbox hier beneden na het uur aanvinken als het uur uitvalt, zodat je er geen melding van ontvangt"/>
+            <!-- Maandag -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/explanation"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Maandag"
+                android:id="@+id/textView"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView"
+                android:id="@+id/a11">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1."
+                    android:id="@+id/textView2"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a12"
+                    android:layout_alignTop="@+id/textView2"
+                    android:layout_toRightOf="@+id/textView2"
+                    android:layout_toEndOf="@+id/textView2"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a13"
+                    android:layout_toRightOf="@+id/a12"
+                    android:layout_toLeftOf="@+id/a14"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/a14"
+                    android:layout_alignTop="@+id/a13"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/a11"
+                android:id="@+id/a21">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2."
+                    android:id="@+id/textView3"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a22"
+                    android:layout_alignTop="@+id/textView3"
+                    android:layout_toRightOf="@+id/textView3"
+                    android:layout_toEndOf="@+id/textView3"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a23"
+                    android:layout_toRightOf="@+id/a22"
+                    android:layout_toLeftOf="@+id/a24"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/a24"
+                    android:layout_alignTop="@+id/a23"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/a21"
+                android:id="@+id/a31">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3."
+                    android:id="@+id/textView4"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a32"
+                    android:layout_alignTop="@+id/textView4"
+                    android:layout_toRightOf="@+id/textView4"
+                    android:layout_toEndOf="@+id/textView4"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a33"
+                    android:layout_toRightOf="@+id/a32"
+                    android:layout_toLeftOf="@+id/a34"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/a34"
+                    android:layout_alignTop="@+id/a33"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/a31"
+                android:id="@+id/a41">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4."
+                    android:id="@+id/textView5"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a42"
+                    android:layout_alignTop="@+id/textView5"
+                    android:layout_toRightOf="@+id/textView5"
+                    android:layout_toEndOf="@+id/textView5"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a43"
+                    android:layout_toRightOf="@+id/a42"
+                    android:layout_toLeftOf="@+id/a44"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/a44"
+                    android:layout_alignTop="@+id/a43"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/a41"
+                android:id="@+id/a51">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5."
+                    android:id="@+id/a55"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a52"
+                    android:layout_alignTop="@+id/a55"
+                    android:layout_toRightOf="@+id/a55"
+                    android:layout_toEndOf="@+id/a55"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a53"
+                    android:layout_toRightOf="@+id/a52"
+                    android:layout_toLeftOf="@+id/a54"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/a54"
+                    android:layout_alignTop="@+id/a53"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/a51"
+                android:id="@+id/a61">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6."
+                    android:id="@+id/a65"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a62"
+                    android:layout_alignTop="@+id/a65"
+                    android:layout_toRightOf="@+id/a65"
+                    android:layout_toEndOf="@+id/a65"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a63"
+                    android:layout_toRightOf="@+id/a62"
+                    android:layout_toLeftOf="@+id/a64"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/a64"
+                    android:layout_alignTop="@+id/a63"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/a61"
+                android:id="@+id/a71">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7."
+                    android:id="@+id/a75"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a72"
+                    android:layout_alignTop="@+id/a75"
+                    android:layout_toRightOf="@+id/a75"
+                    android:layout_toEndOf="@+id/a75"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a73"
+                    android:layout_toRightOf="@+id/a72"
+                    android:layout_toLeftOf="@+id/a74"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/a74"
+                    android:layout_alignTop="@+id/a73"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/a71"
+                android:id="@+id/a81">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8."
+                    android:id="@+id/a85"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a82"
+                    android:layout_alignTop="@+id/a85"
+                    android:layout_toRightOf="@+id/a85"
+                    android:layout_toEndOf="@+id/a85"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a83"
+                    android:layout_toRightOf="@+id/a82"
+                    android:layout_toLeftOf="@+id/a84"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/a84"
+                    android:layout_alignTop="@+id/a83"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/a81"
+                android:id="@+id/a91">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9."
+                    android:id="@+id/a95"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a92"
+                    android:layout_alignTop="@+id/a95"
+                    android:layout_toRightOf="@+id/a95"
+                    android:layout_toEndOf="@+id/a95"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/a93"
+                    android:layout_toRightOf="@+id/a92"
+                    android:layout_toLeftOf="@+id/a94"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/a94"
+                    android:layout_alignTop="@+id/a93"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+
+            <!-- Dinsdag-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Dinsdag"
+                android:id="@+id/b"
+                android:layout_below="@id/a91" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/b"
+                android:id="@+id/b11">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1."
+                    android:id="@+id/b15"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b12"
+                    android:layout_alignTop="@+id/b15"
+                    android:layout_toRightOf="@+id/b15"
+                    android:layout_toEndOf="@+id/b15"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b13"
+                    android:layout_toRightOf="@+id/b12"
+                    android:layout_toLeftOf="@+id/b14"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/b14"
+                    android:layout_alignTop="@+id/b13"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/b11"
+                android:id="@+id/b21">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2."
+                    android:id="@+id/b25"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b22"
+                    android:layout_alignTop="@+id/b25"
+                    android:layout_toRightOf="@+id/b25"
+                    android:layout_toEndOf="@+id/b25"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b23"
+                    android:layout_toRightOf="@+id/b22"
+                    android:layout_toLeftOf="@+id/b24"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/b24"
+                    android:layout_alignTop="@+id/b23"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/b21"
+                android:id="@+id/b31">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3."
+                    android:id="@+id/b35"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b32"
+                    android:layout_alignTop="@+id/b35"
+                    android:layout_toRightOf="@+id/b35"
+                    android:layout_toEndOf="@+id/b35"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b33"
+                    android:layout_toRightOf="@+id/b32"
+                    android:layout_toLeftOf="@+id/b34"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/b34"
+                    android:layout_alignTop="@+id/b33"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/b31"
+                android:id="@+id/b41">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4."
+                    android:id="@+id/b45"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b42"
+                    android:layout_alignTop="@+id/b45"
+                    android:layout_toRightOf="@+id/b45"
+                    android:layout_toEndOf="@+id/b45"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b43"
+                    android:layout_toRightOf="@+id/b42"
+                    android:layout_toLeftOf="@+id/b44"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/b44"
+                    android:layout_alignTop="@+id/b43"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/b41"
+                android:id="@+id/b51">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5."
+                    android:id="@+id/b55"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b52"
+                    android:layout_alignTop="@+id/b55"
+                    android:layout_toRightOf="@+id/b55"
+                    android:layout_toEndOf="@+id/b55"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b53"
+                    android:layout_toRightOf="@+id/b52"
+                    android:layout_toLeftOf="@+id/b54"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/b54"
+                    android:layout_alignTop="@+id/b53"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/b51"
+                android:id="@+id/b61">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6."
+                    android:id="@+id/b65"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b62"
+                    android:layout_alignTop="@+id/b65"
+                    android:layout_toRightOf="@+id/b65"
+                    android:layout_toEndOf="@+id/b65"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b63"
+                    android:layout_toRightOf="@+id/b62"
+                    android:layout_toLeftOf="@+id/b64"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/b64"
+                    android:layout_alignTop="@+id/b63"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/b61"
+                android:id="@+id/b71">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7."
+                    android:id="@+id/b75"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b72"
+                    android:layout_alignTop="@+id/b75"
+                    android:layout_toRightOf="@+id/b75"
+                    android:layout_toEndOf="@+id/b75"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b73"
+                    android:layout_toRightOf="@+id/b72"
+                    android:layout_toLeftOf="@+id/b74"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/b74"
+                    android:layout_alignTop="@+id/b73"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/b71"
+                android:id="@+id/b81">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8."
+                    android:id="@+id/b85"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b82"
+                    android:layout_alignTop="@+id/b85"
+                    android:layout_toRightOf="@+id/b85"
+                    android:layout_toEndOf="@+id/b85"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b83"
+                    android:layout_toRightOf="@+id/b82"
+                    android:layout_toLeftOf="@+id/b84"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/b84"
+                    android:layout_alignTop="@+id/b83"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/b81"
+                android:id="@+id/b91">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9."
+                    android:id="@+id/b95"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b92"
+                    android:layout_alignTop="@+id/b95"
+                    android:layout_toRightOf="@+id/b95"
+                    android:layout_toEndOf="@+id/b95"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/b93"
+                    android:layout_toRightOf="@+id/b92"
+                    android:layout_toLeftOf="@+id/b94"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/b94"
+                    android:layout_alignTop="@+id/b93"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+
+            <!-- Woensdag-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Woensdag"
+                android:id="@+id/c"
+                android:layout_below="@id/b91" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/c"
+                android:id="@+id/c11">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1."
+                    android:id="@+id/c15"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c12"
+                    android:layout_alignTop="@+id/c15"
+                    android:layout_toRightOf="@+id/c15"
+                    android:layout_toEndOf="@+id/c15"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c13"
+                    android:layout_toRightOf="@+id/c12"
+                    android:layout_toLeftOf="@+id/c14"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/c14"
+                    android:layout_alignTop="@+id/c13"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/c11"
+                android:id="@+id/c21">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2."
+                    android:id="@+id/c25"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c22"
+                    android:layout_alignTop="@+id/c25"
+                    android:layout_toRightOf="@+id/c25"
+                    android:layout_toEndOf="@+id/c25"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c23"
+                    android:layout_toRightOf="@+id/c22"
+                    android:layout_toLeftOf="@+id/c24"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/c24"
+                    android:layout_alignTop="@+id/c23"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/c21"
+                android:id="@+id/c31">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3."
+                    android:id="@+id/c35"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c32"
+                    android:layout_alignTop="@+id/c35"
+                    android:layout_toRightOf="@+id/c35"
+                    android:layout_toEndOf="@+id/c35"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c33"
+                    android:layout_toRightOf="@+id/c32"
+                    android:layout_toLeftOf="@+id/c34"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/c34"
+                    android:layout_alignTop="@+id/c33"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/c31"
+                android:id="@+id/c41">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4."
+                    android:id="@+id/c45"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c42"
+                    android:layout_alignTop="@+id/c45"
+                    android:layout_toRightOf="@+id/c45"
+                    android:layout_toEndOf="@+id/c45"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c43"
+                    android:layout_toRightOf="@+id/c42"
+                    android:layout_toLeftOf="@+id/c44"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/c44"
+                    android:layout_alignTop="@+id/c43"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/c41"
+                android:id="@+id/c51">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5."
+                    android:id="@+id/c55"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c52"
+                    android:layout_alignTop="@+id/c55"
+                    android:layout_toRightOf="@+id/c55"
+                    android:layout_toEndOf="@+id/c55"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c53"
+                    android:layout_toRightOf="@+id/c52"
+                    android:layout_toLeftOf="@+id/c54"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/c54"
+                    android:layout_alignTop="@+id/c53"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/c51"
+                android:id="@+id/c61">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6."
+                    android:id="@+id/c65"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c62"
+                    android:layout_alignTop="@+id/c65"
+                    android:layout_toRightOf="@+id/c65"
+                    android:layout_toEndOf="@+id/c65"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c63"
+                    android:layout_toRightOf="@+id/c62"
+                    android:layout_toLeftOf="@+id/c64"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/c64"
+                    android:layout_alignTop="@+id/c63"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/c61"
+                android:id="@+id/c71">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7."
+                    android:id="@+id/c75"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c72"
+                    android:layout_alignTop="@+id/c75"
+                    android:layout_toRightOf="@+id/c75"
+                    android:layout_toEndOf="@+id/c75"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c73"
+                    android:layout_toRightOf="@+id/c72"
+                    android:layout_toLeftOf="@+id/c74"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/c74"
+                    android:layout_alignTop="@+id/c73"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/c71"
+                android:id="@+id/c81">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8."
+                    android:id="@+id/c85"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c82"
+                    android:layout_alignTop="@+id/c85"
+                    android:layout_toRightOf="@+id/c85"
+                    android:layout_toEndOf="@+id/c85"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c83"
+                    android:layout_toRightOf="@+id/c82"
+                    android:layout_toLeftOf="@+id/c84"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/c84"
+                    android:layout_alignTop="@+id/c83"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/c81"
+                android:id="@+id/c91">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9."
+                    android:id="@+id/c95"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c92"
+                    android:layout_alignTop="@+id/c95"
+                    android:layout_toRightOf="@+id/c95"
+                    android:layout_toEndOf="@+id/c95"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/c93"
+                    android:layout_toRightOf="@+id/c92"
+                    android:layout_toLeftOf="@+id/c94"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/c94"
+                    android:layout_alignTop="@+id/c93"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+
+            <!-- Donderdag-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Donderdag"
+                android:id="@+id/d"
+                android:layout_below="@id/c91" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/d"
+                android:id="@+id/d11">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1."
+                    android:id="@+id/d15"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d12"
+                    android:layout_alignTop="@+id/d15"
+                    android:layout_toRightOf="@+id/d15"
+                    android:layout_toEndOf="@+id/d15"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d13"
+                    android:layout_toRightOf="@+id/d12"
+                    android:layout_toLeftOf="@+id/d14"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/d14"
+                    android:layout_alignTop="@+id/d13"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/d11"
+                android:id="@+id/d21">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2."
+                    android:id="@+id/d25"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d22"
+                    android:layout_alignTop="@+id/d25"
+                    android:layout_toRightOf="@+id/d25"
+                    android:layout_toEndOf="@+id/d25"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d23"
+                    android:layout_toRightOf="@+id/d22"
+                    android:layout_toLeftOf="@+id/d24"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/d24"
+                    android:layout_alignTop="@+id/d23"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/d21"
+                android:id="@+id/d31">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3."
+                    android:id="@+id/d35"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d32"
+                    android:layout_alignTop="@+id/d35"
+                    android:layout_toRightOf="@+id/d35"
+                    android:layout_toEndOf="@+id/d35"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d33"
+                    android:layout_toRightOf="@+id/d32"
+                    android:layout_toLeftOf="@+id/d34"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/d34"
+                    android:layout_alignTop="@+id/d33"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/d31"
+                android:id="@+id/d41">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4."
+                    android:id="@+id/d45"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d42"
+                    android:layout_alignTop="@+id/d45"
+                    android:layout_toRightOf="@+id/d45"
+                    android:layout_toEndOf="@+id/d45"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d43"
+                    android:layout_toRightOf="@+id/d42"
+                    android:layout_toLeftOf="@+id/d44"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/d44"
+                    android:layout_alignTop="@+id/d43"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/d41"
+                android:id="@+id/d51">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5."
+                    android:id="@+id/d55"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d52"
+                    android:layout_alignTop="@+id/d55"
+                    android:layout_toRightOf="@+id/d55"
+                    android:layout_toEndOf="@+id/d55"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d53"
+                    android:layout_toRightOf="@+id/d52"
+                    android:layout_toLeftOf="@+id/d54"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/d54"
+                    android:layout_alignTop="@+id/d53"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/d51"
+                android:id="@+id/d61">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6."
+                    android:id="@+id/d65"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d62"
+                    android:layout_alignTop="@+id/d65"
+                    android:layout_toRightOf="@+id/d65"
+                    android:layout_toEndOf="@+id/d65"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d63"
+                    android:layout_toRightOf="@+id/d62"
+                    android:layout_toLeftOf="@+id/d64"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/d64"
+                    android:layout_alignTop="@+id/d63"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/d61"
+                android:id="@+id/d71">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7."
+                    android:id="@+id/d75"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d72"
+                    android:layout_alignTop="@+id/d75"
+                    android:layout_toRightOf="@+id/d75"
+                    android:layout_toEndOf="@+id/d75"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d73"
+                    android:layout_toRightOf="@+id/d72"
+                    android:layout_toLeftOf="@+id/d74"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/d74"
+                    android:layout_alignTop="@+id/d73"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/d71"
+                android:id="@+id/d81">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8."
+                    android:id="@+id/d85"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d82"
+                    android:layout_alignTop="@+id/d85"
+                    android:layout_toRightOf="@+id/d85"
+                    android:layout_toEndOf="@+id/d85"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d83"
+                    android:layout_toRightOf="@+id/d82"
+                    android:layout_toLeftOf="@+id/d84"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/d84"
+                    android:layout_alignTop="@+id/d83"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/d81"
+                android:id="@+id/d91">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9."
+                    android:id="@+id/d95"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d92"
+                    android:layout_alignTop="@+id/d95"
+                    android:layout_toRightOf="@+id/d95"
+                    android:layout_toEndOf="@+id/d95"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/d93"
+                    android:layout_toRightOf="@+id/d92"
+                    android:layout_toLeftOf="@+id/d94"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/d94"
+                    android:layout_alignTop="@+id/d93"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+
+            <!-- Vrijdag-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Vrijdag"
+                android:id="@+id/e"
+                android:layout_below="@id/d91" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/e"
+                android:id="@+id/e11">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1."
+                    android:id="@+id/e15"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e12"
+                    android:layout_alignTop="@+id/e15"
+                    android:layout_toRightOf="@+id/e15"
+                    android:layout_toEndOf="@+id/e15"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e13"
+                    android:layout_toRightOf="@+id/e12"
+                    android:layout_toLeftOf="@+id/e14"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/e14"
+                    android:layout_alignTop="@+id/e13"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/e11"
+                android:id="@+id/e21">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2."
+                    android:id="@+id/e25"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e22"
+                    android:layout_alignTop="@+id/e25"
+                    android:layout_toRightOf="@+id/e25"
+                    android:layout_toEndOf="@+id/e25"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e23"
+                    android:layout_toRightOf="@+id/e22"
+                    android:layout_toLeftOf="@+id/e24"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/e24"
+                    android:layout_alignTop="@+id/e23"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/e21"
+                android:id="@+id/e31">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3."
+                    android:id="@+id/e35"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e32"
+                    android:layout_alignTop="@+id/e35"
+                    android:layout_toRightOf="@+id/e35"
+                    android:layout_toEndOf="@+id/e35"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e33"
+                    android:layout_toRightOf="@+id/e32"
+                    android:layout_toLeftOf="@+id/e34"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/e34"
+                    android:layout_alignTop="@+id/e33"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/e31"
+                android:id="@+id/e41">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4."
+                    android:id="@+id/e45"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e42"
+                    android:layout_alignTop="@+id/e45"
+                    android:layout_toRightOf="@+id/e45"
+                    android:layout_toEndOf="@+id/e45"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e43"
+                    android:layout_toRightOf="@+id/e42"
+                    android:layout_toLeftOf="@+id/e44"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/e44"
+                    android:layout_alignTop="@+id/e43"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/e41"
+                android:id="@+id/e51">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5."
+                    android:id="@+id/e55"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e52"
+                    android:layout_alignTop="@+id/e55"
+                    android:layout_toRightOf="@+id/e55"
+                    android:layout_toEndOf="@+id/e55"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e53"
+                    android:layout_toRightOf="@+id/e52"
+                    android:layout_toLeftOf="@+id/e54"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/e54"
+                    android:layout_alignTop="@+id/e53"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/e51"
+                android:id="@+id/e61">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6."
+                    android:id="@+id/e65"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e62"
+                    android:layout_alignTop="@+id/e65"
+                    android:layout_toRightOf="@+id/e65"
+                    android:layout_toEndOf="@+id/e65"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e63"
+                    android:layout_toRightOf="@+id/e62"
+                    android:layout_toLeftOf="@+id/e64"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/e64"
+                    android:layout_alignTop="@+id/e63"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/e61"
+                android:id="@+id/e71">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7."
+                    android:id="@+id/e75"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e72"
+                    android:layout_alignTop="@+id/e75"
+                    android:layout_toRightOf="@+id/e75"
+                    android:layout_toEndOf="@+id/e75"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e73"
+                    android:layout_toRightOf="@+id/e72"
+                    android:layout_toLeftOf="@+id/e74"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/e74"
+                    android:layout_alignTop="@+id/e73"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/e71"
+                android:id="@+id/e81">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8."
+                    android:id="@+id/e85"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e82"
+                    android:layout_alignTop="@+id/e85"
+                    android:layout_toRightOf="@+id/e85"
+                    android:layout_toEndOf="@+id/e85"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e83"
+                    android:layout_toRightOf="@+id/e82"
+                    android:layout_toLeftOf="@+id/e84"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/e84"
+                    android:layout_alignTop="@+id/e83"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/e81"
+                android:id="@+id/e91">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9."
+                    android:id="@+id/e95"
+                    android:layout_marginTop="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e92"
+                    android:layout_alignTop="@+id/e95"
+                    android:layout_toRightOf="@+id/e95"
+                    android:layout_toEndOf="@+id/e95"
+                    android:layout_marginTop="-10dp" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:id="@+id/e93"
+                    android:layout_toRightOf="@+id/e92"
+                    android:layout_toLeftOf="@+id/e94"
+                    android:layout_width="wrap_content" />
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/e94"
+                    android:layout_alignTop="@+id/e93"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+    <!--
+    <com.google.android.gms.ads.AdView
+        android:layout_alignParentBottom="true"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adUnitId="@string/banner_ad_unit_id"
+        ads:adSize="SMART_BANNER"/>
+    -->
+
+</RelativeLayout>

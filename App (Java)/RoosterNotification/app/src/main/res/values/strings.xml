@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">JFC Rooster App</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="saved">Opgeslagen</string>
+    <string name="banner_ad_unit_id">ca-app-pub-6919792345220213/5762037086</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-6919792345220213/7099169488</string>
+    <string name="test_device_id">152D12D2F4913FBAA753ED1E3FA55BB3</string>
+    <string name="title_activity_zermelo_help">Help</string>
+
+    <string name="invalid_code">Ongeldige code</string>
+    <string name="auth_success">App succesvol gelinkt</string>
+    <string name="no_connection">Error: geen internet</string>
+
+</resources>
