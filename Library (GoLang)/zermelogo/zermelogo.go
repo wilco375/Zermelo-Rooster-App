@@ -1,4 +1,6 @@
+// Copyright (c) 2015, Dima Biletskyy | Edited by Wilco van Beijnum
 // Package gozermelo can be used with gobind (https://godoc.org/golang.org/x/mobile/cmd/gobind).
+
 package zermelogo
 
 import (
