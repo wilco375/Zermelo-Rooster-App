@@ -136,7 +136,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                android:checked="false"
                 android:layout_marginBottom="5dp"
                 android:id="@+id/syncZermeloCheckbox"
                 android:layout_below="@id/fourtyMinuteCheckbox"/>

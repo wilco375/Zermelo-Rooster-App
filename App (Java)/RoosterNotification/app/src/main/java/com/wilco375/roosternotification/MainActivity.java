@@ -193,6 +193,7 @@ public class MainActivity extends Activity {
 
         SharedPreferences.Editor spe = sp.edit();
         spe.putString("token", token);
+        spe.putBoolean("zermeloSync",true);
         spe.apply();
         return true;
     }
@@ -210,7 +211,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 for (EditText e : edittextArray) {
-                    System.out.println("Name: " + getResources().getResourceName(e.getId()).replace("com.wilco375.roosternotification:id/", ""));
+                    //System.out.println("Name: " + getResources().getResourceName(e.getId()).replace("com.wilco375.roosternotification:id/", ""));
                     e.setText(sp.getString(getResources().getResourceName(e.getId()).replace("com.wilco375.roosternotification:id/", ""), ""));
                 }
 
@@ -218,8 +219,18 @@ public class MainActivity extends Activity {
                     c.setChecked(sp.getBoolean(getResources().getResourceName(c.getId()).replace("com.wilco375.roosternotification:id/", ""), false));
                 }
 
+                if(sp.getBoolean("zermeloSync",false)&&!sp.getString("token","").equals("")){
+                    for(EditText e : edittextArray){
+                        e.setKeyListener(null);
+                    }
+                    for(CheckBox c : checkboxArray){
+                        c.setKeyListener(null);
+                    }
+                }
+
                 notify.setChecked(sp.getBoolean("notify", true));
-                zermeloSync.setChecked(sp.getBoolean("zermeloSync", true));
+                System.out.println(sp.getBoolean("zermeloSync",false));
+                zermeloSync.setChecked(sp.getBoolean("zermeloSync", false));
                 fourtyMinuteSchedule.setChecked(sp.getBoolean("fourtyMinuteSchedule", false));
                 notifyCancel.setChecked(sp.getBoolean("notifyCancel", true));
                 group.setOnCheckedChangeListener(null);

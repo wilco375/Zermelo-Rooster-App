@@ -6,9 +6,11 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StrikethroughSpan;
+import android.util.DisplayMetrics;
 import android.widget.RemoteViews;
 
 import java.util.Calendar;
@@ -94,8 +96,18 @@ public class LesdagWidgetProvider extends AppWidgetProvider{
                     //System.out.println("String: "+textString+" j: "+j);
                 }
             }
+            if(sp.getBoolean("fourtyMinuteSchedule",false) && Build.VERSION.SDK_INT>=16) {
+                views.setViewPadding(R.id.app_widget_lesdag_fifthHour, dpToPx(5,context),0,dpToPx(5,context),0);
+                views.setViewPadding(R.id.app_widget_lesdag_sixthHour, dpToPx(5,context), 0, dpToPx(5,context), dpToPx(20, context));
+                views.setTextViewText(R.id.app_widget_lesdag_dag, title+ " (Verkort)");
+            }
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
+    }
+
+    private int dpToPx(int dp, Context context){
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return Math.round(dp*(dm.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 }

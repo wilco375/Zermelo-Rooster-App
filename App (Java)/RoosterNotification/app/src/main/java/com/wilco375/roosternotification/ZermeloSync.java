@@ -31,14 +31,16 @@ public class ZermeloSync {
 		ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-		if ((!mWifi.isConnected() && !restartApp) || !context.getSharedPreferences("Main",Context.MODE_PRIVATE).getBoolean("zermeloSync",true)) {
-            //System.out.println("returning");
+        System.out.println("syncZermelo");
+
+		if ((!mWifi.isConnected() && !restartApp) || !context.getSharedPreferences("Main",Context.MODE_PRIVATE).getBoolean("zermeloSync",false)) {
+            System.out.println("returning");
 			return;
 		}
         new Thread(new Runnable() {
             @Override
             public void run() {
-                //System.out.println("Starting sync thread");
+                System.out.println("Starting sync thread");
 
                 //Start of today
                 long start = (System.currentTimeMillis() / 1000L) - ((System.currentTimeMillis()/1000L) % (24 * 60 * 60));
@@ -233,7 +235,7 @@ public class ZermeloSync {
                 if(restartApp){
                     Intent i = new Intent(context, MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    //System.out.println("restarting");
+                    System.out.println("restarting");
                     //activity.finish();
                     context.startActivity(i);
                 }
