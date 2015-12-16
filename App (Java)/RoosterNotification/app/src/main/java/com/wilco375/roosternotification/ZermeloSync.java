@@ -233,11 +233,11 @@ public class ZermeloSync {
                 lesuurWidget.onUpdate(context, AppWidgetManager.getInstance(context), ids2);
 
                 if(restartApp){
-                    Intent i = new Intent(context, MainActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    System.out.println("restarting");
-                    //activity.finish();
+                    Intent i = new Intent(context,RefreshActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    System.out.println("restarting, zermeloSync,false: " + sp.getBoolean("zermeloSync", false) + " zermeloSync,true: " + sp.getBoolean("zermeloSync", true));
                     context.startActivity(i);
+                    //new MainActivity().fillEditTextFields();
                 }
             }
         }).start();

@@ -11,5 +11,6 @@
     <string name="invalid_code">Ongeldige code</string>
     <string name="auth_success">App succesvol gelinkt</string>
     <string name="no_connection">Error: geen internet</string>
+    <string name="title_activity_refresh">RefreshActivity</string>
 
 </resources>

@@ -173,7 +173,7 @@
                 android:layout_below="@+id/roosterTitle"
                 android:id="@+id/explanation"
                 android:layout_marginBottom="5dp"
-                android:text="Je kan een checkbox hier beneden na het uur aanvinken als het uur uitvalt, zodat je er geen melding van ontvangt"/>
+                android:text="Een aangevinkt vakje hieronder geeft aan dat het uur uitvalt, zodat je er geen melding van ontvangt"/>
             <!-- Maandag -->
             <TextView
                 android:layout_width="wrap_content"

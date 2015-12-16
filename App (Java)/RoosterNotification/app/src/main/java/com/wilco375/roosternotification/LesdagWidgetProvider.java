@@ -49,8 +49,7 @@ public class LesdagWidgetProvider extends AppWidgetProvider{
             }else if(day == Calendar.FRIDAY){
                 title = "Vrijdag";
                 string = "e";
-            }else if(day == Calendar.SATURDAY) title = "Zaterdag";
-            else if(day == Calendar.SUNDAY) title = "Zondag";
+            }
 
             //System.out.println("Day: "+title);
 

@@ -1,11 +1,11 @@
 package com.wilco375.roosternotification;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
+import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -19,9 +19,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-//import com.google.android.gms.ads.AdRequest;
-//import com.google.android.gms.ads.AdView;
 
 import go.zermelogo.Zermelogo;
 
@@ -39,7 +36,6 @@ public class MainActivity extends Activity {
     boolean syncing = false;
     SharedPreferences sp;
     Intent autoStartUp;
-    CompoundButton.OnCheckedChangeListener groupListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +49,21 @@ public class MainActivity extends Activity {
         paused = false;
 
         sp = getSharedPreferences("Main",MODE_PRIVATE);
+
+        System.out.println("zermeloSync is "+sp.getBoolean("zermeloSync",false));
+
+        if(sp.getBoolean("firstSync",false)){
+            sp.edit().putBoolean("firstSync",false).apply();
+            new AlertDialog.Builder(this)
+                .setTitle("LET OP!")
+                .setMessage("Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent.")
+                .setCancelable(true)
+                .setNeutralButton("Oké", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).create().show();
+        }
 
         setAlarm();
 
@@ -68,6 +79,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if(doAuth("jfc",zermeloCode.getText().toString().replaceAll(" ",""))){
+                    sp.edit().putBoolean("firstSync",true).putBoolean("zermeloSync",true).apply();
                     new ZermeloSync().syncZermelo(getApplication(), true);
                     Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
                     //System.out.println("zermelo confirm button clicked");
@@ -97,20 +109,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        groupListener = new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.edit().putBoolean("group", group.isChecked()).apply();
-                new ZermeloSync().syncZermelo(getApplication(), true);
-                Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
-                syncing = true;
-            }
-        };
-
-
-
         group = (CheckBox) findViewById(R.id.showGroupCheckbox);
-        group.setOnCheckedChangeListener(groupListener);
 
         CheckBox[] tempCheckboxArray = {(CheckBox) findViewById(R.id.a12),(CheckBox) findViewById(R.id.b12),(CheckBox) findViewById(R.id.c12),(CheckBox) findViewById(R.id.d12),(CheckBox) findViewById(R.id.e12),(CheckBox) findViewById(R.id.a22),(CheckBox) findViewById(R.id.b22),(CheckBox) findViewById(R.id.c22),(CheckBox) findViewById(R.id.d22),(CheckBox) findViewById(R.id.e22),(CheckBox) findViewById(R.id.a32),(CheckBox) findViewById(R.id.b32),(CheckBox) findViewById(R.id.c32),(CheckBox) findViewById(R.id.d32),(CheckBox) findViewById(R.id.e32),(CheckBox) findViewById(R.id.a42),(CheckBox) findViewById(R.id.b42),(CheckBox) findViewById(R.id.c42),(CheckBox) findViewById(R.id.d42),(CheckBox) findViewById(R.id.e42),(CheckBox) findViewById(R.id.a52),(CheckBox) findViewById(R.id.b52),(CheckBox) findViewById(R.id.c52),(CheckBox) findViewById(R.id.d52),(CheckBox) findViewById(R.id.e52),(CheckBox) findViewById(R.id.a62),(CheckBox) findViewById(R.id.b62),(CheckBox) findViewById(R.id.c62),(CheckBox) findViewById(R.id.d62),(CheckBox) findViewById(R.id.e62),(CheckBox) findViewById(R.id.a72),(CheckBox) findViewById(R.id.b72),(CheckBox) findViewById(R.id.c72),(CheckBox) findViewById(R.id.d72),(CheckBox) findViewById(R.id.e72),(CheckBox) findViewById(R.id.a82),(CheckBox) findViewById(R.id.b82),(CheckBox) findViewById(R.id.c82),(CheckBox) findViewById(R.id.d82),(CheckBox) findViewById(R.id.e82),(CheckBox) findViewById(R.id.a92),(CheckBox) findViewById(R.id.b92),(CheckBox) findViewById(R.id.c92),(CheckBox) findViewById(R.id.d92),(CheckBox) findViewById(R.id.e92)};
         checkboxArray = tempCheckboxArray;
@@ -124,7 +123,7 @@ public class MainActivity extends Activity {
         notifyCancel = (CheckBox) findViewById(R.id.showCancelledNotificationCheckbox);
 
         TextView notifyText = (TextView) findViewById(R.id.showNotificationText);
-        TextView zermeloSyncText = (TextView) findViewById(R.id.syncZermeloText);
+        final TextView zermeloSyncText = (TextView) findViewById(R.id.syncZermeloText);
         TextView fourtyMinuteScheduleText = (TextView) findViewById(R.id.fourtyMinuteText);
         final TextView notifyCancelText = (TextView) findViewById(R.id.showCancelledNotificationText);
         final TextView groupText = (TextView) findViewById(R.id.showGroupText);
@@ -164,6 +163,29 @@ public class MainActivity extends Activity {
         if(sp.getBoolean("RoosterSaved",false)){
             fillEditTextFields();
         }
+
+
+        group.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sp.edit().putBoolean("group", group.isChecked()).apply();
+                new ZermeloSync().syncZermelo(getApplication(), true);
+                Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
+                syncing = true;
+            }
+        });
+
+        zermeloSync.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sp.edit().putBoolean("syncZermelo", zermeloSync.isChecked()).apply();
+                if(zermeloSync.isChecked()) {
+                    new ZermeloSync().syncZermelo(getApplication(), true);
+                    Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
+                    syncing = true;
+                }
+            }
+        });
     }
 
     public void setAlarm(){
@@ -184,7 +206,10 @@ public class MainActivity extends Activity {
         }
 
         String token = Zermelogo.Auth(org, code);
-
+        if(token == null){
+            Toast.makeText(this, R.string.invalid_code, Toast.LENGTH_LONG).show();
+            return false;
+        }
         if (token.equals("")) {
             Toast.makeText(this, R.string.invalid_code, Toast.LENGTH_LONG).show();
             return false;
@@ -206,7 +231,8 @@ public class MainActivity extends Activity {
                 activeNetwork.isConnectedOrConnecting();
     }
 
-    private void fillEditTextFields(){
+    public void fillEditTextFields(){
+        System.out.println("filling edittextfields");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -228,14 +254,14 @@ public class MainActivity extends Activity {
                     }
                 }
 
+                System.out.println("zermeloSync2: "+sp.getBoolean("zermeloSync",false));
+
                 notify.setChecked(sp.getBoolean("notify", true));
-                System.out.println(sp.getBoolean("zermeloSync",false));
+                System.out.println(sp.getBoolean("zermeloSync", false));
                 zermeloSync.setChecked(sp.getBoolean("zermeloSync", false));
                 fourtyMinuteSchedule.setChecked(sp.getBoolean("fourtyMinuteSchedule", false));
                 notifyCancel.setChecked(sp.getBoolean("notifyCancel", true));
-                group.setOnCheckedChangeListener(null);
                 group.setChecked(sp.getBoolean("group", false));
-                group.setOnCheckedChangeListener(groupListener);
             }
         });
     }
@@ -243,19 +269,19 @@ public class MainActivity extends Activity {
     private void saveEditTextFields(){
         SharedPreferences.Editor spe = sp.edit();
 
-        for(EditText e : edittextArray){
-            spe.putString(getResources().getResourceName(e.getId()).replace("com.wilco375.roosternotification:id/", ""),e.getText().toString());
-        }
+        if(!zermeloSync.isChecked()) {
+            for (EditText e : edittextArray) {
+                spe.putString(getResources().getResourceName(e.getId()).replace("com.wilco375.roosternotification:id/", ""), e.getText().toString());
+            }
 
-        for(CheckBox c : checkboxArray){
-            spe.putBoolean(getResources().getResourceName(c.getId()).replace("com.wilco375.roosternotification:id/",""),c.isChecked());
+            for (CheckBox c : checkboxArray) {
+                spe.putBoolean(getResources().getResourceName(c.getId()).replace("com.wilco375.roosternotification:id/", ""), c.isChecked());
+            }
         }
 
         spe.putBoolean("notify",notify.isChecked());
-        spe.putBoolean("zermeloSync",zermeloSync.isChecked());
         spe.putBoolean("fourtyMinuteSchedule", fourtyMinuteSchedule.isChecked());
         spe.putBoolean("notifyCancel",notifyCancel.isChecked());
-        spe.putBoolean("group",group.isChecked());
 
         if(!sp.getBoolean("RoosterSaved",false)){
             spe.putBoolean("RoosterSaved",true);
@@ -268,7 +294,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPause() {
-        if(!syncing) {
+        ///if(!syncing) {
             saveEditTextFields();
 
             int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), LesdagWidgetProvider.class));
@@ -278,10 +304,20 @@ public class MainActivity extends Activity {
             int[] ids2 = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), LesuurWidgetProvider.class));
             LesuurWidgetProvider lesuurWidget = new LesuurWidgetProvider();
             lesuurWidget.onUpdate(this, AppWidgetManager.getInstance(this), ids2);
-        }else{
-            syncing = false;
-        }
+        //}else{
+        //    syncing = false;
+        //}
         paused = true;
         super.onPause();
     }
+
+    @Override
+    protected void onResume() {
+        System.out.println("resume, ma,4e uur: "+sp.getString("a43",""));
+        sp = getSharedPreferences("Main",MODE_PRIVATE);
+        fillEditTextFields();
+        super.onResume();
+    }
+
+
 }
