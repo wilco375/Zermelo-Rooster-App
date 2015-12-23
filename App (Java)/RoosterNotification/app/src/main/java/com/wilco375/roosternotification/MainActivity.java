@@ -178,11 +178,17 @@ public class MainActivity extends Activity {
         zermeloSync.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.edit().putBoolean("syncZermelo", zermeloSync.isChecked()).apply();
+                SharedPreferences.Editor spe = sp.edit();
                 if(zermeloSync.isChecked()) {
+                    spe.putBoolean("zermeloSync", true);
+                    spe.apply();
                     new ZermeloSync().syncZermelo(getApplication(), true);
                     Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
                     syncing = true;
+                } else {
+                    spe.putBoolean("zermeloSync", false);
+                    spe.apply();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 }
             }
         });
@@ -247,10 +253,10 @@ public class MainActivity extends Activity {
 
                 if(sp.getBoolean("zermeloSync",false)&&!sp.getString("token","").equals("")){
                     for(EditText e : edittextArray){
-                        e.setKeyListener(null);
+                        e.setFocusable(false);
                     }
                     for(CheckBox c : checkboxArray){
-                        c.setKeyListener(null);
+                        c.setClickable(false);
                     }
                 }
 
@@ -282,6 +288,7 @@ public class MainActivity extends Activity {
         spe.putBoolean("notify",notify.isChecked());
         spe.putBoolean("fourtyMinuteSchedule", fourtyMinuteSchedule.isChecked());
         spe.putBoolean("notifyCancel",notifyCancel.isChecked());
+        spe.putBoolean("syncZermelo", zermeloSync.isChecked());
 
         if(!sp.getBoolean("RoosterSaved",false)){
             spe.putBoolean("RoosterSaved",true);
