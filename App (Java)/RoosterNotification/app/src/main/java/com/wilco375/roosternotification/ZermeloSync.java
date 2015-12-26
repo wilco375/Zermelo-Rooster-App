@@ -3,6 +3,8 @@ package com.wilco375.roosternotification;
 import android.app.Activity;
 import android.app.Notification;
 import android.appwidget.AppWidgetManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +13,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -27,7 +30,7 @@ public class ZermeloSync {
 
     SharedPreferences sp;
 
-    public void syncZermelo(final Context context, final boolean restartApp){
+    public void syncZermelo(final Context context, final Activity activity, final boolean restartApp, final boolean copyClipboard){
 		ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
@@ -231,6 +234,22 @@ public class ZermeloSync {
                 int[] ids2 = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, LesuurWidgetProvider.class));
                 LesuurWidgetProvider lesuurWidget = new LesuurWidgetProvider();
                 lesuurWidget.onUpdate(context, AppWidgetManager.getInstance(context), ids2);
+
+                if(copyClipboard){
+                    final long startTime = startOfWeek + (2 * 24 * 60 * 60);
+                    final long endTime = endOfStartWeek + (6 * 24 * 60 * 60);
+                    final String finalToken = token;
+
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("Rooster JSON", Zermelogo.GetScheduleByTimeInJson("jfc", finalToken, String.valueOf(startTime), String.valueOf(endTime)));
+                            clipboard.setPrimaryClip(clip);
+                            Toast.makeText(context,"Gekopieërd",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
 
                 if(restartApp){
                     Intent i = new Intent(context,RefreshActivity.class);

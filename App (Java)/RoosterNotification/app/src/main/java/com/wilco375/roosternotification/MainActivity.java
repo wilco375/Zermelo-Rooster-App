@@ -3,6 +3,8 @@ package com.wilco375.roosternotification;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +38,7 @@ public class MainActivity extends Activity {
     boolean syncing = false;
     SharedPreferences sp;
     Intent autoStartUp;
+    int timesClicked = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +83,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 if(doAuth("jfc",zermeloCode.getText().toString().replaceAll(" ",""))){
                     sp.edit().putBoolean("firstSync",true).putBoolean("zermeloSync",true).apply();
-                    new ZermeloSync().syncZermelo(getApplication(), true);
+                    new ZermeloSync().syncZermelo(getApplication(),activity, true, false);
                     Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
                     //System.out.println("zermelo confirm button clicked");
                     syncing = true;
@@ -92,7 +95,7 @@ public class MainActivity extends Activity {
         syncZermelo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ZermeloSync().syncZermelo(getApplication(), true);
+                new ZermeloSync().syncZermelo(getApplication(),activity, true, false);
                 Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
                 //System.out.println("zeremlo sync button clicked");
                 syncing = true;
@@ -106,6 +109,17 @@ public class MainActivity extends Activity {
                 Intent i = new Intent(getApplication(), ZermeloHelp.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplication().startActivity(i);
+            }
+        });
+
+        TextView roosterTitle = (TextView) findViewById(R.id.roosterTitle);
+        roosterTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timesClicked += 1;
+                if(timesClicked >= 3){
+                    new ZermeloSync().syncZermelo(getApplication(), activity, false, true);
+                }
             }
         });
 
@@ -169,7 +183,7 @@ public class MainActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sp.edit().putBoolean("group", group.isChecked()).apply();
-                new ZermeloSync().syncZermelo(getApplication(), true);
+                new ZermeloSync().syncZermelo(getApplication(), activity, true, false);
                 Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
                 syncing = true;
             }
@@ -182,7 +196,7 @@ public class MainActivity extends Activity {
                 if(zermeloSync.isChecked()) {
                     spe.putBoolean("zermeloSync", true);
                     spe.apply();
-                    new ZermeloSync().syncZermelo(getApplication(), true);
+                    new ZermeloSync().syncZermelo(getApplication(), activity, true, false);
                     Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
                     syncing = true;
                 } else {

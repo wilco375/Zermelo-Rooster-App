@@ -38,7 +38,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         //spe.putString("lastSync",String.valueOf(System.currentTimeMillis()));
 
         if(sp.getInt("syncCount",0)==3) {
-            new ZermeloSync().syncZermelo(context, false);
+            new ZermeloSync().syncZermelo(context,null, false, false);
             spe.putInt("timesSynced",sp.getInt("timesSynced",0)+1);
             spe.putInt("syncCount", 0);
         } else{
