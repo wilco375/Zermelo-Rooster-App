@@ -1,5 +1,3 @@
-// Copyright (c) 2015, Dima Biletskyy | Edited by Wilco van Beijnum
-
 package zapi
 
 import (

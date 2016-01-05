@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<style>
+	#schedule {
+		white-space: pre-line;
+	}
+</style>
+
+<title>Gozermelo</title>
+</head>
+
+<body>
+100<input id="userid" type="number"><br>
+In <input id="d" type="number" value="0"> days. (0 = today).
+<br>
+<span id="schedule"></span>
+
+<script>
+	(function(){
+	
+	var schedule = document.getElementById("schedule")
+	var userid = document.getElementById("userid")
+	var d = document.getElementById("d")
+	
+	userid.addEventListener("keyup", function(e) {
+	if(this.value.length>=4) {
+		callAjax("/r/tabor/100"+this.value.substring(0,4)+"/"+d.value+"/?t=nlvhmfj8cdig3m2a1pk8isma7p",
+		function(r) {
+			if (schedule.textContent.length > 2000) {
+				schedule.textContent = ""
+			}
+			schedule.textContent = "\n" + r + schedule.textContent
+		})
+		this.value = ""
+	}
+	
+	})
+	
+	function callAjax(url, callback){
+		var xmlhttp = new XMLHttpRequest()
+		
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+				callback(xmlhttp.responseText)
+			}
+		}
+		
+		xmlhttp.open("GET", url, true)
+		xmlhttp.send()
+	}
+	})()
+
+</script>
+
+</body>
+</html>

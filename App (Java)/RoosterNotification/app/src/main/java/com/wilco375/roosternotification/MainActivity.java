@@ -82,11 +82,11 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if(doAuth("jfc",zermeloCode.getText().toString().replaceAll(" ",""))){
+                    syncing = true;
                     sp.edit().putBoolean("firstSync",true).putBoolean("zermeloSync",true).apply();
                     new ZermeloSync().syncZermelo(getApplication(),activity, true, false);
                     Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
                     //System.out.println("zermelo confirm button clicked");
-                    syncing = true;
                 }
             }
         });
@@ -95,10 +95,10 @@ public class MainActivity extends Activity {
         syncZermelo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                syncing = true;
                 new ZermeloSync().syncZermelo(getApplication(),activity, true, false);
                 Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
                 //System.out.println("zeremlo sync button clicked");
-                syncing = true;
             }
         });
 
@@ -182,10 +182,10 @@ public class MainActivity extends Activity {
         group.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                syncing = true;
                 sp.edit().putBoolean("group", group.isChecked()).apply();
                 new ZermeloSync().syncZermelo(getApplication(), activity, true, false);
                 Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
-                syncing = true;
             }
         });
 
@@ -194,11 +194,11 @@ public class MainActivity extends Activity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor spe = sp.edit();
                 if(zermeloSync.isChecked()) {
+                    syncing = true;
                     spe.putBoolean("zermeloSync", true);
                     spe.apply();
                     new ZermeloSync().syncZermelo(getApplication(), activity, true, false);
                     Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
-                    syncing = true;
                 } else {
                     spe.putBoolean("zermeloSync", false);
                     spe.apply();
@@ -315,7 +315,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPause() {
-        ///if(!syncing) {
+        if(!syncing) {
             saveEditTextFields();
 
             int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), LesdagWidgetProvider.class));
@@ -325,9 +325,9 @@ public class MainActivity extends Activity {
             int[] ids2 = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), LesuurWidgetProvider.class));
             LesuurWidgetProvider lesuurWidget = new LesuurWidgetProvider();
             lesuurWidget.onUpdate(this, AppWidgetManager.getInstance(this), ids2);
-        //}else{
-        //    syncing = false;
-        //}
+        }else{
+            syncing = false;
+        }
         paused = true;
         super.onPause();
     }
