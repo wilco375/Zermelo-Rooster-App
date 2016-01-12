@@ -49,6 +49,9 @@ public class ZermeloSync {
     JSONArray locationsArray;
     String locationsString;
 
+    int exam = 0;
+    int cancelled = 0;
+
     String scheduleString = "";
 
     Calendar calendar;
@@ -81,14 +84,14 @@ public class ZermeloSync {
                 //Get schedule string
                 try{
                     HttpClient client = HttpClientBuilder.create().build();
-                    String url = "https://jfc.zportal.nl/api/v2/appointments?user=~me&start=" + String.valueOf(startOfWeek) + "&end=" + String.valueOf(endOfWeek) + "&valid=true&fields=subjects,cancelled,locations,startTimeSlot,start,end,groups&access_token=" + token;
+                    String url = "https://jfc.zportal.nl/api/v2/appointments?user=~me&start=" + String.valueOf(startOfWeek) + "&end=" + String.valueOf(endOfWeek) + "&valid=true&fields=subjects,cancelled,locations,startTimeSlot,start,end,groups,type&access_token=" + token;
                     HttpGet get = new HttpGet(url);
                     HttpResponse response = client.execute(get);
 
                     if (response.getStatusLine().getStatusCode() == 200) {
                         BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
                         scheduleString = br.readLine();
-                        System.out.println("scheduleString: "+scheduleString);
+                        //System.out.println("scheduleString: "+scheduleString);
                     }else return;
                 }catch (IOException e){
                     e.printStackTrace();
@@ -146,32 +149,66 @@ public class ZermeloSync {
                         scheduleArray[i][LOCATIONS] = locationsString;
 
                         scheduleArray[i][CANCELLED] = jsonObject.getBoolean("cancelled");
-                        scheduleArray[i][TIMESLOT] = jsonObject.getInt("startTimeSlot");
+                        if(jsonObject.getBoolean("cancelled")) cancelled += 1;
+                        if(!jsonObject.get("startTimeSlot").toString().equals("null")) {
+                            scheduleArray[i][TIMESLOT] = jsonObject.getInt("startTimeSlot");
+                        }
+                        else {
+                            scheduleArray[i][TIMESLOT] = 0;
+                            if(jsonObject.getString("type").equals("exam")){
+                                exam += 1;
+                            }
+                        }
                     }
-                    System.out.println("scheduleArray: "+Arrays.deepToString(scheduleArray));
+                    //System.out.println("scheduleArray: "+Arrays.deepToString(scheduleArray));
 
                     SharedPreferences.Editor spe = sp.edit();
                     boolean shortened = false;
 
-                    //Loop through all lessons and save them to SharedPreferences
-                    for(Object[] lesson : scheduleArray){
-                        if(!shortened && (boolean) lesson[SHORTENED]){
-                            shortened = true;
-                            spe.putBoolean("fourtyMinuteSchedule",true);
-                        }
-                        String daySlot = lesson[DAY].toString() + lesson[TIMESLOT].toString();
-                        spe.putBoolean(daySlot + "2",(boolean) lesson[CANCELLED]);
-                        if((boolean) lesson[CANCELLED]){
-                            cancelNotification(getDayWord(lesson[DAY].toString()),getDayInt(lesson[DAY].toString()),Integer.valueOf(lesson[TIMESLOT].toString()),lesson[SUBJECTS].toString(),context);
-                        }
-                        if(!sp.getBoolean("group",false)) spe.putString(daySlot + "3", lesson[SUBJECTS].toString());
-                        else spe.putString(daySlot + "3",lesson[SUBJECTS].toString()+"-"+lesson[GROUPS].toString());
-                        spe.putString(daySlot + "4", lesson[LOCATIONS].toString());
+                    //Clear all fields
+                    for(int i=1;i<=9;i++){
+                        spe.putBoolean("a"+i+"2",false);
+                        spe.putBoolean("b"+i+"2",false);
+                        spe.putBoolean("c"+i+"2",false);
+                        spe.putBoolean("d"+i+"2",false);
+                        spe.putBoolean("e"+i+"2",false);
+                        spe.putString("a" + i + "3","");
+                        spe.putString("b" + i + "3","");
+                        spe.putString("c" + i + "3","");
+                        spe.putString("d" + i + "3","");
+                        spe.putString("e" + i + "3","");
+                        spe.putString("a" + i + "4","");
+                        spe.putString("b" + i + "4","");
+                        spe.putString("c" + i + "4","");
+                        spe.putString("d" + i + "4","");
+                        spe.putString("e" + i + "4","");
                     }
 
-                    if(!shortened){
-                        spe.putBoolean("fourtyMinuteSchedule",false);
-                    }
+                    //When 3 exams and 20 lessons cancelled assume test week
+                    if(!(exam > 3 && cancelled > 20)){
+                        spe.putBoolean("exam",false);
+                        //Loop through all lessons and save them to SharedPreferences
+                        for (Object[] lesson : scheduleArray) {
+                            if (!shortened && (boolean) lesson[SHORTENED]) {
+                                shortened = true;
+                                spe.putBoolean("fourtyMinuteSchedule", true);
+                            }
+                            String daySlot = lesson[DAY].toString() + lesson[TIMESLOT].toString();
+                            spe.putBoolean(daySlot + "2", (boolean) lesson[CANCELLED]);
+                            if ((boolean) lesson[CANCELLED]) {
+                                cancelNotification(getDayWord(lesson[DAY].toString()), getDayInt(lesson[DAY].toString()), Integer.valueOf(lesson[TIMESLOT].toString()), lesson[SUBJECTS].toString(), context);
+                            }
+                            if (!sp.getBoolean("group", false))
+                                spe.putString(daySlot + "3", lesson[SUBJECTS].toString());
+                            else
+                                spe.putString(daySlot + "3", lesson[SUBJECTS].toString() + "-" + lesson[GROUPS].toString());
+                            spe.putString(daySlot + "4", lesson[LOCATIONS].toString());
+                        }
+
+                        if (!shortened) {
+                            spe.putBoolean("fourtyMinuteSchedule", false);
+                        }
+                    }else notifyExam(context);
 
                     spe.apply();
 
@@ -245,6 +282,9 @@ public class ZermeloSync {
         //End of today
         long end = start + (60*60*24);
 
+        //start += 7*24*60*60;
+        //end += 7*24*60*60;
+
         calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         //If friday after 5pm assume its saturday
@@ -274,6 +314,25 @@ public class ZermeloSync {
         timeArray[1] = endOfWeek;
 
         return timeArray;
+    }
+
+    private void notifyExam(Context context){
+        //System.out.println("exam: "+sp.getBoolean("exam",false));
+        if(!sp.getBoolean("exam",false)){
+            sp.edit().putBoolean("exam",true).apply();
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.notification_logo)
+                    .setContentTitle("Er is een toetsweek gedetecteerd")
+                    .setContentText("Kijk op Zermelo voor je toetsrooster");
+
+            Notification notification = builder.build();
+
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+
+            //System.out.println("Sending message");
+
+            notificationManagerCompat.notify(1, notification);
+        }
     }
 
 	private void cancelNotification(String day, int dayInt, int hour, String subject, Context context){

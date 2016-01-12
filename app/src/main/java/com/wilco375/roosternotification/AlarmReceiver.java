@@ -22,6 +22,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        System.out.println("Received Alarm");
         createNotification(context);
     }
 
@@ -38,6 +39,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         //spe.putString("lastSync",String.valueOf(System.currentTimeMillis()));
 
         if(sp.getInt("syncCount",0)==3) {
+            System.out.println("Syncing with Zermelo");
             new ZermeloSync().syncZermelo(context,null, false, false);
             spe.putInt("timesSynced",sp.getInt("timesSynced",0)+1);
             spe.putInt("syncCount", 0);

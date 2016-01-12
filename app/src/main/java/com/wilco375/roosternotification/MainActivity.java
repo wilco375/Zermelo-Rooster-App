@@ -77,13 +77,25 @@ public class MainActivity extends Activity {
             sp.edit().putBoolean("firstSync",false).apply();
             new AlertDialog.Builder(this)
                 .setTitle("LET OP!")
-                .setMessage("Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent.")
+                .setMessage("Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent. Het JFC is niet verantwoordelijk voor deze app")
                 .setCancelable(true)
                 .setNeutralButton("Oké", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 }).create().show();
+        }
+
+        if(sp.getBoolean("exam",false)){
+            new AlertDialog.Builder(this)
+                    .setTitle("Toetsweek")
+                    .setMessage("Er is een toetsweek gedetecteerd. Kijk voor je toetsrooster op Zermelo")
+                    .setCancelable(true)
+                    .setNeutralButton("Oké", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    }).create().show();
         }
 
         setAlarm();
@@ -227,7 +239,7 @@ public class MainActivity extends Activity {
     }
 
     public void setAlarm(){
-        //System.out.println("setting alarm");
+        System.out.println("setting alarm");
         autoStartUp = new Intent(this, AutoStartUp.class);
         startService(autoStartUp);
     }
