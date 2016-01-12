@@ -184,31 +184,36 @@ public class ZermeloSync {
                         spe.putString("e" + i + "4","");
                     }
 
-                    //When 3 exams and 20 lessons cancelled assume test week
-                    if(!(exam > 3 && cancelled > 20)){
-                        spe.putBoolean("exam",false);
-                        //Loop through all lessons and save them to SharedPreferences
-                        for (Object[] lesson : scheduleArray) {
-                            if (!shortened && (boolean) lesson[SHORTENED]) {
-                                shortened = true;
-                                spe.putBoolean("fourtyMinuteSchedule", true);
-                            }
-                            String daySlot = lesson[DAY].toString() + lesson[TIMESLOT].toString();
+
+                    spe.putBoolean("exam",false);
+                    //Loop through all lessons and save them to SharedPreferences
+                    for (Object[] lesson : scheduleArray) {
+                        if (!shortened && (boolean) lesson[SHORTENED]) {
+                            shortened = true;
+                            spe.putBoolean("fourtyMinuteSchedule", true);
+                        }
+                        String daySlot = lesson[DAY].toString() + lesson[TIMESLOT].toString();
+
+                        if(!(exam > 3 && cancelled > 20 && (boolean)lesson[CANCELLED])) {
                             spe.putBoolean(daySlot + "2", (boolean) lesson[CANCELLED]);
-                            if ((boolean) lesson[CANCELLED]) {
+                            if ((boolean) lesson[CANCELLED])
                                 cancelNotification(getDayWord(lesson[DAY].toString()), getDayInt(lesson[DAY].toString()), Integer.valueOf(lesson[TIMESLOT].toString()), lesson[SUBJECTS].toString(), context);
-                            }
+
                             if (!sp.getBoolean("group", false))
                                 spe.putString(daySlot + "3", lesson[SUBJECTS].toString());
                             else
                                 spe.putString(daySlot + "3", lesson[SUBJECTS].toString() + "-" + lesson[GROUPS].toString());
+
                             spe.putString(daySlot + "4", lesson[LOCATIONS].toString());
                         }
+                    }
 
-                        if (!shortened) {
-                            spe.putBoolean("fourtyMinuteSchedule", false);
-                        }
-                    }else notifyExam(context);
+                    if (!shortened) {
+                        spe.putBoolean("fourtyMinuteSchedule", false);
+                    }
+
+                    //When 3 exams and 20 lessons cancelled assume test week
+                    if(exam > 3 && cancelled > 20) notifyExam(context);
 
                     spe.apply();
 
