@@ -22,7 +22,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import cz.msebera.android.httpclient.HttpResponse;
@@ -57,6 +56,7 @@ public class ZermeloSync {
     Calendar calendar;
 
     SharedPreferences sp;
+    SharedPreferences.Editor spe;
 
     public void syncZermelo(final Context context, final Activity activity, final boolean restartApp, final boolean copyClipboard){
 		ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -162,7 +162,7 @@ public class ZermeloSync {
                     }
                     //System.out.println("scheduleArray: "+Arrays.deepToString(scheduleArray));
 
-                    SharedPreferences.Editor spe = sp.edit();
+                    spe = sp.edit();
                     boolean shortened = false;
 
                     //Clear all fields
@@ -184,8 +184,6 @@ public class ZermeloSync {
                         spe.putString("e" + i + "4","");
                     }
 
-
-                    spe.putBoolean("exam",false);
                     //Loop through all lessons and save them to SharedPreferences
                     for (Object[] lesson : scheduleArray) {
                         if (!shortened && (boolean) lesson[SHORTENED]) {
@@ -214,6 +212,7 @@ public class ZermeloSync {
 
                     //When 3 exams and 20 lessons cancelled assume test week
                     if(exam > 3 && cancelled > 20) notifyExam(context);
+                    else spe.putBoolean("exam",false);
 
                     spe.apply();
 
@@ -322,9 +321,10 @@ public class ZermeloSync {
     }
 
     private void notifyExam(Context context){
-        //System.out.println("exam: "+sp.getBoolean("exam",false));
+        System.out.println("exam: "+sp.getBoolean("exam",false));
         if(!sp.getBoolean("exam",false)){
-            sp.edit().putBoolean("exam",true).apply();
+            spe.putBoolean("exam", true);
+            spe.apply();
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.notification_logo)
                     .setContentTitle("Er is een toetsweek gedetecteerd")
@@ -363,7 +363,6 @@ public class ZermeloSync {
             String currentNotString = intStr(calendar.get(Calendar.YEAR))+intStr(currentWeek)+intStr(dayInt)+intStr(hour);
             if(dayInt>=currentDay && !sp.getString("prevNots","").contains(currentNotString)) {
                 int notId = sp.getInt("notId", 2);
-                SharedPreferences.Editor spe = sp.edit();
                 spe.putInt("notId", notId + 1);
                 spe.putString("prevNots", sp.getString("prevNots","")+currentNotString);
                 spe.apply();
