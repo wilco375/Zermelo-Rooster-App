@@ -69,6 +69,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             string = "e";
         }
         uur = lesuur(context,sp);
+        if(uur == 0) return;
 
         String one =   "1. "+ sp.getString(string+"13","")+" "+sp.getString(string+"14","");
         String two =   "2. "+ sp.getString(string+"23","")+" "+sp.getString(string+"24","");

@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RoosterNotification.iml" filepath="$PROJECT_DIR$/RoosterNotification.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/zermelogo/zermelogo.iml" filepath="$PROJECT_DIR$/zermelogo/zermelogo.iml" />
     </modules>
   </component>
 </project>

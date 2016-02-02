@@ -49,6 +49,7 @@ public class ZermeloSync {
     String locationsString;
 
     int exam = 0;
+    int notExam = 0;
     int cancelled = 0;
 
     String scheduleString = "";
@@ -157,7 +158,7 @@ public class ZermeloSync {
                             scheduleArray[i][TIMESLOT] = 0;
                             if(jsonObject.getString("type").equals("exam")){
                                 exam += 1;
-                            }
+                            }else notExam += 1;
                         }
                     }
                     //System.out.println("scheduleArray: "+Arrays.deepToString(scheduleArray));
@@ -192,7 +193,7 @@ public class ZermeloSync {
                         }
                         String daySlot = lesson[DAY].toString() + lesson[TIMESLOT].toString();
 
-                        if(!(exam > 3 && cancelled > 20 && (boolean)lesson[CANCELLED])) {
+                        if(!(exam > 3 && (cancelled > 20 || notExam == 0) && (boolean)lesson[CANCELLED])) {
                             spe.putBoolean(daySlot + "2", (boolean) lesson[CANCELLED]);
                             if ((boolean) lesson[CANCELLED])
                                 cancelNotification(getDayWord(lesson[DAY].toString()), getDayInt(lesson[DAY].toString()), Integer.valueOf(lesson[TIMESLOT].toString()), lesson[SUBJECTS].toString(), context);
@@ -210,8 +211,9 @@ public class ZermeloSync {
                         spe.putBoolean("fourtyMinuteSchedule", false);
                     }
 
+                    //System.out.println("exam: "+exam+" cancelled: "+cancelled);
                     //When 3 exams and 20 lessons cancelled assume test week
-                    if(exam > 3 && cancelled > 20) notifyExam(context);
+                    if(exam > 3 && (cancelled > 20 || notExam == 0)) notifyExam(context);
                     else spe.putBoolean("exam",false);
 
                     spe.apply();

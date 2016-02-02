@@ -1,1 +1,1 @@
-include ':app', ':zermelogo'
+include ':app'
