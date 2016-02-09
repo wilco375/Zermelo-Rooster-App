@@ -9,11 +9,17 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.StrikethroughSpan;
 import android.util.DisplayMetrics;
 import android.widget.RemoteViews;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class LesdagWidgetProvider extends AppWidgetProvider{
 
@@ -25,88 +31,66 @@ public class LesdagWidgetProvider extends AppWidgetProvider{
         for (int i=0; i<N; i++) {
             int appWidgetId = appWidgetIds[i];
 
-            String title = "";
-
             Calendar calendar = Calendar.getInstance();
             int day = calendar.get(Calendar.DAY_OF_WEEK);
-            if(calendar.get(Calendar.HOUR_OF_DAY)>17){
-                day += 1;
-            }if(day >= 7 || day == 1) day = 2;
-            String string = "";
-            SharedPreferences sp = context.getSharedPreferences("Main", context.MODE_PRIVATE);
-            if(day == Calendar.MONDAY) {
-                title = "Maandag";
-                string = "a";
-            }else if(day == Calendar.TUESDAY){
-                title = "Dinsdag";
-                string = "b";
-            }else if(day == Calendar.WEDNESDAY){
-                title = "Woensdag";
-                string = "c";
-            }else if(day == Calendar.THURSDAY){
-                title = "Donderdag";
-                string = "d";
-            }else if(day == Calendar.FRIDAY){
-                title = "Vrijdag";
-                string = "e";
-            }
 
-            //System.out.println("Day: "+title);
+            if(calendar.get(Calendar.HOUR_OF_DAY)>17) day += 1;
+            if(day == Calendar.SATURDAY || day == Calendar.SUNDAY) day = Calendar.MONDAY;
+
+            SharedPreferences sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
 
             Intent intent = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget_lesdag);
             views.setOnClickPendingIntent(R.id.app_widget_lesdag_layout, pendingIntent);
-            views.setTextViewText(R.id.app_widget_lesdag_dag, title);
+            views.setTextViewText(R.id.app_widget_lesdag_dag, Utils.dayIntToStr(day));
 
-            SpannableString spannable;
-            String textString;
-            for(int j=1;j<=9;j++){
-                //i+". "+sp.getString(string+i+"3","")+sp.getString(string+i+"4","");
+            String widgetText = "";
 
-                if(sp.getBoolean(string+j+"2",false)){
-                    spannable = new SpannableString(j+". "+sp.getString(string+j+"3","")+" "+sp.getString(string+j+"4",""));
-                    spannable.setSpan(new StrikethroughSpan(), 0, spannable.toString().length(), 0);
-                    if(j == 1) views.setTextViewText(R.id.app_widget_lesdag_firstHour,spannable);
-                    else if(j == 2) views.setTextViewText(R.id.app_widget_lesdag_secondHour,spannable);
-                    else if(j == 3) views.setTextViewText(R.id.app_widget_lesdag_thirdHour,spannable);
-                    else if(j == 4) views.setTextViewText(R.id.app_widget_lesdag_fourthHour,spannable);
-                    else if(j == 5) views.setTextViewText(R.id.app_widget_lesdag_fifthHour,spannable);
-                    else if(j == 6) views.setTextViewText(R.id.app_widget_lesdag_sixthHour,spannable);
-                    else if(j == 7) views.setTextViewText(R.id.app_widget_lesdag_seventhHour,spannable);
-                    else if(j == 8) views.setTextViewText(R.id.app_widget_lesdag_eighthHour,spannable);
-                    else if(j == 9) views.setTextViewText(R.id.app_widget_lesdag_ninthHour,spannable);
-                    //System.out.println("SpannableString: "+spannable.toString()+" j: "+j+" lenght: "+(spannable.toString().length()));
-                }else{
-                    textString = j+". "+sp.getString(string+j+"3","")+" "+sp.getString(string+j+"4","");
-                    if(j == 1){
-                        views.setTextViewText(R.id.app_widget_lesdag_firstHour,textString);
-                        //System.out.println("First hour set");
+            Schedule[] schedule = ScheduleHandler.getScheduleByDay(context,day);
+            List<Integer> strikethroughStartIndex = new ArrayList<>();
+            List<Integer> strikethroughEndIndex = new ArrayList<>();
+
+            Arrays.sort(schedule, new Schedule.ScheduleComparator());
+            for(Schedule lesson : schedule){
+                int timeslot = lesson.getTimeslot();
+                if(timeslot == 0){
+                    if(lesson.getCancelled()){
+                        String string;
+                        if(!lesson.getType().equals("Les")) string = lesson.getSubjectAndGroup(sp) + " (" + lesson.getType() + ") " + lesson.getLocation() + "\n";
+                        else string = lesson.getSubjectAndGroup(sp) + " " + lesson.getLocation()+"\n";
+                        strikethroughStartIndex.add(widgetText.length());
+                        strikethroughEndIndex.add(widgetText.length()+string.length());
+                        widgetText += string;
+                    }else{
+                        if(!lesson.getType().equals("Les")) widgetText += lesson.getSubjectAndGroup(sp) + " (" + lesson.getType() + ") " + lesson.getLocation() + "\n";
+                        else widgetText += lesson.getSubjectAndGroup(sp) + " " + lesson.getLocation()+"\n";
                     }
-                    else if(j == 2) views.setTextViewText(R.id.app_widget_lesdag_secondHour,textString);
-                    else if(j == 3) views.setTextViewText(R.id.app_widget_lesdag_thirdHour,textString);
-                    else if(j == 4) views.setTextViewText(R.id.app_widget_lesdag_fourthHour,textString);
-                    else if(j == 5) views.setTextViewText(R.id.app_widget_lesdag_fifthHour,textString);
-                    else if(j == 6) views.setTextViewText(R.id.app_widget_lesdag_sixthHour,textString);
-                    else if(j == 7) views.setTextViewText(R.id.app_widget_lesdag_seventhHour,textString);
-                    else if(j == 8) views.setTextViewText(R.id.app_widget_lesdag_eighthHour,textString);
-                    else if(j == 9) views.setTextViewText(R.id.app_widget_lesdag_ninthHour,textString);
-                    //System.out.println("String: "+textString+" j: "+j);
+                }else{
+                    if(lesson.getCancelled()){
+                        String string;
+                        if(!lesson.getType().equals("Les")) string = String.valueOf(timeslot) + ". " + lesson.getSubjectAndGroup(sp) + " (" + lesson.getType() + ") " + lesson.getLocation() + "\n";
+                        else string = String.valueOf(timeslot) + ". " + lesson.getSubjectAndGroup(sp) + " " + lesson.getLocation()+"\n";
+                        strikethroughStartIndex.add(widgetText.length());
+                        strikethroughEndIndex.add(widgetText.length()+string.length());
+                        widgetText += string;
+                    }else{
+                        if(!lesson.getType().equals("Les")) widgetText += String.valueOf(timeslot) + ". " + lesson.getSubjectAndGroup(sp) + " (" + lesson.getType() + ") " + lesson.getLocation() + "\n";
+                        else widgetText += String.valueOf(timeslot) + ". " + lesson.getSubjectAndGroup(sp) + " " + lesson.getLocation()+"\n";
+                    }
                 }
             }
-            if(sp.getBoolean("fourtyMinuteSchedule",false) && Build.VERSION.SDK_INT>=16) {
-                views.setViewPadding(R.id.app_widget_lesdag_fifthHour, dpToPx(5,context),0,dpToPx(5,context),0);
-                views.setViewPadding(R.id.app_widget_lesdag_sixthHour, dpToPx(5,context), 0, dpToPx(5,context), dpToPx(20, context));
-                views.setTextViewText(R.id.app_widget_lesdag_dag, title+ " (Verkort)");
+
+            SpannableString widgetTextSpan = new SpannableString(widgetText);
+
+            for(int j=0;j<strikethroughEndIndex.size();j++){
+                widgetTextSpan.setSpan(new StrikethroughSpan(),strikethroughStartIndex.get(j),strikethroughEndIndex.get(j),0);
             }
+
+            views.setTextViewText(R.id.app_widget_lesdag_content,widgetTextSpan);
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
-    }
-
-    private int dpToPx(int dp, Context context){
-        DisplayMetrics dm = context.getResources().getDisplayMetrics();
-        return Math.round(dp*(dm.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 }

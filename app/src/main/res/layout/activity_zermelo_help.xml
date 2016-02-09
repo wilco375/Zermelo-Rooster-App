@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView"
-        android:layout_below="@+id/stepThree"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" >
 

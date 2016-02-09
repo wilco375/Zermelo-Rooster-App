@@ -9,8 +9,7 @@ public class BootComplete extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         //System.out.println("Intent message is "+intent.getAction());
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) || "START_ALARM".equals(intent.getAction())) {
-            Intent serviceIntent = new Intent(context, AutoStartUp.class);
-            context.startService(serviceIntent);
+            Utils.setAlarm(context);
         }
     }
 }
