@@ -115,7 +115,7 @@ public class MainActivity extends Activity {
                 Calendar calendar = Calendar.getInstance();
                 day = calendar.get(Calendar.DAY_OF_WEEK);
                 if(calendar.get(Calendar.HOUR_OF_DAY)>17) day += 1;
-                if(day == Calendar.SATURDAY || day == Calendar.SUNDAY) day = Calendar.MONDAY;
+                if(day == Calendar.SATURDAY || day == Calendar.SUNDAY || (day == Calendar.MONDAY && calendar.get(Calendar.HOUR_OF_DAY) > 17)) day = Calendar.MONDAY;
 
                 showSchedule();
             }

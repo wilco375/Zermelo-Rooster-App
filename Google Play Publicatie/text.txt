@@ -1,12 +1,16 @@
 Deze app is ontwikkeld voor leerlingen/leraren van het Johannes Fontanus College die makkelijk toegang willen hebben tot hun rooster. 
 De belangrijkste features van deze app:
 - Synchronisatie met Zermelo
-    - Elke 5 minuten het laatste rooster gedownload (alleen als je verbonden bent met WiFi)
+    - Elke 20 minuten het laatste rooster gedownload (alleen als je verbonden bent met WiFi)
     - Al je lessen van de huidige week automatisch opgehaald
-    - Uitval van lesuren
-    - 50- of 40-minuten rooster
     - Notificatie als een les uitvalt
-- Elk een kwartier voor elk lesuur een notificatie van het vak dat je het volgende uur hebt, en in welk lokaal (met actueel 50- of 40-minutenrooster
-- Widgets met het rooster van de hele dag en het huidige vak
-- Elk onderdeel van de app uit te schakelen: synchronisatie met Zermelo, notificaties en 40-minutenrooster
+    - Vermelding van cluster/klas (voor leraren)
+- Een kwartier voor elk lesuur een notificatie van het vak dat je het volgende uur hebt, en in welk lokaal 
+- Widgets met het rooster van de hele dag of het huidige vak
+- Elk onderdeel van de app uit te schakelen: notificaties van huidige les, notificaties van uitval, vermelding van cluster/klas
 - Als je een Android Wear smartwatch hebt, kan je bij deze notificatie ook gelijk je hele dagrooster zien door naar links te swypen.
+
+--------------------------
+
+Disclaimer:
+Deze app is ontwikkeld door een leerling van het JFC en is dus niet officieel door het JFC ondersteund.
