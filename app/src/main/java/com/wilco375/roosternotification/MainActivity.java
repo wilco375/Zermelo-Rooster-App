@@ -54,9 +54,6 @@ public class MainActivity extends Activity {
         //Get SharedPreferences
         sp = getSharedPreferences("Main",MODE_PRIVATE);
 
-        //Display warning on first Zermelo sync
-        if(sp.getBoolean("firstSync",false)) displayWarning();
-
         //Set alarm
         Utils.setAlarm(this);
 
@@ -201,7 +198,7 @@ public class MainActivity extends Activity {
                 public void onClick(View v) {
                     if (ZermeloSync.authenticate(((EditText) findViewById(R.id.zermeloCode)).getText().toString().replaceAll(" ", ""), getBaseContext(), sp)) {
                         syncing = true;
-                        sp.edit().putBoolean("firstSync", true).putBoolean("zermeloSync", true).apply();
+                        displayWarning();
                         new ZermeloSync().syncZermelo(getApplication(), activity, true, false);
                         Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
                     }

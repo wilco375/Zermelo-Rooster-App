@@ -2,6 +2,7 @@ package com.wilco375.roosternotification;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,6 +40,8 @@ public class ZermeloSync {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                List<Schedule> cancelledNotification = new ArrayList<>();
+
                 //Get start and end of week in unix time
                 long startOfWeek = Utils.getUnixWeek()[0];
                 long endOfWeek = Utils.getUnixWeek()[1];
@@ -65,7 +68,52 @@ public class ZermeloSync {
 
                     //Loop through all lessons and check cancelled
                     for (Schedule lesson : scheduleArray) {
-                        if(lesson.getCancelled()) cancelNotification(lesson, context);
+                        if(lesson.getCancelled()) cancelledNotification.add(lesson);
+                    }
+
+                    //Notify cancelled lessons
+                    if(sp.getBoolean("notifyCancel",true)) {
+                        Calendar calendar = Calendar.getInstance();
+                        int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+                        int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+                        if (currentDay == Calendar.SATURDAY || (currentDay == Calendar.FRIDAY && calendar.get(Calendar.HOUR_OF_DAY) >= 17)) {
+                            currentDay = Calendar.MONDAY;
+                            currentWeek += 1;
+                        }
+
+                        int count = 0;
+                        for (Schedule s : cancelledNotification) {
+                            String currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(currentWeek) + intStr(s.getDay()) + intStr(s.getTimeslot()) + s.getSubject();
+                            if (s.getDay() >= currentDay && !sp.getString("prevNots", "").contains(currentNotString)) {
+                                count++;
+                            }
+                        }
+
+                        if (count < 8) {
+                            for (Schedule s : cancelledNotification) {
+                                cancelNotification(s, context);
+                            }
+                        } else {
+                            NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                                    .setSmallIcon(R.drawable.notification_logo)
+                                    .setContentTitle("Er vallen "+count+" lessen uit")
+                                    .setContentText("Kijk in de app voor meer info");
+
+                            Notification notification = builder.build();
+                            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+                            int notId = sp.getInt("notId", 2);
+                            SharedPreferences.Editor spe = sp.edit();
+                            notificationManagerCompat.notify(notId, notification);
+
+                            String currentNotString;
+                            for(Schedule s : cancelledNotification) {
+                                currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(currentWeek) + intStr(s.getDay()) + intStr(s.getTimeslot()) + s.getSubject();
+                                if (s.getDay() >= currentDay && !sp.getString("prevNots", "").contains(currentNotString)) {
+                                    spe.putString("prevNots", sp.getString("prevNots", "") + currentNotString);
+                                    spe.apply();
+                                }
+                            }
+                        }
                     }
 
                     //Save schedule
@@ -102,7 +150,7 @@ public class ZermeloSync {
             int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
             int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
             if(currentDay == Calendar.SATURDAY || (currentDay == Calendar.FRIDAY && calendar.get(Calendar.HOUR_OF_DAY)>=17)){
-                currentDay = Calendar.SUNDAY;
+                currentDay = Calendar.MONDAY;
                 currentWeek += 1;
             }
 
