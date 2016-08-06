@@ -259,6 +259,8 @@ public class ZermeloSync {
     }
 
     public static boolean authenticate(String code, Context context, SharedPreferences sp) {
+        System.out.println("Authing "+code);
+
         if (code.equals("")) {
             Toast.makeText(context, R.string.invalid_code, Toast.LENGTH_LONG).show();
             return false;
@@ -280,17 +282,20 @@ public class ZermeloSync {
 
             post.setEntity(new UrlEncodedFormEntity(nameValuePair));
             HttpResponse response = client.execute(post);
-            if(response.getStatusLine().getStatusCode() != 200) return false;
+            if(response.getStatusLine().getStatusCode() != 200){
+                Toast.makeText(context, R.string.invalid_code, Toast.LENGTH_LONG).show();
+                return false;
+            }
 
             JSONObject tokenJson = new JSONObject(new BufferedReader(new InputStreamReader((response.getEntity().getContent()))).readLine());
             String token = tokenJson.getString("access_token");
 
             if (token == null) {
-                Toast.makeText(context, R.string.invalid_code, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.validation_error, Toast.LENGTH_LONG).show();
                 return false;
             }
             if (token.equals("")) {
-                Toast.makeText(context, R.string.invalid_code, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.validation_error, Toast.LENGTH_LONG).show();
                 return false;
             }
             Toast.makeText(context, R.string.auth_success, Toast.LENGTH_LONG).show();
@@ -302,9 +307,11 @@ public class ZermeloSync {
             return true;
         }catch(JSONException e){
             e.printStackTrace();
+            Toast.makeText(context, R.string.validation_error, Toast.LENGTH_LONG).show();
             return false;
         }catch(IOException e){
             e.printStackTrace();
+            Toast.makeText(context, R.string.validation_error, Toast.LENGTH_LONG).show();
             return false;
         }
     }

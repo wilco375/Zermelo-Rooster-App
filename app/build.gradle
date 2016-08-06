@@ -8,8 +8,8 @@ android {
         applicationId "com.wilco375.roosternotification"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 22
-        versionName "3.6"
+        versionCode 23
+        versionName "3.7"
     }
     buildTypes {
         release {

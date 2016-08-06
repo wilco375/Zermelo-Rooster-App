@@ -8,9 +8,10 @@
     <string name="test_device_id">152D12D2F4913FBAA753ED1E3FA55BB3</string>
     <string name="title_activity_zermelo_help">Help</string>
 
-    <string name="invalid_code">Ongeldige code</string>
+    <string name="invalid_code">Ongeldige code of code al gebruikt</string>
     <string name="auth_success">App succesvol gelinkt</string>
     <string name="no_connection">Error: geen internet</string>
+    <string name="validation_error">Er is iets misgegaan</string>
     <string name="title_activity_refresh">RefreshActivity</string>
 
 </resources>

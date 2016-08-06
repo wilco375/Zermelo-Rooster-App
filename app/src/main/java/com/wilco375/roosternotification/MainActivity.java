@@ -198,6 +198,8 @@ public class MainActivity extends Activity {
                 public void onClick(View v) {
                     if (ZermeloSync.authenticate(((EditText) findViewById(R.id.zermeloCode)).getText().toString().replaceAll(" ", ""), getBaseContext(), sp)) {
                         syncing = true;
+                        findViewById(R.id.zermeloSyncLayout).setVisibility(View.GONE);
+                        findViewById(R.id.zermeloForceSync).setVisibility(View.VISIBLE);
                         displayWarning();
                         new ZermeloSync().syncZermelo(getApplication(), activity, true, false);
                         Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
@@ -214,6 +216,7 @@ public class MainActivity extends Activity {
                     Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
                 }
             });
+            syncZermelo.setVisibility(View.GONE);
 
             TextView zermeloHelp = (TextView) findViewById(R.id.zermeloCodeHelp);
             zermeloHelp.setOnClickListener(new View.OnClickListener() {
@@ -225,7 +228,7 @@ public class MainActivity extends Activity {
                 }
             });
         }else{
-            findViewById(R.id.zermeloSyncLayout).setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+            findViewById(R.id.zermeloSyncLayout).setVisibility(View.GONE);
             Button syncZermelo = (Button) findViewById(R.id.zermeloForceSync);
             syncZermelo.setOnClickListener(new View.OnClickListener() {
                 @Override
