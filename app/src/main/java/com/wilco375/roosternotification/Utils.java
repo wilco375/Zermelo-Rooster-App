@@ -161,7 +161,7 @@ public class Utils {
                 ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(title, content);
                 clipboard.setPrimaryClip(clip);
-                if (toast) Toast.makeText(context, "Gekopieërd", Toast.LENGTH_SHORT).show();
+                if (toast) Toast.makeText(context, R.string.copied, Toast.LENGTH_SHORT).show();
             }
         });
     }

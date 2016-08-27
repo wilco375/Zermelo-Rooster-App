@@ -41,22 +41,15 @@ public class ScheduleListAdapter extends BaseAdapter{
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View rowView;
-        Holder holder = new Holder();
-        rowView = inflater.inflate(R.layout.schedule_list, null);
-        holder.timeslot = (TextView) rowView.findViewById(R.id.timeslot);
-        holder.info = (TextView) rowView.findViewById(R.id.info);
-        holder.time = (TextView) rowView.findViewById(R.id.time);
-        holder.timeslot.setText(timeslots[position]);
-        holder.info.setText(infos[position]);
-        holder.time.setText(times[position]);
-        if(cancelleds[position]) holder.info.setPaintFlags(holder.info.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);;
-        return rowView;
-    }
-
-    private class Holder{
-        TextView timeslot;
-        TextView info;
-        TextView time;
+        if(convertView == null)
+            convertView = inflater.inflate(R.layout.schedule_list, null);
+        TextView timeslot = (TextView) convertView.findViewById(R.id.timeslot);
+        TextView info = (TextView) convertView.findViewById(R.id.info);
+        TextView time = (TextView) convertView.findViewById(R.id.time);
+        timeslot.setText(timeslots[position]);
+        info.setText(infos[position]);
+        time.setText(times[position]);
+        if(cancelleds[position]) info.setPaintFlags(info.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);;
+        return convertView;
     }
 }

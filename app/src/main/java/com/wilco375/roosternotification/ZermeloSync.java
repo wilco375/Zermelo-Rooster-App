@@ -54,7 +54,7 @@ public class ZermeloSync {
                 if(scheduleString == null) return;
 
                 //If necessary copy string to clipboard
-                if(copyClipboard) Utils.copyText(activity, context, "Rooster JSON", scheduleString, true);
+                if(copyClipboard) Utils.copyText(activity, context, context.getResources().getString(R.string.schedule_json), scheduleString, true);
 
                 try{
                     //Format to JSONArray
@@ -96,8 +96,9 @@ public class ZermeloSync {
                         } else {
                             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                                     .setSmallIcon(R.drawable.notification_logo)
-                                    .setContentTitle("Er vallen "+count+" lessen uit")
-                                    .setContentText("Kijk in de app voor meer info");
+                                    .setContentTitle(String.format(context.getResources().getString(R.string.hours_cancelled_count), count))
+                                    .setContentText(context.getResources().getString(R.string.check_app_for_info))
+                                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0));
 
                             Notification notification = builder.build();
                             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
@@ -138,7 +139,8 @@ public class ZermeloSync {
         if(sp.getBoolean("notifyCancel",true)) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.notification_logo)
-                    .setContentTitle("Er valt een uur uit op " + Utils.dayIntToStr(schedule.getDay()).toLowerCase());
+                    .setContentTitle(String.format(context.getResources().getString(R.string.hour_cancelled_on), Utils.dayIntToStr(schedule.getDay()).toLowerCase()))
+                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0));
 
             if(schedule.getTimeslot() != 0) builder.setContentText(schedule.getTimeslot() + ". " + schedule.getSubject());
             else builder.setContentText(schedule.getSubject());
@@ -259,8 +261,6 @@ public class ZermeloSync {
     }
 
     public static boolean authenticate(String code, Context context, SharedPreferences sp) {
-        System.out.println("Authing "+code);
-
         if (code.equals("")) {
             Toast.makeText(context, R.string.invalid_code, Toast.LENGTH_LONG).show();
             return false;

@@ -14,4 +14,9 @@
     <string name="validation_error">Er is iets misgegaan</string>
     <string name="title_activity_refresh">RefreshActivity</string>
 
+    <string name="hour_cancelled_on">Er valt een uur uit op %s</string>
+    <string name="check_app_for_info">Kijk in de app voor meer info</string>
+    <string name="hours_cancelled_count">Er vallen %d lessen uit</string>
+    <string name="schedule_json">Rooster JSON</string>
+    <string name="copied">Gekopieërd</string>
 </resources>

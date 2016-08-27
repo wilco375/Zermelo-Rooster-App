@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.SynchronousQueue;
 
 public class MainActivity extends Activity {
     boolean syncing = false;
@@ -110,9 +111,10 @@ public class MainActivity extends Activity {
                 scheduleArray = tempScheduleArray;
 
                 Calendar calendar = Calendar.getInstance();
-                day = calendar.get(Calendar.DAY_OF_WEEK);
-                if(calendar.get(Calendar.HOUR_OF_DAY)>17) day += 1;
-                if(day == Calendar.SATURDAY || day == Calendar.SUNDAY || (day == Calendar.MONDAY && calendar.get(Calendar.HOUR_OF_DAY) > 17)) day = Calendar.MONDAY;
+                int thisDay = calendar.get(Calendar.DAY_OF_WEEK);
+                day = thisDay;
+                if(calendar.get(Calendar.HOUR_OF_DAY) > 17) day += 1;
+                if(thisDay == Calendar.SATURDAY || thisDay == Calendar.SUNDAY) day = Calendar.MONDAY;
 
                 showSchedule();
             }
@@ -123,7 +125,10 @@ public class MainActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Schedule [] daySchedule = scheduleArray[day];
+                System.out.println("Day: "+day);
+                System.out.println("scheduleArray: "+Arrays.deepToString(scheduleArray));
+
+                Schedule[] daySchedule = scheduleArray[day];
                 Arrays.sort(daySchedule, new Schedule.ScheduleComparator());
 
                 //Set text to day

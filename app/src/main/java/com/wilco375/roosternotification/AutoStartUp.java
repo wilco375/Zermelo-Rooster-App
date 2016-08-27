@@ -9,8 +9,6 @@ public class AutoStartUp extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        System.out.println("Setting alarmManager");
-
         AlarmReceiver.createNotification(this);
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(getBaseContext(),AlarmReceiver.class);
