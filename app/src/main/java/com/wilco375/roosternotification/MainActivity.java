@@ -125,9 +125,6 @@ public class MainActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Day: "+day);
-                System.out.println("scheduleArray: "+Arrays.deepToString(scheduleArray));
-
                 Schedule[] daySchedule = scheduleArray[day];
                 Arrays.sort(daySchedule, new Schedule.ScheduleComparator());
 
