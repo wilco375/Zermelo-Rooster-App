@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.SynchronousQueue;
 
 public class MainActivity extends Activity {
     boolean syncing = false;
@@ -76,10 +75,15 @@ public class MainActivity extends Activity {
                 List<Schedule> wednesday = new ArrayList<>();
                 List<Schedule> thursday = new ArrayList<>();
                 List<Schedule> friday = new ArrayList<>();
+                List<Schedule> nextmonday = new ArrayList<>();
+                List<Schedule> nexttuesday = new ArrayList<>();
+                List<Schedule> nextwednesday = new ArrayList<>();
+                List<Schedule> nextthursday = new ArrayList<>();
+                List<Schedule> nextfriday = new ArrayList<>();
 
                 //Add schedule to appropriate day
                 for(Schedule lesson : schedule){
-                    switch (lesson.getDay()){
+                    switch (lesson.getDay()) {
                         case Calendar.MONDAY:
                             monday.add(lesson);
                             break;
@@ -95,10 +99,25 @@ public class MainActivity extends Activity {
                         case Calendar.FRIDAY:
                             friday.add(lesson);
                             break;
+                        case Calendar.MONDAY + 7:
+                            nextmonday.add(lesson);
+                            break;
+                        case Calendar.TUESDAY + 7:
+                            nexttuesday.add(lesson);
+                            break;
+                        case Calendar.WEDNESDAY + 7:
+                            nextwednesday.add(lesson);
+                            break;
+                        case Calendar.THURSDAY + 7:
+                            nextthursday.add(lesson);
+                            break;
+                        case Calendar.FRIDAY + 7:
+                            nextfriday.add(lesson);
+                            break;
                     }
                 }
 
-                Schedule[][] tempScheduleArray = {
+                scheduleArray = new Schedule[][]{
                         {},
                         {},
                         Utils.scheduleListToArray(monday),
@@ -106,15 +125,16 @@ public class MainActivity extends Activity {
                         Utils.scheduleListToArray(wednesday),
                         Utils.scheduleListToArray(thursday),
                         Utils.scheduleListToArray(friday),
+                        {},
+                        {},
+                        Utils.scheduleListToArray(nextmonday),
+                        Utils.scheduleListToArray(nexttuesday),
+                        Utils.scheduleListToArray(nextwednesday),
+                        Utils.scheduleListToArray(nextthursday),
+                        Utils.scheduleListToArray(nextfriday),
                 };
 
-                scheduleArray = tempScheduleArray;
-
-                Calendar calendar = Calendar.getInstance();
-                int thisDay = calendar.get(Calendar.DAY_OF_WEEK);
-                day = thisDay;
-                if(calendar.get(Calendar.HOUR_OF_DAY) > 17) day += 1;
-                if(thisDay == Calendar.SATURDAY || thisDay == Calendar.SUNDAY) day = Calendar.MONDAY;
+                day = Utils.currentDay();
 
                 showSchedule();
             }
@@ -311,7 +331,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (day - 1 >= Calendar.MONDAY) {
-                    day -= 1;
+                    if(day-1 == Calendar.SUNDAY+7) day = Calendar.FRIDAY;
+                    else day -= 1;
                     showSchedule();
                 } else {
                     Toast.makeText(context, "Je kunt niet verder terug", Toast.LENGTH_LONG).show();
@@ -322,8 +343,9 @@ public class MainActivity extends Activity {
         findViewById(R.id.nextDay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(day+1<=Calendar.FRIDAY){
-                    day += 1;
+                if(day+1 <= Calendar.FRIDAY+7){
+                    if(day+1 == Calendar.SATURDAY) day = Calendar.MONDAY + 7;
+                    else day += 1;
                     showSchedule();
                 }else{
                     Toast.makeText(context,"Je kunt niet verder",Toast.LENGTH_LONG).show();

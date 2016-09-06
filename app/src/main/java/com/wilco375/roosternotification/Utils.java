@@ -49,41 +49,38 @@ public class Utils {
     }
 
     //Time
-    public static long[] getUnixWeek(){
-        //Start of today
-        long start = (System.currentTimeMillis() / 1000L) - ((System.currentTimeMillis()/1000L) % (24 * 60 * 60));
-        //End of today
-        long end = start + (60*60*24);
-
+    public static long getUnixStartOfWeek(){
         Calendar calendar = Calendar.getInstance();
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        //If friday after 5pm assume its saturday
-        if(dayOfWeek == Calendar.FRIDAY && calendar.get(Calendar.HOUR_OF_DAY) >= 17){
-            dayOfWeek += 1;
-            start += 60*60*24;
-            end += 60*60*24;
+        if(calendar.get(Calendar.HOUR_OF_DAY) > 17)
+            calendar.add(Calendar.DAY_OF_WEEK, 1);
+        if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            calendar.add(Calendar.WEEK_OF_YEAR, 1);
         }
 
-        long startOfWeek;
-        long endOfWeek;
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 
-        if(dayOfWeek != Calendar.SATURDAY) {
-            startOfWeek = start - (dayOfWeek * 24 * 60 * 60);
-            endOfWeek = end - (dayOfWeek * 24 * 60 * 60);
-        }else{
-            //If saturday startOfWeek is start
-            startOfWeek = start;
-            endOfWeek = end;
-        }
+        return calendar.getTimeInMillis()/1000L;
+    }
 
-        startOfWeek += 2 * 24 * 60 * 60;
-        endOfWeek += 6 * 24 * 60 * 60;
+    public static int currentDay(){
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        if(calendar.get(Calendar.HOUR_OF_DAY) > 17) day += 1;
+        if(day == Calendar.SATURDAY || day == Calendar.SUNDAY) day = Calendar.MONDAY;
+        return day;
+    }
 
-        long[] timeArray = new long[2];
-        timeArray[0] = startOfWeek;
-        timeArray[1] = endOfWeek;
+    public static int currentWeek(){
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        if(calendar.get(Calendar.HOUR_OF_DAY) > 17) day += 1;
 
-        return timeArray;
+        if(day == Calendar.SATURDAY || day == Calendar.SUNDAY) return calendar.get(Calendar.WEEK_OF_YEAR) + 1;
+        else return calendar.get(Calendar.WEEK_OF_YEAR);
     }
 
     public static Calendar unixToCalendar(long unixTime){
@@ -111,24 +108,40 @@ public class Utils {
     }
 
     public static String dayIntToStr(int day){
+        boolean nextWeek = false;
+        while(day > 7){
+            nextWeek = true;
+            day -= 7;
+        }
+
+        String dayStr;
         switch (day){
             case Calendar.MONDAY:
-                return "Maandag";
+                dayStr = "Maandag";
+                break;
             case Calendar.TUESDAY:
-                return "Dinsdag";
+                dayStr = "Dinsdag";
+                break;
             case Calendar.WEDNESDAY:
-                return "Woensdag";
+                dayStr = "Woensdag";
+                break;
             case Calendar.THURSDAY:
-                return "Donderdag";
+                dayStr = "Donderdag";
+                break;
             case Calendar.FRIDAY:
-                return "Vrijdag";
+                dayStr = "Vrijdag";
+                break;
             case Calendar.SATURDAY:
-                return "Zaterdag";
+                dayStr = "Zaterdag";
+                break;
             case Calendar.SUNDAY:
-                return "Zondag";
+                dayStr = "Zondag";
+                break;
             default:
-                return "";
+                return "Error";
         }
+
+        return nextWeek ? "Volgende week " + dayStr.toLowerCase() : dayStr;
     }
 
     //Schedule

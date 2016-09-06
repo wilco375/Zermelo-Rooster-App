@@ -31,11 +31,7 @@ public class LesdagWidgetProvider extends AppWidgetProvider{
         for (int i=0; i<N; i++) {
             int appWidgetId = appWidgetIds[i];
 
-            Calendar calendar = Calendar.getInstance();
-            int thisDay = calendar.get(Calendar.DAY_OF_WEEK);
-            int day = thisDay;
-            if(calendar.get(Calendar.HOUR_OF_DAY) > 17) day += 1;
-            if(thisDay == Calendar.SATURDAY || thisDay == Calendar.SUNDAY) day = Calendar.MONDAY;
+            int day = Utils.currentDay();
 
             SharedPreferences sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
 

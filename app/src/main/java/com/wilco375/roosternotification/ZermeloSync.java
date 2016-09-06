@@ -17,9 +17,15 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
@@ -42,15 +48,16 @@ public class ZermeloSync {
             public void run() {
                 List<Schedule> cancelledNotification = new ArrayList<>();
 
-                //Get start and end of week in unix time
-                long startOfWeek = Utils.getUnixWeek()[0];
-                long endOfWeek = Utils.getUnixWeek()[1];
+                // Get start of this week in unix
+                long start = Utils.getUnixStartOfWeek();
+                // Set end two weeks later
+                long end = start + 12 * 24 * 60 * 60;
 
                 //Get token
                 sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
 
                 //Get schedule string
-                String scheduleString = getScheduleString(startOfWeek, endOfWeek, sp.getString("token", ""));
+                String scheduleString = getScheduleString(start, end, sp.getString("token", ""));
                 if(scheduleString == null) return;
 
                 //If necessary copy string to clipboard
@@ -74,17 +81,13 @@ public class ZermeloSync {
                     //Notify cancelled lessons
                     if(sp.getBoolean("notifyCancel",true)) {
                         Calendar calendar = Calendar.getInstance();
-                        int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
-                        int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
-                        if (currentDay == Calendar.SATURDAY || (currentDay == Calendar.FRIDAY && calendar.get(Calendar.HOUR_OF_DAY) >= 17)) {
-                            currentDay = Calendar.MONDAY;
-                            currentWeek += 1;
-                        }
+                        int currentDay = Utils.currentDay();
+                        int currentWeek = Utils.currentWeek();
 
                         int count = 0;
                         for (Schedule s : cancelledNotification) {
                             String currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(currentWeek) + intStr(s.getDay()) + intStr(s.getTimeslot()) + s.getSubject();
-                            if (s.getDay() >= currentDay && !sp.getString("prevNots", "").contains(currentNotString)) {
+                            if (s.getDay() >= currentDay && s.getDay() < 7 && !sp.getString("prevNots", "").contains(currentNotString)) {
                                 count++;
                             }
                         }
@@ -136,7 +139,7 @@ public class ZermeloSync {
     }
 
 	private void cancelNotification(Schedule schedule, Context context){
-        if(sp.getBoolean("notifyCancel",true)) {
+        if(sp.getBoolean("notifyCancel",true) && schedule.getDay() < 7) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.notification_logo)
                     .setContentTitle(String.format(context.getResources().getString(R.string.hour_cancelled_on), Utils.dayIntToStr(schedule.getDay()).toLowerCase()))
@@ -149,15 +152,9 @@ public class ZermeloSync {
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
 
             Calendar calendar = Calendar.getInstance();
-            int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
-            int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
-            if(currentDay == Calendar.SATURDAY || (currentDay == Calendar.FRIDAY && calendar.get(Calendar.HOUR_OF_DAY)>=17)){
-                currentDay = Calendar.MONDAY;
-                currentWeek += 1;
-            }
 
-            String currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(currentWeek) + intStr(schedule.getDay()) + intStr(schedule.getTimeslot()) + schedule.getSubject();
-            if(schedule.getDay()>=currentDay && !sp.getString("prevNots","").contains(currentNotString)) {
+            String currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(Utils.currentDay()) + intStr(schedule.getDay()) + intStr(schedule.getTimeslot()) + schedule.getSubject();
+            if(schedule.getDay() >= Utils.currentDay() && !sp.getString("prevNots","").contains(currentNotString)) {
                 int notId = sp.getInt("notId", 2);
                 SharedPreferences.Editor spe = sp.edit();
                 spe.putInt("notId", notId + 1);
@@ -172,10 +169,10 @@ public class ZermeloSync {
         return String.valueOf(integer);
     }
 
-    private String getScheduleString(long startOfWeek,long endOfWeek, String token){
+    private String getScheduleString(long start,long end, String token){
         try{
             HttpClient client = HttpClientBuilder.create().build();
-            String url = "https://jfc.zportal.nl/api/v2/appointments?user=~me&start=" + String.valueOf(startOfWeek) + "&end=" + String.valueOf(endOfWeek) + "&valid=true&fields=subjects,cancelled,locations,startTimeSlot,start,end,groups,type&access_token=" + token;
+            String url = "https://jfc.zportal.nl/api/v2/appointments?user=~me&start=" + String.valueOf(start) + "&end=" + String.valueOf(end) + "&valid=true&fields=subjects,cancelled,locations,startTimeSlot,start,end,groups,type&access_token=" + token;
             HttpGet get = new HttpGet(url);
             HttpResponse response = client.execute(get);
 
@@ -198,7 +195,8 @@ public class ZermeloSync {
             Calendar calendarEnd = Utils.unixToCalendar(unixEnd);
 
             //Day
-            scheduleItem.setDay(calendarStart.get(Calendar.DAY_OF_WEEK));
+            if(Utils.currentWeek() == calendarStart.get(Calendar.WEEK_OF_YEAR)) scheduleItem.setDay(calendarStart.get(Calendar.DAY_OF_WEEK));
+            else scheduleItem.setDay(calendarStart.get(Calendar.DAY_OF_WEEK) + 7);
 
             //Start (Readable string)
             scheduleItem.setStart(Utils.calendarTimeToString(calendarStart));
