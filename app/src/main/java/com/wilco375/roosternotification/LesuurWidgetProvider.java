@@ -6,12 +6,10 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.app.NotificationCompat;
 import android.text.SpannableString;
 import android.text.style.StrikethroughSpan;
 import android.widget.RemoteViews;
 
-import java.util.Arrays;
 import java.util.Calendar;
 
 public class LesuurWidgetProvider extends AppWidgetProvider{
