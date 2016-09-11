@@ -79,7 +79,8 @@ public class Utils {
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         if(calendar.get(Calendar.HOUR_OF_DAY) > 17) day += 1;
 
-        if(day >= Calendar.SATURDAY || day == Calendar.SUNDAY) return calendar.get(Calendar.WEEK_OF_YEAR) + 1;
+        // If saturday or sunday or sunday (after 17:00)
+        if(day >= Calendar.SATURDAY || day == Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) return calendar.get(Calendar.WEEK_OF_YEAR) + 1;
         else return calendar.get(Calendar.WEEK_OF_YEAR);
     }
 
