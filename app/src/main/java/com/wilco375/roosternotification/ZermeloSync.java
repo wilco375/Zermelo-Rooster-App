@@ -148,7 +148,8 @@ public class ZermeloSync {
 
             Calendar calendar = Calendar.getInstance();
 
-            String currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(Utils.currentDay()) + intStr(schedule.getDay()) + intStr(schedule.getTimeslot()) + schedule.getSubject();
+            String currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(Utils.currentWeek()) + intStr(schedule.getDay()) + intStr(schedule.getTimeslot()) + schedule.getSubject();
+            System.out.println("currentNotString: "+currentNotString);
             if(schedule.getDay() >= Utils.currentDay() && !sp.getString("prevNots","").contains(currentNotString)) {
                 int notId = sp.getInt("notId", 2);
                 SharedPreferences.Editor spe = sp.edit();
