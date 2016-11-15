@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.wilco375.roosternotification"
@@ -10,6 +10,25 @@ android {
         targetSdkVersion 22
         versionCode 28
         versionName "3.9.2"
+    }
+    productFlavors{
+        jfc{
+            buildConfigField "String", "PREFIX", '"jfc"'
+            resValue "string", "app_name", "JFC Rooster App"
+            resValue "string", "first_sync_message", "Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent. Het JFC is niet verantwoordelijk voor deze app"
+        }
+        candea{
+            applicationId "com.wilco375.candearoosternotificationapp"
+            buildConfigField "String", "PREFIX", '"candea"'
+            resValue "string", "app_name", "Candea Rooster App"
+            resValue "string", "first_sync_message", "Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent. Het Candea is niet verantwoordelijk voor deze app"
+        }
+        jpthijsse{
+            applicationId "com.wilco375.jpthijsseroosternotification"
+            buildConfigField "String", "PREFIX", '"jpthijsse"'
+            resValue "string", "app_name", "JPThijsse Rooster App"
+            resValue "string", "first_sync_message", "Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent. Het TPThijsse College is niet verantwoordelijk voor deze app"
+        }
     }
     buildTypes {
         release {

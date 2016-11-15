@@ -12,14 +12,14 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Appstyle">
-        <receiver android:name=".BootComplete">
+        <receiver android:name=".receiver.BootComplete">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".receiver.AlarmReceiver" />
         <receiver
-            android:name=".LesdagWidgetProvider"
+            android:name=".widget.LesdagWidgetProvider"
             android:label="Dagrooster Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -30,7 +30,7 @@
                 android:resource="@xml/app_widget_lesdag" />
         </receiver>
         <receiver
-            android:name=".LesuurWidgetProvider"
+            android:name=".widget.LesuurWidgetProvider"
             android:label="Lesuur Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -42,11 +42,11 @@
         </receiver>
 
         <service
-            android:name=".AutoStartUp"
+            android:name=".receiver.AutoStartUp"
             android:exported="false" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,8 +55,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ZermeloHelp"
-            android:label="@string/title_activity_zermelo_help"></activity>
+            android:name=".activity.ZermeloHelp"
+            android:label="@string/title_activity_zermelo_help" />
     </application>
 
 </manifest>

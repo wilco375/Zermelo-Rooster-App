@@ -2,6 +2,8 @@ package com.wilco375.roosternotification;
 
 import android.content.SharedPreferences;
 
+import com.wilco375.roosternotification.general.Utils;
+
 import java.io.Serializable;
 import java.util.Comparator;
 
