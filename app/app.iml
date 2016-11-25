@@ -43,6 +43,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/candeaDebug/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/candeaDebug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/candeaDebug/shaders" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/candea/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/candea/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/candea/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/candea/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/candea/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/candea/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/candea/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCandeaDebug/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCandeaDebug/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCandeaDebug/assets" type="java-test-resource" />
@@ -51,13 +58,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/testCandeaDebug/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCandeaDebug/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testCandeaDebug/shaders" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/candea/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/candea/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/candea/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/candea/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/candea/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/candea/debug" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/candea/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/candea/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/candea/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/candea/assets" type="java-resource" />
@@ -66,14 +66,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/candea/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/candea/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/candea/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestCandea/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestCandea/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestCandea/assets" type="java-test-resource" />
@@ -82,6 +74,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestCandea/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestCandea/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestCandea/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testCandea/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/assets" type="java-resource" />
