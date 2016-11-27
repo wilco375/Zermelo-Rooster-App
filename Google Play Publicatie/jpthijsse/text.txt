@@ -1,0 +1,16 @@
+Deze app is ontwikkeld voor leerlingen/leraren van het JPThijsse College die makkelijk toegang willen hebben tot hun rooster. 
+De belangrijkste features van deze app:
+- Synchronisatie met Zermelo
+    - Elke 20 minuten het laatste rooster gedownload (alleen als je verbonden bent met WiFi)
+    - Al je lessen van de huidige week automatisch opgehaald
+    - Notificatie als een les uitvalt
+    - Vermelding van cluster/klas (voor leraren)
+- Een kwartier voor elk lesuur een notificatie van het vak dat je het volgende uur hebt, en in welk lokaal 
+- Widgets met het rooster van de hele dag of het huidige vak
+- Elk onderdeel van de app uit te schakelen: notificaties van huidige les, notificaties van uitval, vermelding van cluster/klas
+- Als je een Android Wear smartwatch hebt, kan je bij deze notificatie ook gelijk je hele dagrooster zien door naar links te swypen.
+
+--------------------------
+
+Disclaimer:
+Deze app is niet door het JPThijsse College ontwikkeld en is dus niet officieel door het JPThijsse College ondersteund.
