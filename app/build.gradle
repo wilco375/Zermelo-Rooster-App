@@ -8,8 +8,8 @@ android {
         applicationId "com.wilco375.roosternotification"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 29
-        versionName "3.9.3"
+        versionCode 30
+        versionName "3.9.4"
     }
     productFlavors{
         jfc{
@@ -27,7 +27,7 @@ android {
             applicationId "com.wilco375.jpthijsseroosternotification"
             buildConfigField "String", "PREFIX", '"jpthijsse"'
             resValue "string", "app_name", "JPThijsse Rooster App"
-            resValue "string", "first_sync_message", "Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent. Het TPThijsse College is niet verantwoordelijk voor deze app"
+            resValue "string", "first_sync_message", "Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent. Het JPThijsse College is niet verantwoordelijk voor deze app"
         }
     }
     buildTypes {
