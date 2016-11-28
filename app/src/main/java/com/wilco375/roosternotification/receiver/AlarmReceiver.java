@@ -86,7 +86,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         if(!(subject.equals("") && location.equals(""))){
             builder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.notification_logo)
-                    .setContentText(location);
+                    .setContentText(location)
+                    .setStyle(secondPageStyle);
 
             if(!timeslot.contains("0") && !timeslot.equals("")) builder.setContentTitle(timeslot + ": " + subject);
             else builder.setContentTitle(subject);
