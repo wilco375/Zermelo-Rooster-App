@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="themeColorPrimary">#0085ad</color>
+    <color name="themeColorPrimaryDark">#00455A</color>
+    <color name="themeColorPrimaryAlpha">#800085ad</color>
+</resources>

@@ -1,6 +1,7 @@
 package com.wilco375.roosternotification.receiver;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.support.v4.app.NotificationManagerCompat;
 
 import com.wilco375.roosternotification.R;
 import com.wilco375.roosternotification.Schedule;
+import com.wilco375.roosternotification.activity.MainActivity;
 import com.wilco375.roosternotification.general.ScheduleHandler;
 import com.wilco375.roosternotification.general.Utils;
 import com.wilco375.roosternotification.online.ZermeloSync;
@@ -76,7 +78,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         NotificationCompat.BigTextStyle secondPageStyle = new NotificationCompat.BigTextStyle();
-        secondPageStyle.setBigContentTitle(Utils.dayIntToStr(dayOfWeek)).bigText(Utils.replaceLast(bigText,"\n",""));
+        secondPageStyle.setBigContentTitle(Utils.dayIntToStr(dayOfWeek))
+                       .bigText(Utils.replaceLast(bigText,"\n",""));
 
         String spQuery = timeslot + ": " + subject + " "+location;
         if(sp.getString("lastNotification","").equals(spQuery)) return;
@@ -87,7 +90,8 @@ public class AlarmReceiver extends BroadcastReceiver {
             builder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.notification_logo)
                     .setContentText(location)
-                    .setStyle(secondPageStyle);
+                    .setStyle(secondPageStyle)
+                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0));
 
             if(!timeslot.contains("0") && !timeslot.equals("")) builder.setContentTitle(timeslot + ": " + subject);
             else builder.setContentTitle(subject);
