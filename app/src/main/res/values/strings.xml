@@ -19,4 +19,19 @@
     <string name="schedule_json">Rooster JSON</string>
     <string name="copied">Gekopieërd</string>
     <string name="first_sync_title">LET OP!</string>
+
+    <string name="zermelo_sync">Zermelo sychronisatie</string>
+    <string name="zermelo_code">Vul hier een Zermelo \'Link App\' code in om te synchroniseren met Zermelo (dit is NIET je leerlingnummer):</string>
+    <string name="zermelo_where">Waar is deze code?</string>
+    <string name="zermelo_force_sync">Forceer synchronisatie</string>
+    <string name="settings">Instellingen</string>
+    <string name="notify">Geef meldingen van lesuren</string>
+    <string name="notify_day_schedule">Laat dagrooster zien in meldingen</string>
+    <string name="notify_cancel">Geef meldingen van uitval</string>
+    <string name="show_group">Laat clusters/klassen zien (voor leraren)</string>
+    <string name="schedule">Rooster</string>
+    <string name="first_day_of_week">Maandag</string>
+    <string name="back">&lt;</string>
+    <string name="forward">&gt;</string>
+    <string name="divider">Divider</string>
 </resources>

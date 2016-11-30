@@ -1,5 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"  tools:context=".activity.MainActivity">
 
@@ -18,9 +18,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:id="@+id/zermeloTitle"
                     android:layout_marginBottom="5dp"
-                    android:text="Zermelo sychronisatie"
+                    android:text="@string/zermelo_sync"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <RelativeLayout
@@ -31,8 +32,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Vul hier een Zermelo &apos;Link App&apos; code in om te synchroniseren met Zermelo (dit is NIET je leerlingnummer):"
+                    android:text="@string/zermelo_code"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:id="@+id/zermeloText"/>
                 <EditText
@@ -46,11 +48,11 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/zermeloCode"
                     android:id="@+id/zermeloConfirm"
-                    android:text="Ok"/>
+                    android:text="@android:string/ok"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Waar is deze code?"
+                    android:text="@string/zermelo_where"
                     android:layout_below="@+id/zermeloCode"
                     android:layout_toRightOf="@+id/zermeloConfirm"
                     android:layout_toEndOf="@+id/zermeloConfirm"
@@ -64,11 +66,12 @@
                 android:layout_below="@+id/zermeloSyncLayout"
                 android:id="@+id/zermeloForceSync"
                 android:layout_marginTop="-1dp"
-                android:text="Forceer synchronisatie"/>
+                android:text="@string/zermelo_force_sync"/>
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_marginTop="10dp"
                 android:layout_height="2px"
+                android:contentDescription="@string/divider"
                 android:id="@+id/divider"
                 android:background="#000000"
                 android:layout_below="@id/zermeloForceSync"
@@ -83,8 +86,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:id="@+id/settingsTitle"
-                android:text="Instellingen"
+                android:text="@string/settings"
                 android:layout_below="@id/divider"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -98,23 +102,41 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Geef meldingen van lesuren"
+                android:text="@string/notify"
                 android:id="@+id/showNotificationText"
                 android:layout_toRightOf="@+id/showNotificationCheckbox"
+                android:layout_toEndOf="@id/showNotificationCheckbox"
                 android:layout_alignBaseline="@+id/showNotificationCheckbox"/>
 
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:id="@+id/showCancelledNotificationCheckbox"
+                android:layout_marginTop="5dp"
+                android:id="@+id/showDayScheduleCheckbox"
                 android:layout_below="@id/showNotificationCheckbox"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Geef meldingen van uitval"
+                android:text="@string/notify_day_schedule"
+                android:id="@+id/showDayScheduleText"
+                android:layout_toRightOf="@+id/showDayScheduleCheckbox"
+                android:layout_toEndOf="@+id/showDayScheduleCheckbox"
+                android:layout_alignBaseline="@+id/showDayScheduleCheckbox"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:id="@+id/showCancelledNotificationCheckbox"
+                android:layout_below="@id/showDayScheduleCheckbox"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notify_cancel"
                 android:id="@+id/showCancelledNotificationText"
                 android:layout_toRightOf="@+id/showCancelledNotificationCheckbox"
+                android:layout_toEndOf="@+id/showCancelledNotificationCheckbox"
                 android:layout_alignBaseline="@+id/showCancelledNotificationCheckbox"/>
 
             <CheckBox
@@ -126,15 +148,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Laat clusters/klassen zien (voor leraren)"
+                android:text="@string/show_group"
                 android:id="@+id/showGroupText"
                 android:layout_toRightOf="@+id/showGroupCheckbox"
+                android:layout_toEndOf="@+id/showGroupCheckbox"
                 android:layout_alignBaseline="@+id/showGroupCheckbox"
                 android:paddingBottom="5dp" />
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="2px"
                 android:id="@+id/divider1"
+                android:contentDescription="@string/divider"
                 android:background="#000000"
                 android:layout_below="@id/showGroupCheckbox"
                 android:layout_marginTop="3dp" />
@@ -150,16 +174,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:id="@+id/scheduleTitle"
                 android:layout_marginTop="5dp"
                 android:layout_below="@id/divider1"
-                android:text="Rooster"
+                android:text="@string/schedule"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Maandag"
+                android:text="@string/first_day_of_week"
                 android:id="@+id/dayText"
                 android:layout_below="@+id/scheduleTitle"
                 android:paddingTop="5dp" />
@@ -168,16 +193,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/prevDay"
-                android:text="&lt;"
+                android:text="@string/back"
                 android:layout_below="@id/dayText"/>
             <Button
                 android:minHeight="0dp" android:minWidth="0dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/nextDay"
-                android:text="&gt;"
+                android:text="@string/forward"
                 android:layout_alignBaseline="@id/prevDay"
-                android:layout_toRightOf="@id/prevDay"/>
+                android:layout_toRightOf="@id/prevDay"
+                android:layout_toEndOf="@id/prevDay"/>
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

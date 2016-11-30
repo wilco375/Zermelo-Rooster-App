@@ -278,10 +278,12 @@ public class MainActivity extends AppCompatActivity {
         final CheckBox group = (CheckBox) findViewById(R.id.showGroupCheckbox);
         final CheckBox notify = (CheckBox) findViewById(R.id.showNotificationCheckbox);
         final CheckBox notifyCancel = (CheckBox) findViewById(R.id.showCancelledNotificationCheckbox);
+        final CheckBox notifyDaySchedule = (CheckBox) findViewById(R.id.showDayScheduleCheckbox);
 
         group.setChecked(sp.getBoolean("group",false));
         notify.setChecked(sp.getBoolean("notify",true));
         notifyCancel.setChecked(sp.getBoolean("notifyCancel",true));
+        notifyDaySchedule.setChecked(sp.getBoolean("notifyDaySchedule", true));
 
         findViewById(R.id.showNotificationText).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -299,6 +301,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 group.setChecked(!group.isChecked());
+            }
+        });
+        findViewById(R.id.showDayScheduleText).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                notifyDaySchedule.setChecked(!notifyDaySchedule.isChecked());
             }
         });
 
@@ -321,6 +329,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sp.edit().putBoolean("notifyCancel", isChecked).apply();
+            }
+        });
+
+        notifyDaySchedule.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                sp.edit().putBoolean("notifyDaySchedule", isChecked).apply();
             }
         });
 

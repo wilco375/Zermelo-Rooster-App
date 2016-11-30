@@ -21,7 +21,7 @@ import java.util.Calendar;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    static int notificationId = 001;
+    private static final int NOTIFICATION_ID = 1;
 
     static NotificationCompat.Builder builder;
 
@@ -31,10 +31,10 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     public static void createNotification(Context context){
-        SharedPreferences sp = context.getSharedPreferences("Main", context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
         SharedPreferences.Editor spe = sp.edit();
 
-        //Sync with zermelo
+        //Sync with Zermelo
         if(sp.getInt("syncCount",0)==3) {
             new ZermeloSync().syncZermelo(context,null, false, false);
             spe.putInt("timesSynced",sp.getInt("timesSynced",0)+1);
@@ -45,20 +45,24 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
         spe.apply();
 
-        //Notification
-        if(!sp.getBoolean("notify",true)) return;
+        // Return if notifications are disabled
+        if(!sp.getBoolean("notify", true)) return;
 
+        // Get current day
         int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         if(dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) return;
 
+        // Get schedule of current day
         Schedule[] schedule = ScheduleHandler.getScheduleByDay(context,dayOfWeek);
         if(schedule.length < 1) return;
         Arrays.sort(schedule,new Schedule.ScheduleComparator());
 
+        // Get all the notification texts
         String bigText = "";
         String subject = "";
         String location = "";
         String timeslot = "";
+        String title = "";
         //Get 15 minutes before current time
         double currentTime = Utils.calendarTimeToDouble(Calendar.getInstance())+0.25;
         for(Schedule lesson : schedule){
@@ -69,6 +73,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 timeslot = String.valueOf(lesson.getTimeslot());
             }
 
+            title = (!timeslot.equals("0") && !timeslot.equals("")) ? timeslot + ": " + subject : subject;
+
             //Second Page for Android Wear
             String timeslot2;
             if(lesson.getTimeslot() <= 0) timeslot2 = "";
@@ -77,33 +83,39 @@ public class AlarmReceiver extends BroadcastReceiver {
             else bigText += timeslot2+"X\n";
         }
 
-        NotificationCompat.BigTextStyle secondPageStyle = new NotificationCompat.BigTextStyle();
-        secondPageStyle.setBigContentTitle(Utils.dayIntToStr(dayOfWeek))
-                       .bigText(Utils.replaceLast(bigText,"\n",""));
-
+        // If the notification is already sent, return
         String spQuery = timeslot + ": " + subject + " "+location;
         if(sp.getString("lastNotification","").equals(spQuery)) return;
 
+        // Update last notification String
         spe.putString("lastNotification", spQuery).apply();
 
         if(!(subject.equals("") && location.equals(""))){
+            // Style that shows the entire day's schedule
+            NotificationCompat.BigTextStyle daySchedule = new NotificationCompat.BigTextStyle();
+            daySchedule.setBigContentTitle(Utils.dayIntToStr(dayOfWeek))
+                       .bigText(Utils.replaceLast(bigText,"\n",""));
+
+            // Create main notification with daySchedule as extended notification
             builder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.notification_logo)
                     .setContentText(location)
-                    .setStyle(secondPageStyle)
+                    .extend(new NotificationCompat.WearableExtender()
+                            .addPage(
+                                    new NotificationCompat.Builder(context)
+                                            .setStyle(daySchedule).build()
+                            )
+                    )
+                    .setContentTitle(title)
                     .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0));
 
-            if(!timeslot.contains("0") && !timeslot.equals("")) builder.setContentTitle(timeslot + ": " + subject);
-            else builder.setContentTitle(subject);
+            if(sp.getBoolean("notifyDaySchedule", true)) builder.setStyle(daySchedule);
 
-            Notification secondPageNotification = new NotificationCompat.Builder(context)
-                    .setStyle(secondPageStyle).build();
-
-            Notification notification = builder.extend(new NotificationCompat.WearableExtender().addPage(secondPageNotification)).build();
-
+            Notification notification = builder.build();
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-            notificationManagerCompat.notify(notificationId, notification);
+            notificationManagerCompat.notify(NOTIFICATION_ID, notification);
         }else{
+            // Cancel all notifications if there's no subject and location
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
             notificationManagerCompat.cancelAll();
         }
