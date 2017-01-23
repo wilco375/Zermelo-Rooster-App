@@ -1,6 +1,5 @@
 package com.wilco375.roosternotification.activity;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -12,12 +11,12 @@ import com.wilco375.roosternotification.R;
 
 import java.io.InputStream;
 
-public class ZermeloHelp extends AppCompatActivity {
+public class HelpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_zermelo_help);
+        setContentView(R.layout.activity_help);
         new DownloadImageTask((ImageView) findViewById(R.id.stepOneImg))
                 .execute("https://raw.githubusercontent.com/wilco375/JFCAppResources/master/zermelo_code_1.png");
         new DownloadImageTask((ImageView) findViewById(R.id.stepTwoImg))

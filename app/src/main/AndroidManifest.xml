@@ -59,8 +59,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ZermeloHelp"
+            android:name=".activity.HelpActivity"
             android:label="@string/title_activity_zermelo_help" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/settings"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity android:name=".activity.InitActivity"/>
     </application>
 
 </manifest>

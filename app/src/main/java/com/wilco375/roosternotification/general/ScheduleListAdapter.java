@@ -10,14 +10,16 @@ import android.widget.TextView;
 
 import com.wilco375.roosternotification.R;
 
-public class ScheduleListAdapter extends BaseAdapter{
-    String [] timeslots;
-    String[] infos;
-    String[] times;
-    boolean[] cancelleds;
-    LayoutInflater inflater;
+import java.util.List;
 
-    public ScheduleListAdapter(Context contextArg, String[] timeslotsArg, String[] infosArg, String[] timesArg, boolean[] cancelledsArg) {
+public class ScheduleListAdapter extends BaseAdapter{
+    private List<String> timeslots;
+    private List<String> infos;
+    private List<String> times;
+    private List<Boolean> cancelleds;
+    private LayoutInflater inflater;
+
+    public ScheduleListAdapter(Context contextArg, List<String> timeslotsArg, List<String> infosArg, List<String> timesArg, List<Boolean> cancelledsArg) {
         timeslots = timeslotsArg;
         infos = infosArg;
         times = timesArg;
@@ -37,7 +39,7 @@ public class ScheduleListAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return timeslots.length;
+        return timeslots.size();
     }
 
     @Override
@@ -47,10 +49,10 @@ public class ScheduleListAdapter extends BaseAdapter{
         TextView timeslot = (TextView) convertView.findViewById(R.id.timeslot);
         TextView info = (TextView) convertView.findViewById(R.id.info);
         TextView time = (TextView) convertView.findViewById(R.id.time);
-        timeslot.setText(timeslots[position]);
-        info.setText(infos[position]);
-        time.setText(times[position]);
-        if(cancelleds[position]) info.setPaintFlags(info.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);;
+        timeslot.setText(timeslots.get(position));
+        info.setText(infos.get(position));
+        time.setText(times.get(position));
+        if(cancelleds.get(position)) info.setPaintFlags(info.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);;
         return convertView;
     }
 }

@@ -156,10 +156,6 @@ public class Utils {
         return list.toArray(new Schedule[list.size()]);
     }
 
-    public static List<Schedule> scheduleArrayToList(Schedule[] schedule){
-        return Arrays.asList(schedule);
-    }
-
     //String utils
     public static String replaceLast(String string, String substring, String replacement)
     {
@@ -184,11 +180,5 @@ public class Utils {
                 if (toast) Toast.makeText(context, R.string.copied, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    public static int spToPx(Activity activity,int sp){
-        DisplayMetrics dm = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        return (int) (sp * dm.scaledDensity);
     }
 }
