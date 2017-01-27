@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,8 +31,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     boolean syncing = false;
     SharedPreferences sp;
-    Activity activity;
-    Context context;
     List<ArrayList<Schedule>> scheduleList;
     int day;
 
@@ -44,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Allow internet
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
-
-        activity = this;
-        context = getApplicationContext();
 
         //Get SharedPreferences
         sp = getSharedPreferences("Main",MODE_PRIVATE);
@@ -83,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Schedule[] schedule = ScheduleHandler.getSchedule(context);
+                Schedule[] schedule = ScheduleHandler.getSchedule(MainActivity.this);
                 int DAY_MAX = Calendar.FRIDAY + 7;
 
                 scheduleList = new ArrayList<>();
@@ -116,27 +111,10 @@ public class MainActivity extends AppCompatActivity {
                 TextView dayText = (TextView) findViewById(R.id.dayText);
                 dayText.setText(Utils.dayIntToStr(day));
 
-                List<String> timeslots = new ArrayList<>();
-                List<String> infos = new ArrayList<>();
-                List<String> times = new ArrayList<>();
-                List<Boolean> cancelled = new ArrayList<>();
-
-                for(Schedule lesson : daySchedule){
-                    timeslots.add(lesson.getTimeslot() < 1 ? "-" : String.valueOf(lesson.getTimeslot()));
-
-                    String infoStr = "";
-                    if(!lesson.getSubject().equals("")) infoStr = lesson.getSubjectAndGroup(sp);
-                    if(!lesson.getType().equals("Les")) infoStr += " ("+lesson.getType()+")";
-                    if(!lesson.getLocation().equals("")) infoStr += " - "+lesson.getLocation();
-                    infos.add(infoStr);
-
-                    times.add(lesson.getStart()+" - "+lesson.getEnd());
-
-                    cancelled.add(lesson.getCancelled());
-                }
-
                 ListView listView = (ListView) findViewById(R.id.dayListView);
-                listView.setAdapter(new ScheduleListAdapter(context, timeslots, infos, times,cancelled));
+                listView.setAdapter(
+                        new ScheduleListAdapter(daySchedule, sp, (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                );
             }
         });
     }
@@ -153,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     else day -= 1;
                     setupSchedule();
                 } else {
-                    Toast.makeText(context, "Je kunt niet verder terug", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Je kunt niet verder terug", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -166,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                     else day += 1;
                     setupSchedule();
                 }else{
-                    Toast.makeText(context,"Je kunt niet verder",Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Je kunt niet verder", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -177,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void syncSchedule(){
         syncing = true;
-        new ZermeloSync().syncZermelo(getApplication(), activity, true, false);
+        new ZermeloSync().syncZermelo(getApplication(), MainActivity.this, true, false);
         Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
     }
 

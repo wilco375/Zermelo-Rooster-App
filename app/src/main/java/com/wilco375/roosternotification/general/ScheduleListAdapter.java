@@ -1,6 +1,7 @@
 package com.wilco375.roosternotification.general;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,22 +10,19 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wilco375.roosternotification.R;
+import com.wilco375.roosternotification.Schedule;
 
 import java.util.List;
 
 public class ScheduleListAdapter extends BaseAdapter{
-    private List<String> timeslots;
-    private List<String> infos;
-    private List<String> times;
-    private List<Boolean> cancelleds;
+    private SharedPreferences sp;
     private LayoutInflater inflater;
+    private List<Schedule> schedule;
 
-    public ScheduleListAdapter(Context contextArg, List<String> timeslotsArg, List<String> infosArg, List<String> timesArg, List<Boolean> cancelledsArg) {
-        timeslots = timeslotsArg;
-        infos = infosArg;
-        times = timesArg;
-        cancelleds = cancelledsArg;
-        inflater = (LayoutInflater) contextArg.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public ScheduleListAdapter(List<Schedule> schedule, SharedPreferences sp, LayoutInflater inflater) {
+        this.sp = sp;
+        this.inflater = inflater;
+        this.schedule = schedule;
     }
 
     @Override
@@ -39,20 +37,35 @@ public class ScheduleListAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return timeslots.size();
+        return schedule.size();
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         if(convertView == null)
             convertView = inflater.inflate(R.layout.schedule_list, null);
+
+        Schedule lesson = schedule.get(position);
+
         TextView timeslot = (TextView) convertView.findViewById(R.id.timeslot);
         TextView info = (TextView) convertView.findViewById(R.id.info);
         TextView time = (TextView) convertView.findViewById(R.id.time);
-        timeslot.setText(timeslots.get(position));
-        info.setText(infos.get(position));
-        time.setText(times.get(position));
-        if(cancelleds.get(position)) info.setPaintFlags(info.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);;
+        timeslot.setText(String.valueOf(lesson.getTimeslot()));
+        info.setText(getInfo(lesson));
+        time.setText(lesson.getStart()+" - "+lesson.getEnd());
+        if(lesson.getCancelled()){
+            info.setPaintFlags(info.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            info.setPaintFlags(0);
+        }
         return convertView;
+    }
+
+    private String getInfo(Schedule lesson){
+        String info = "";
+        if(!lesson.getSubject().equals("")) info = lesson.getSubjectAndGroup(sp);
+        if(!lesson.getType().equals("Les")) info += " ("+lesson.getType()+")";
+        if(!lesson.getLocation().equals("")) info += " - "+lesson.getLocation();
+        return info;
     }
 }
