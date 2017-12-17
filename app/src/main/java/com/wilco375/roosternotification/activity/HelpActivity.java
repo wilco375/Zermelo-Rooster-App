@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.wilco375.roosternotification.R;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 
 public class HelpActivity extends AppCompatActivity {
 
@@ -17,19 +18,19 @@ public class HelpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
-        new DownloadImageTask((ImageView) findViewById(R.id.stepOneImg))
+        new DownloadImageTask(findViewById(R.id.stepOneImg))
                 .execute("https://raw.githubusercontent.com/wilco375/JFCAppResources/master/zermelo_code_1.png");
-        new DownloadImageTask((ImageView) findViewById(R.id.stepTwoImg))
+        new DownloadImageTask(findViewById(R.id.stepTwoImg))
                 .execute("https://raw.githubusercontent.com/wilco375/JFCAppResources/master/zermelo_code_2.png");
-        new DownloadImageTask((ImageView) findViewById(R.id.stepThreeImg))
+        new DownloadImageTask(findViewById(R.id.stepThreeImg))
                 .execute("https://raw.githubusercontent.com/wilco375/JFCAppResources/master/zermelo_code_3.png");
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
+    private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        private WeakReference<ImageView> bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
+        DownloadImageTask(ImageView bmImage) {
+            this.bmImage = new WeakReference<>(bmImage);
         }
 
         protected Bitmap doInBackground(String... urls) {
@@ -45,7 +46,8 @@ public class HelpActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+            ImageView imageView = bmImage.get();
+            if(imageView != null) imageView.setImageBitmap(result);
         }
     }
 }

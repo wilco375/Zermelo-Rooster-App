@@ -5,7 +5,6 @@ import android.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.wilco375.roosternotification.R;
 
@@ -34,43 +33,23 @@ public class SettingsActivity extends AppCompatActivity {
     private void setupSettings(){
         sp = getSharedPreferences("Main",MODE_PRIVATE);
 
-        final CheckBox group = (CheckBox) findViewById(R.id.showGroupCheckbox);
-        final CheckBox notify = (CheckBox) findViewById(R.id.showNotificationCheckbox);
-        final CheckBox notifyCancel = (CheckBox) findViewById(R.id.showCancelledNotificationCheckbox);
-        final CheckBox notifyDaySchedule = (CheckBox) findViewById(R.id.showDayScheduleCheckbox);
+        final CheckBox group = findViewById(R.id.showGroupCheckbox);
+        final CheckBox notify = findViewById(R.id.showNotificationCheckbox);
+        final CheckBox notifyCancel = findViewById(R.id.showCancelledNotificationCheckbox);
+        final CheckBox notifyDaySchedule = findViewById(R.id.showDayScheduleCheckbox);
 
         group.setChecked(sp.getBoolean("group",false));
         notify.setChecked(sp.getBoolean("notify",true));
         notifyCancel.setChecked(sp.getBoolean("notifyCancel",true));
         notifyDaySchedule.setChecked(sp.getBoolean("notifyDaySchedule", true));
 
-        group.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.edit().putBoolean("group", isChecked).apply();
-            }
-        });
+        group.setOnCheckedChangeListener((buttonView, isChecked) -> sp.edit().putBoolean("group", isChecked).apply());
 
-        notify.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.edit().putBoolean("notify", isChecked).apply();
-            }
-        });
+        notify.setOnCheckedChangeListener((buttonView, isChecked) -> sp.edit().putBoolean("notify", isChecked).apply());
 
-        notifyCancel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.edit().putBoolean("notifyCancel", isChecked).apply();
-            }
-        });
+        notifyCancel.setOnCheckedChangeListener((buttonView, isChecked) -> sp.edit().putBoolean("notifyCancel", isChecked).apply());
 
-        notifyDaySchedule.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                sp.edit().putBoolean("notifyDaySchedule", isChecked).apply();
-            }
-        });
+        notifyDaySchedule.setOnCheckedChangeListener((compoundButton, isChecked) -> sp.edit().putBoolean("notifyDaySchedule", isChecked).apply());
 
         /*findViewById(R.id.scheduleTitle).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,5 @@
 package com.wilco375.roosternotification.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,25 +73,22 @@ public class MainActivity extends AppCompatActivity {
      * Get schedule from storage
      */
     public void getSchedule(){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Schedule[] schedule = ScheduleHandler.getSchedule(MainActivity.this);
-                int DAY_MAX = Calendar.FRIDAY + 7;
+        runOnUiThread(() -> {
+            Schedule[] schedule = ScheduleHandler.getSchedule(MainActivity.this);
+            int DAY_MAX = Calendar.FRIDAY + 7;
 
-                scheduleList = new ArrayList<>();
-                // Add empty ArrayLists to scheduleList for each day of the week
-                for(int i = 0; i <= DAY_MAX; i++){
-                    scheduleList.add(i, new ArrayList<Schedule>());
-                }
-                for(Schedule lesson : schedule){
-                    scheduleList.get(lesson.getDay()).add(lesson);
-                }
-
-                day = Utils.currentDay();
-
-                setupSchedule();
+            scheduleList = new ArrayList<>();
+            // Add empty ArrayLists to scheduleList for each day of the week
+            for(int i = 0; i <= DAY_MAX; i++){
+                scheduleList.add(i, new ArrayList<>());
             }
+            for(Schedule lesson : schedule){
+                scheduleList.get(lesson.getDay()).add(lesson);
+            }
+
+            day = Utils.currentDay();
+
+            setupSchedule();
         });
     }
 
@@ -101,21 +96,18 @@ public class MainActivity extends AppCompatActivity {
      * Show schedule in app
      */
     private void setupSchedule(){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                List<Schedule> daySchedule = scheduleList.get(day);
-                Collections.sort(daySchedule, new Schedule.ScheduleComparator());
+        runOnUiThread(() -> {
+            List<Schedule> daySchedule = scheduleList.get(day);
+            Collections.sort(daySchedule, new Schedule.ScheduleComparator());
 
-                //Set text to day
-                TextView dayText = (TextView) findViewById(R.id.dayText);
-                dayText.setText(Utils.dayIntToStr(day));
+            //Set text to day
+            TextView dayText = findViewById(R.id.dayText);
+            dayText.setText(Utils.dayIntToStr(day));
 
-                ListView listView = (ListView) findViewById(R.id.dayListView);
-                listView.setAdapter(
-                        new ScheduleListAdapter(daySchedule, sp, (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                );
-            }
+            ListView listView = findViewById(R.id.dayListView);
+            listView.setAdapter(
+                    new ScheduleListAdapter(daySchedule, sp, (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+            );
         });
     }
 
@@ -123,29 +115,23 @@ public class MainActivity extends AppCompatActivity {
      * Setup navigation to go to previous/next day
      */
     private void setupNavigation(){
-        findViewById(R.id.prevDay).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (day - 1 >= Calendar.MONDAY) {
-                    if(day-1 == Calendar.SUNDAY+7) day = Calendar.FRIDAY;
-                    else day -= 1;
-                    setupSchedule();
-                } else {
-                    Toast.makeText(MainActivity.this, "Je kunt niet verder terug", Toast.LENGTH_LONG).show();
-                }
+        findViewById(R.id.prevDay).setOnClickListener(v -> {
+            if (day - 1 >= Calendar.MONDAY) {
+                if(day-1 == Calendar.SUNDAY+7) day = Calendar.FRIDAY;
+                else day -= 1;
+                setupSchedule();
+            } else {
+                Toast.makeText(MainActivity.this, "Je kunt niet verder terug", Toast.LENGTH_LONG).show();
             }
         });
 
-        findViewById(R.id.nextDay).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(day+1 <= Calendar.FRIDAY+7){
-                    if(day+1 == Calendar.SATURDAY) day = Calendar.MONDAY + 7;
-                    else day += 1;
-                    setupSchedule();
-                }else{
-                    Toast.makeText(MainActivity.this, "Je kunt niet verder", Toast.LENGTH_LONG).show();
-                }
+        findViewById(R.id.nextDay).setOnClickListener(v -> {
+            if(day+1 <= Calendar.FRIDAY+7){
+                if(day+1 == Calendar.SATURDAY) day = Calendar.MONDAY + 7;
+                else day += 1;
+                setupSchedule();
+            }else{
+                Toast.makeText(MainActivity.this, "Je kunt niet verder", Toast.LENGTH_LONG).show();
             }
         });
     }

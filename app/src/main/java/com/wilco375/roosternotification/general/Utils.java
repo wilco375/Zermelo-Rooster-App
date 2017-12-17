@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.DisplayMetrics;
 import android.widget.Toast;
 
 import com.wilco375.roosternotification.receiver.AutoStartUp;
@@ -18,7 +17,6 @@ import com.wilco375.roosternotification.widget.LesuurWidgetProvider;
 import com.wilco375.roosternotification.R;
 import com.wilco375.roosternotification.Schedule;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -171,14 +169,11 @@ public class Utils {
 
     //Copy to clipboard
     public static void copyText(Activity activity, final Context context, final String title, final String content, final boolean toast){
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(title, content);
-                clipboard.setPrimaryClip(clip);
-                if (toast) Toast.makeText(context, R.string.copied, Toast.LENGTH_SHORT).show();
-            }
+        activity.runOnUiThread(() -> {
+            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText(title, content);
+            clipboard.setPrimaryClip(clip);
+            if (toast) Toast.makeText(context, R.string.copied, Toast.LENGTH_SHORT).show();
         });
     }
 }

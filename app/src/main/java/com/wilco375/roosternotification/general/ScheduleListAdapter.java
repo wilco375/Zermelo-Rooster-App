@@ -1,6 +1,5 @@
 package com.wilco375.roosternotification.general;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -47,9 +46,9 @@ public class ScheduleListAdapter extends BaseAdapter{
 
         Schedule lesson = schedule.get(position);
 
-        TextView timeslot = (TextView) convertView.findViewById(R.id.timeslot);
-        TextView info = (TextView) convertView.findViewById(R.id.info);
-        TextView time = (TextView) convertView.findViewById(R.id.time);
+        TextView timeslot = convertView.findViewById(R.id.timeslot);
+        TextView info = convertView.findViewById(R.id.info);
+        TextView time = convertView.findViewById(R.id.time);
         timeslot.setText(String.valueOf(lesson.getTimeslot()));
         info.setText(getInfo(lesson));
         time.setText(lesson.getStart()+" - "+lesson.getEnd());

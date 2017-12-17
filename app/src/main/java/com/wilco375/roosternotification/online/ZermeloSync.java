@@ -45,97 +45,94 @@ public class ZermeloSync {
 
 		if (!Utils.isWifiConnected(context) && !updateMainActivity) return;
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<Schedule> cancelledNotification = new ArrayList<>();
+        new Thread(() -> {
+            List<Schedule> cancelledNotification = new ArrayList<>();
 
-                // Get start of this week in unix
-                long start = Utils.getUnixStartOfWeek();
-                // Set end two weeks later
-                long end = start + 12 * 24 * 60 * 60;
+            // Get start of this week in unix
+            long start = Utils.getUnixStartOfWeek();
+            // Set end two weeks later
+            long end = start + 12 * 24 * 60 * 60;
 
-                //Get token
-                sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
+            //Get token
+            sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
 
-                //Get schedule string
-                String scheduleString = getScheduleString(start, end, sp.getString("token", ""));
-                if(scheduleString == null) return;
+            //Get schedule string
+            String scheduleString = getScheduleString(start, end, sp.getString("token", ""));
+            if(scheduleString == null) return;
 
-                //If necessary copy string to clipboard
-                if(copyClipboard) Utils.copyText(activity, context, context.getResources().getString(R.string.schedule_json), scheduleString, true);
+            //If necessary copy string to clipboard
+            if(copyClipboard) Utils.copyText(activity, context, context.getResources().getString(R.string.schedule_json), scheduleString, true);
 
-                try{
-                    //Format to JSONArray
-                    JSONArray schedule = new JSONObject(scheduleString).getJSONObject("response").getJSONArray("data");
-                    List<Schedule> scheduleArray = new ArrayList<>();
+            try{
+                //Format to JSONArray
+                JSONArray schedule = new JSONObject(scheduleString).getJSONObject("response").getJSONArray("data");
+                List<Schedule> scheduleArray = new ArrayList<>();
 
-                    //Loop trough all lessons and create an object array with all lessons
-                    for(int i = 0; i < schedule.length(); i++) {
-                       scheduleArray.add(getScheduleByJSON(schedule.getJSONObject(i)));
-                    }
-
-                    //Loop through all lessons and check cancelled
-                    for (Schedule lesson : scheduleArray) {
-                        if(lesson.getCancelled()) cancelledNotification.add(lesson);
-                    }
-
-                    //Notify cancelled lessons
-                    if(sp.getBoolean("notifyCancel",true)) {
-                        Calendar calendar = Calendar.getInstance();
-                        int currentDay = Utils.currentDay();
-                        int currentWeek = Utils.currentWeek();
-
-                        int count = 0;
-                        for (Schedule s : cancelledNotification) {
-                            String currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(currentWeek) + intStr(s.getDay()) + intStr(s.getTimeslot()) + s.getSubject();
-                            if (s.getDay() >= currentDay && s.getDay() < 7 && !sp.getString("prevNots", "").contains(currentNotString)) {
-                                count++;
-                            }
-                        }
-
-                        if (count < 8) {
-                            for (Schedule s : cancelledNotification) {
-                                cancelNotification(s, context);
-                            }
-                        } else {
-                            NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                                    .setSmallIcon(R.drawable.notification_logo)
-                                    .setContentTitle(String.format(context.getResources().getString(R.string.hours_cancelled_count), count))
-                                    .setContentText(context.getResources().getString(R.string.check_app_for_info))
-                                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0));
-
-                            Notification notification = builder.build();
-                            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-                            int notId = sp.getInt("notId", 2);
-                            SharedPreferences.Editor spe = sp.edit();
-                            notificationManagerCompat.notify(notId, notification);
-
-                            String currentNotString;
-                            for(Schedule s : cancelledNotification) {
-                                currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(currentWeek) + intStr(s.getDay()) + intStr(s.getTimeslot()) + s.getSubject();
-                                if (s.getDay() >= currentDay && !sp.getString("prevNots", "").contains(currentNotString)) {
-                                    spe.putString("prevNots", sp.getString("prevNots", "") + currentNotString);
-                                    spe.apply();
-                                }
-                            }
-                        }
-                    }
-
-                    //Save schedule
-                    ScheduleHandler.setSchedule(context, Utils.scheduleListToArray(scheduleArray));
-
-                    //Update widgets
-                    Utils.updateWidgets(context);
-
-                    //Restart app if necessary
-                    if(updateMainActivity){
-                        MainActivity mainActivity = (MainActivity) activity;
-                        mainActivity.getSchedule();
-                    }
-                }catch (JSONException e){
-                    e.printStackTrace();
+                //Loop trough all lessons and create an object array with all lessons
+                for(int i = 0; i < schedule.length(); i++) {
+                   scheduleArray.add(getScheduleByJSON(schedule.getJSONObject(i)));
                 }
+
+                //Loop through all lessons and check cancelled
+                for (Schedule lesson : scheduleArray) {
+                    if(lesson.getCancelled()) cancelledNotification.add(lesson);
+                }
+
+                //Notify cancelled lessons
+                if(sp.getBoolean("notifyCancel",true)) {
+                    Calendar calendar = Calendar.getInstance();
+                    int currentDay = Utils.currentDay();
+                    int currentWeek = Utils.currentWeek();
+
+                    int count = 0;
+                    for (Schedule s : cancelledNotification) {
+                        String currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(currentWeek) + intStr(s.getDay()) + intStr(s.getTimeslot()) + s.getSubject();
+                        if (s.getDay() >= currentDay && s.getDay() < 7 && !sp.getString("prevNots", "").contains(currentNotString)) {
+                            count++;
+                        }
+                    }
+
+                    if (count < 8) {
+                        for (Schedule s : cancelledNotification) {
+                            cancelNotification(s, context);
+                        }
+                    } else {
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                                .setSmallIcon(R.drawable.notification_logo)
+                                .setContentTitle(String.format(context.getResources().getString(R.string.hours_cancelled_count), count))
+                                .setContentText(context.getResources().getString(R.string.check_app_for_info))
+                                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0));
+
+                        Notification notification = builder.build();
+                        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+                        int notId = sp.getInt("notId", 2);
+                        SharedPreferences.Editor spe = sp.edit();
+                        notificationManagerCompat.notify(notId, notification);
+
+                        String currentNotString;
+                        for(Schedule s : cancelledNotification) {
+                            currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(currentWeek) + intStr(s.getDay()) + intStr(s.getTimeslot()) + s.getSubject();
+                            if (s.getDay() >= currentDay && !sp.getString("prevNots", "").contains(currentNotString)) {
+                                spe.putString("prevNots", sp.getString("prevNots", "") + currentNotString);
+                                spe.apply();
+                            }
+                        }
+                    }
+                }
+
+                //Save schedule
+                ScheduleHandler.setSchedule(context, Utils.scheduleListToArray(scheduleArray));
+
+                //Update widgets
+                Utils.updateWidgets(context);
+
+                //Restart app if necessary
+                if(updateMainActivity){
+                    MainActivity mainActivity = (MainActivity) activity;
+                    mainActivity.getSchedule();
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
             }
         }).start();
     }
