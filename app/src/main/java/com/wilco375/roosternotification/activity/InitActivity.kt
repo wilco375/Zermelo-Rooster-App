@@ -14,7 +14,7 @@ class InitActivity : CAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(activity_init)
+        setContentView(R.layout.activity_init)
         setSupportActionBar(toolbar)
 
         setupInit()
