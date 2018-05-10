@@ -19,18 +19,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/zermelo_code"
-            android:id="@+id/zermeloText" />
+            android:id="@+id/zermeloText"
+            android:layout_marginBottom="8dp"/>
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/zermelo_connect_app_code"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:id="@+id/zermeloCode" />
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/zermelo_connect_app_code"
+                android:id="@+id/zermeloCode"
+                android:inputType="number"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,7 +44,7 @@
             android:textColor="@color/md_blue_500" />
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/zermeloConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -59,7 +59,7 @@ class MainActivity : CAppCompatActivity() {
      * Check if first launch or first sync
      */
     private fun checkInit() {
-        if (sp.getString("token", "") == "") {
+        if (sp.getString("token[tmp]", "") == "") { // STOPSHIP
             val i = Intent(this@MainActivity, InitActivity::class.java)
             finish()
             startActivity(i)

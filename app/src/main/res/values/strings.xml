@@ -22,6 +22,7 @@
 
     <string name="zermelo_sync">Zermelo sychronisatie</string>
     <string name="zermelo_code">Vul hier een Zermelo \'Koppel App\' code in om te synchroniseren met Zermelo (dit is NIET je leerlingnummer):</string>
+    <string name="zermelo_site">Website - [school].zportal.nl</string>
     <string name="zermelo_connect_app_code">Koppel App Code</string>
     <string name="zermelo_where">Waar is deze code?</string>
     <string name="zermelo_force_sync">Forceer synchronisatie</string>
