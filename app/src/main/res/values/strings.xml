@@ -1,5 +1,5 @@
 <resources>
-
+    <string name="app_name">Rooster App</string>
     <string name="action_settings">Settings</string>
     <string name="saved">Opgeslagen</string>
     <string name="banner_ad_unit_id">ca-app-pub-6919792345220213/5762037086</string>
@@ -8,6 +8,7 @@
     <string name="title_activity_zermelo_help">Help</string>
 
     <string name="invalid_code">Ongeldige code of code al gebruikt</string>
+    <string name="invalid_site">Ongeldige website</string>
     <string name="auth_success">App succesvol gelinkt</string>
     <string name="no_connection">Error: geen internet</string>
     <string name="validation_error">Er is iets misgegaan</string>
@@ -19,12 +20,13 @@
     <string name="schedule_json">Rooster JSON</string>
     <string name="copied">Gekopieërd</string>
     <string name="first_sync_title">LET OP!</string>
+    <string name="first_sync_message">Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent. Je school is niet verantwoordelijk voor deze app</string>
 
     <string name="zermelo_sync">Zermelo sychronisatie</string>
-    <string name="zermelo_code">Vul hier een Zermelo \'Koppel App\' code in om te synchroniseren met Zermelo (dit is NIET je leerlingnummer):</string>
+    <string name="zermelo_code">Vul hier de Zermelo website van je school en een Zermelo \'Koppel App\' code in om te synchroniseren met Zermelo (dit is NIET je leerlingnummer):</string>
     <string name="zermelo_site">Website - [school].zportal.nl</string>
-    <string name="zermelo_connect_app_code">Koppel App Code</string>
-    <string name="zermelo_where">Waar is deze code?</string>
+    <string name="zermelo_connect_app_code">Code</string>
+    <string name="zermelo_where">Waar vind ik deze code?</string>
     <string name="zermelo_force_sync">Forceer synchronisatie</string>
     <string name="settings">Instellingen</string>
     <string name="notify">Geef meldingen van lesuren</string>

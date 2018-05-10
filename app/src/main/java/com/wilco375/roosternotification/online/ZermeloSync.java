@@ -6,15 +6,16 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import android.widget.Toast;
 
 import com.wilco375.roosternotification.BuildConfig;
 import com.wilco375.roosternotification.R;
 import com.wilco375.roosternotification.Schedule;
 import com.wilco375.roosternotification.activity.MainActivity;
+import com.wilco375.roosternotification.exception.InvalidCodeException;
+import com.wilco375.roosternotification.exception.InvalidWebsiteException;
+import com.wilco375.roosternotification.exception.NoInternetException;
+import com.wilco375.roosternotification.exception.UnknownAuthenticationException;
 import com.wilco375.roosternotification.general.ScheduleHandler;
 import com.wilco375.roosternotification.general.Utils;
 
@@ -29,6 +30,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.HttpClient;
@@ -57,7 +61,9 @@ public class ZermeloSync {
             sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
 
             //Get schedule string
-            String scheduleString = getScheduleString(start, end, sp.getString("token", ""));
+            String scheduleString = getScheduleString(sp.getString("website", ""),
+                    sp.getString("token", ""),
+                    start, end);
             if (scheduleString == null) return;
 
             //If necessary copy string to clipboard
@@ -171,10 +177,10 @@ public class ZermeloSync {
     }
 
     @Nullable
-    private String getScheduleString(long start, long end, String token) {
+    private String getScheduleString(String website, String token, long start, long end) {
         try {
             HttpClient client = HttpClientBuilder.create().build();
-            String url = "https://" + BuildConfig.PREFIX + ".zportal.nl/api/v2/appointments?user=~me&start=" + String.valueOf(start) + "&end=" + String.valueOf(end) + "&valid=true&fields=subjects,cancelled,locations,startTimeSlot,start,end,groups,type&access_token=" + token;
+            String url = "https://" + website + "/api/v2/appointments?user=~me&start=" + String.valueOf(start) + "&end=" + String.valueOf(end) + "&valid=true&fields=subjects,cancelled,locations,startTimeSlot,start,end,groups,type&access_token=" + token;
             HttpGet get = new HttpGet(url);
             HttpResponse response = client.execute(get);
 
@@ -261,21 +267,22 @@ public class ZermeloSync {
         }
     }
 
-    public static boolean authenticate(String code, Context context, SharedPreferences sp) {
+    public static boolean authenticate(String website, String code, Context context, SharedPreferences sp) throws InvalidCodeException, NoInternetException, UnknownAuthenticationException, InvalidWebsiteException {
+        if (website.equals("")) {
+            throw new InvalidWebsiteException();
+        }
         if (code.equals("")) {
-            Toast.makeText(context, R.string.invalid_code, Toast.LENGTH_LONG).show();
-            return false;
+            throw new InvalidCodeException();
         }
 
         if (!Utils.isConnected(context)) {
-            Toast.makeText(context, R.string.no_connection, Toast.LENGTH_LONG).show();
-            return false;
+            throw new NoInternetException();
         }
 
         try {
             HttpClient client = HttpClientBuilder.create().build();
 
-            HttpPost post = new HttpPost("https://" + BuildConfig.PREFIX + ".zportal.nl/api/v2/oauth/token?");
+            HttpPost post = new HttpPost("https://" + website + "/api/v2/oauth/token?");
 
             List<NameValuePair> nameValuePair = new ArrayList<>(2);
             nameValuePair.add(new BasicNameValuePair("grant_type", "authorization_code"));
@@ -283,37 +290,38 @@ public class ZermeloSync {
 
             post.setEntity(new UrlEncodedFormEntity(nameValuePair));
             HttpResponse response = client.execute(post);
-            if (response.getStatusLine().getStatusCode() != 200) {
-                Toast.makeText(context, R.string.invalid_code, Toast.LENGTH_LONG).show();
-                return false;
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != 200) {
+                if (statusCode == 404) {
+                    throw new InvalidWebsiteException();
+                } else {
+                    throw new InvalidCodeException();
+                }
             }
 
             JSONObject tokenJson = new JSONObject(new BufferedReader(new InputStreamReader((response.getEntity().getContent()))).readLine());
             String token = tokenJson.getString("access_token");
 
             if (token == null) {
-                Toast.makeText(context, R.string.validation_error, Toast.LENGTH_LONG).show();
-                return false;
+                throw new UnknownAuthenticationException("Error getting API token: Token is null");
             }
             if (token.equals("")) {
-                Toast.makeText(context, R.string.validation_error, Toast.LENGTH_LONG).show();
-                return false;
+                throw new UnknownAuthenticationException("Error getting API token: Token is empty");
             }
             Toast.makeText(context, R.string.auth_success, Toast.LENGTH_LONG).show();
 
             SharedPreferences.Editor spe = sp.edit();
+            spe.putString("website", website);
             spe.putString("token", token);
             spe.putBoolean("zermeloSync", true);
             spe.apply();
             return true;
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(context, R.string.validation_error, Toast.LENGTH_LONG).show();
-            return false;
+            throw new UnknownAuthenticationException("Error getting API token: JSON is invalid: " + e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(context, R.string.validation_error, Toast.LENGTH_LONG).show();
-            return false;
+            throw new UnknownAuthenticationException("Error getting API token: IOException: " + e.getMessage());
         }
     }
 }
