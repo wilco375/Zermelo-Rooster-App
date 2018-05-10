@@ -11,11 +11,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
+import com.wilco375.roosternotification.R;
+import com.wilco375.roosternotification.Schedule;
 import com.wilco375.roosternotification.receiver.AutoStartUp;
 import com.wilco375.roosternotification.widget.LesdagWidgetProvider;
 import com.wilco375.roosternotification.widget.LesuurWidgetProvider;
-import com.wilco375.roosternotification.R;
-import com.wilco375.roosternotification.Schedule;
 
 import java.util.Calendar;
 import java.util.List;
@@ -29,20 +29,20 @@ public class Utils {
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    public static boolean isWifiConnected(Context context){
+    public static boolean isWifiConnected(Context context) {
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return wifi.isConnected();
     }
 
     //Set alarm
-    public static void setAlarm(Context context){
+    public static void setAlarm(Context context) {
         Intent autoStartUp = new Intent(context, AutoStartUp.class);
         context.startService(autoStartUp);
     }
 
     //Update widgets
-    public static void updateWidgets(Context context){
+    public static void updateWidgets(Context context) {
         int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, LesdagWidgetProvider.class));
         LesdagWidgetProvider lesdagWidget = new LesdagWidgetProvider();
         lesdagWidget.onUpdate(context, AppWidgetManager.getInstance(context), ids);
@@ -53,11 +53,11 @@ public class Utils {
     }
 
     //Time
-    public static long getUnixStartOfWeek(){
+    public static long getUnixStartOfWeek() {
         Calendar calendar = Calendar.getInstance();
-        if(calendar.get(Calendar.HOUR_OF_DAY) > 17)
+        if (calendar.get(Calendar.HOUR_OF_DAY) > 17)
             calendar.add(Calendar.DAY_OF_WEEK, 1);
-        if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
             calendar.add(Calendar.WEEK_OF_YEAR, 1);
         }
 
@@ -67,60 +67,61 @@ public class Utils {
         calendar.clear(Calendar.MILLISECOND);
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 
-        return calendar.getTimeInMillis()/1000L;
+        return calendar.getTimeInMillis() / 1000L;
     }
 
-    public static int currentDay(){
+    public static int currentDay() {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
-        if(calendar.get(Calendar.HOUR_OF_DAY) > 17) day += 1;
-        if(day >= Calendar.SATURDAY || day == Calendar.SUNDAY) day = Calendar.MONDAY;
+        if (calendar.get(Calendar.HOUR_OF_DAY) > 17) day += 1;
+        if (day >= Calendar.SATURDAY || day == Calendar.SUNDAY) day = Calendar.MONDAY;
         return day;
     }
 
-    public static int currentWeek(){
+    public static int currentWeek() {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
-        if(calendar.get(Calendar.HOUR_OF_DAY) > 17) day += 1;
+        if (calendar.get(Calendar.HOUR_OF_DAY) > 17) day += 1;
 
         // If saturday or sunday or sunday (after 17:00)
-        if(day >= Calendar.SATURDAY || day == Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) return calendar.get(Calendar.WEEK_OF_YEAR) + 1;
+        if (day >= Calendar.SATURDAY || day == Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+            return calendar.get(Calendar.WEEK_OF_YEAR) + 1;
         else return calendar.get(Calendar.WEEK_OF_YEAR);
     }
 
-    public static Calendar unixToCalendar(long unixTime){
+    public static Calendar unixToCalendar(long unixTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(unixTime * 1000);
         return calendar;
     }
 
-    public static double calendarTimeToDouble(Calendar calendar){
+    public static double calendarTimeToDouble(Calendar calendar) {
         double hours = (double) calendar.get(Calendar.HOUR_OF_DAY);
         double minutes = (double) calendar.get(Calendar.MINUTE);
-        return hours+(minutes/60);
+        return hours + (minutes / 60);
     }
 
-    public static String calendarTimeToString(Calendar calendar){
+    public static String calendarTimeToString(Calendar calendar) {
         int hours = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
         String hoursStr;
         String minutesStr;
-        if(hours<10) hoursStr = "0"+String.valueOf(hours);
+        if (hours < 10) hoursStr = "0" + String.valueOf(hours);
         else hoursStr = String.valueOf(hours);
-        if(minutes<10) minutesStr = "0"+String.valueOf(minutes);
+        if (minutes < 10) minutesStr = "0" + String.valueOf(minutes);
         else minutesStr = String.valueOf(minutes);
-        return hoursStr+":"+minutesStr;
+        return hoursStr + ":" + minutesStr;
     }
 
-    public static String dayIntToStr(int day){
+    public static String dayIntToStr(int day) {
         boolean nextWeek = false;
-        while(day > 7){
+        while (day > 7) {
             nextWeek = true;
             day -= 7;
         }
 
         String dayStr;
-        switch (day){
+        switch (day) {
             case Calendar.MONDAY:
                 dayStr = "Maandag";
                 break;
@@ -150,25 +151,24 @@ public class Utils {
     }
 
     //Schedule
-    public static Schedule[] scheduleListToArray(List<Schedule> list){
+    public static Schedule[] scheduleListToArray(List<Schedule> list) {
         return list.toArray(new Schedule[list.size()]);
     }
 
     //String utils
-    public static String replaceLast(String string, String substring, String replacement)
-    {
+    public static String replaceLast(String string, String substring, String replacement) {
         int index = string.lastIndexOf(substring);
         if (index == -1) return string;
-        return string.substring(0, index) + replacement + string.substring(index+substring.length());
+        return string.substring(0, index) + replacement + string.substring(index + substring.length());
     }
 
-    public static String strNotNull(String string){
-        if(string == null) return "";
+    public static String strNotNull(String string) {
+        if (string == null) return "";
         else return string;
     }
 
     //Copy to clipboard
-    public static void copyText(Activity activity, final Context context, final String title, final String content, final boolean toast){
+    public static void copyText(Activity activity, final Context context, final String title, final String content, final boolean toast) {
         activity.runOnUiThread(() -> {
             ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText(title, content);

@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 
         //Get SharedPreferences
-        sp = getSharedPreferences("Main",MODE_PRIVATE);
+        sp = getSharedPreferences("Main", MODE_PRIVATE);
 
         //Set alarm
         Utils.setAlarm(this);
@@ -57,12 +57,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Check if first launch or first sync
      */
-    private void checkInit(){
+    private void checkInit() {
         if (sp.getString("token", "").equals("")) {
             Intent i = new Intent(MainActivity.this, InitActivity.class);
             finish();
             startActivity(i);
-        }else if(sp.getBoolean("firstSync",true)){
+        } else if (sp.getBoolean("firstSync", true)) {
             syncSchedule();
 
             sp.edit().putBoolean("firstSync", false).apply();
@@ -72,17 +72,17 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get schedule from storage
      */
-    public void getSchedule(){
+    public void getSchedule() {
         runOnUiThread(() -> {
             Schedule[] schedule = ScheduleHandler.getSchedule(MainActivity.this);
             int DAY_MAX = Calendar.FRIDAY + 7;
 
             scheduleList = new ArrayList<>();
             // Add empty ArrayLists to scheduleList for each day of the week
-            for(int i = 0; i <= DAY_MAX; i++){
+            for (int i = 0; i <= DAY_MAX; i++) {
                 scheduleList.add(i, new ArrayList<>());
             }
-            for(Schedule lesson : schedule){
+            for (Schedule lesson : schedule) {
                 scheduleList.get(lesson.getDay()).add(lesson);
             }
 
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Show schedule in app
      */
-    private void setupSchedule(){
+    private void setupSchedule() {
         runOnUiThread(() -> {
             List<Schedule> daySchedule = scheduleList.get(day);
             Collections.sort(daySchedule, new Schedule.ScheduleComparator());
@@ -114,10 +114,10 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Setup navigation to go to previous/next day
      */
-    private void setupNavigation(){
+    private void setupNavigation() {
         findViewById(R.id.prevDay).setOnClickListener(v -> {
             if (day - 1 >= Calendar.MONDAY) {
-                if(day-1 == Calendar.SUNDAY+7) day = Calendar.FRIDAY;
+                if (day - 1 == Calendar.SUNDAY + 7) day = Calendar.FRIDAY;
                 else day -= 1;
                 setupSchedule();
             } else {
@@ -126,11 +126,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.nextDay).setOnClickListener(v -> {
-            if(day+1 <= Calendar.FRIDAY+7){
-                if(day+1 == Calendar.SATURDAY) day = Calendar.MONDAY + 7;
+            if (day + 1 <= Calendar.FRIDAY + 7) {
+                if (day + 1 == Calendar.SATURDAY) day = Calendar.MONDAY + 7;
                 else day += 1;
                 setupSchedule();
-            }else{
+            } else {
                 Toast.makeText(MainActivity.this, "Je kunt niet verder", Toast.LENGTH_LONG).show();
             }
         });
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Sync schedule with Zermelo
      */
-    private void syncSchedule(){
+    private void syncSchedule() {
         syncing = true;
         new ZermeloSync().syncZermelo(getApplication(), MainActivity.this, true, false);
         Toast.makeText(getApplication(), "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show();
@@ -155,19 +155,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Launch SettingsActivity
-        if(item.getItemId() == R.id.settings){
+        if (item.getItemId() == R.id.settings) {
             Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(i);
 
             return true;
         }
         // Sync schedule
-        else if(item.getItemId() == R.id.zermelo_sync){
+        else if (item.getItemId() == R.id.zermelo_sync) {
             syncSchedule();
 
             return true;
-        }
-        else{
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }

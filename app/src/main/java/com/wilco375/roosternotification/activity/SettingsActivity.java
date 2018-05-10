@@ -1,9 +1,9 @@
 package com.wilco375.roosternotification.activity;
 
-import android.content.SharedPreferences;
 import android.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.CheckBox;
 
 import com.wilco375.roosternotification.R;
@@ -30,17 +30,17 @@ public class SettingsActivity extends AppCompatActivity {
     /**
      * Save settings to SharedPreferences when changed
      */
-    private void setupSettings(){
-        sp = getSharedPreferences("Main",MODE_PRIVATE);
+    private void setupSettings() {
+        sp = getSharedPreferences("Main", MODE_PRIVATE);
 
         final CheckBox group = findViewById(R.id.showGroupCheckbox);
         final CheckBox notify = findViewById(R.id.showNotificationCheckbox);
         final CheckBox notifyCancel = findViewById(R.id.showCancelledNotificationCheckbox);
         final CheckBox notifyDaySchedule = findViewById(R.id.showDayScheduleCheckbox);
 
-        group.setChecked(sp.getBoolean("group",false));
-        notify.setChecked(sp.getBoolean("notify",true));
-        notifyCancel.setChecked(sp.getBoolean("notifyCancel",true));
+        group.setChecked(sp.getBoolean("group", false));
+        notify.setChecked(sp.getBoolean("notify", true));
+        notifyCancel.setChecked(sp.getBoolean("notifyCancel", true));
         notifyDaySchedule.setChecked(sp.getBoolean("notifyDaySchedule", true));
 
         group.setOnCheckedChangeListener((buttonView, isChecked) -> sp.edit().putBoolean("group", isChecked).apply());

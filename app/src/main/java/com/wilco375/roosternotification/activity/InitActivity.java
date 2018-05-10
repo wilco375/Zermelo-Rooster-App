@@ -3,8 +3,8 @@ package com.wilco375.roosternotification.activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -24,7 +24,7 @@ public class InitActivity extends AppCompatActivity {
     /**
      * Launch MainActivity after entering code or launch HelpActivity on button click
      */
-    private void setupInit(){
+    private void setupInit() {
         findViewById(R.id.zermeloConfirm).setOnClickListener(v -> {
             String code = ((EditText) findViewById(R.id.zermeloCode)).getText().toString().replaceAll(" ", "");
             SharedPreferences sp = getSharedPreferences("Main", MODE_PRIVATE);

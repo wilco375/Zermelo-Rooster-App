@@ -14,8 +14,8 @@ import android.widget.Toast;
 import com.wilco375.roosternotification.BuildConfig;
 import com.wilco375.roosternotification.R;
 import com.wilco375.roosternotification.Schedule;
-import com.wilco375.roosternotification.general.ScheduleHandler;
 import com.wilco375.roosternotification.activity.MainActivity;
+import com.wilco375.roosternotification.general.ScheduleHandler;
 import com.wilco375.roosternotification.general.Utils;
 
 import org.json.JSONArray;
@@ -41,9 +41,9 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 public class ZermeloSync {
     SharedPreferences sp;
 
-    public void syncZermelo(final Context context, final Activity activity, final boolean updateMainActivity, final boolean copyClipboard){
+    public void syncZermelo(final Context context, final Activity activity, final boolean updateMainActivity, final boolean copyClipboard) {
 
-		if (!Utils.isWifiConnected(context) && !updateMainActivity) return;
+        if (!Utils.isWifiConnected(context) && !updateMainActivity) return;
 
         new Thread(() -> {
             List<Schedule> cancelledNotification = new ArrayList<>();
@@ -58,28 +58,29 @@ public class ZermeloSync {
 
             //Get schedule string
             String scheduleString = getScheduleString(start, end, sp.getString("token", ""));
-            if(scheduleString == null) return;
+            if (scheduleString == null) return;
 
             //If necessary copy string to clipboard
-            if(copyClipboard) Utils.copyText(activity, context, context.getResources().getString(R.string.schedule_json), scheduleString, true);
+            if (copyClipboard)
+                Utils.copyText(activity, context, context.getResources().getString(R.string.schedule_json), scheduleString, true);
 
-            try{
+            try {
                 //Format to JSONArray
                 JSONArray schedule = new JSONObject(scheduleString).getJSONObject("response").getJSONArray("data");
                 List<Schedule> scheduleArray = new ArrayList<>();
 
                 //Loop trough all lessons and create an object array with all lessons
-                for(int i = 0; i < schedule.length(); i++) {
-                   scheduleArray.add(getScheduleByJSON(schedule.getJSONObject(i)));
+                for (int i = 0; i < schedule.length(); i++) {
+                    scheduleArray.add(getScheduleByJSON(schedule.getJSONObject(i)));
                 }
 
                 //Loop through all lessons and check cancelled
                 for (Schedule lesson : scheduleArray) {
-                    if(lesson.getCancelled()) cancelledNotification.add(lesson);
+                    if (lesson.getCancelled()) cancelledNotification.add(lesson);
                 }
 
                 //Notify cancelled lessons
-                if(sp.getBoolean("notifyCancel",true)) {
+                if (sp.getBoolean("notifyCancel", true)) {
                     Calendar calendar = Calendar.getInstance();
                     int currentDay = Utils.currentDay();
                     int currentWeek = Utils.currentWeek();
@@ -110,7 +111,7 @@ public class ZermeloSync {
                         notificationManagerCompat.notify(notId, notification);
 
                         String currentNotString;
-                        for(Schedule s : cancelledNotification) {
+                        for (Schedule s : cancelledNotification) {
                             currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(currentWeek) + intStr(s.getDay()) + intStr(s.getTimeslot()) + s.getSubject();
                             if (s.getDay() >= currentDay && !sp.getString("prevNots", "").contains(currentNotString)) {
                                 spe.putString("prevNots", sp.getString("prevNots", "") + currentNotString);
@@ -127,24 +128,25 @@ public class ZermeloSync {
                 Utils.updateWidgets(context);
 
                 //Restart app if necessary
-                if(updateMainActivity){
+                if (updateMainActivity) {
                     MainActivity mainActivity = (MainActivity) activity;
                     mainActivity.getSchedule();
                 }
-            }catch (JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }).start();
     }
 
-	private void cancelNotification(Schedule schedule, Context context){
-        if(sp.getBoolean("notifyCancel",true) && schedule.getDay() < 7) {
+    private void cancelNotification(Schedule schedule, Context context) {
+        if (sp.getBoolean("notifyCancel", true) && schedule.getDay() < 7) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.notification_logo)
                     .setContentTitle(String.format(context.getResources().getString(R.string.hour_cancelled_on), Utils.dayIntToStr(schedule.getDay()).toLowerCase()))
                     .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0));
 
-            if(schedule.getTimeslot() != 0) builder.setContentText(schedule.getTimeslot() + ". " + schedule.getSubject());
+            if (schedule.getTimeslot() != 0)
+                builder.setContentText(schedule.getTimeslot() + ". " + schedule.getSubject());
             else builder.setContentText(schedule.getSubject());
 
             Notification notification = builder.build();
@@ -153,40 +155,40 @@ public class ZermeloSync {
             Calendar calendar = Calendar.getInstance();
 
             String currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(Utils.currentWeek()) + intStr(schedule.getDay()) + intStr(schedule.getTimeslot()) + schedule.getSubject();
-            if(schedule.getDay() >= Utils.currentDay() && !sp.getString("prevNots","").contains(currentNotString)) {
+            if (schedule.getDay() >= Utils.currentDay() && !sp.getString("prevNots", "").contains(currentNotString)) {
                 int notId = sp.getInt("notId", 2);
                 SharedPreferences.Editor spe = sp.edit();
                 spe.putInt("notId", notId + 1);
-                spe.putString("prevNots", sp.getString("prevNots","") + currentNotString);
+                spe.putString("prevNots", sp.getString("prevNots", "") + currentNotString);
                 spe.apply();
                 notificationManagerCompat.notify(notId, notification);
             }
         }
-	}
+    }
 
-    private static String intStr(int integer){
+    private static String intStr(int integer) {
         return String.valueOf(integer);
     }
 
     @Nullable
-    private String getScheduleString(long start,long end, String token){
-        try{
+    private String getScheduleString(long start, long end, String token) {
+        try {
             HttpClient client = HttpClientBuilder.create().build();
-            String url = "https://"+ BuildConfig.PREFIX+".zportal.nl/api/v2/appointments?user=~me&start=" + String.valueOf(start) + "&end=" + String.valueOf(end) + "&valid=true&fields=subjects,cancelled,locations,startTimeSlot,start,end,groups,type&access_token=" + token;
+            String url = "https://" + BuildConfig.PREFIX + ".zportal.nl/api/v2/appointments?user=~me&start=" + String.valueOf(start) + "&end=" + String.valueOf(end) + "&valid=true&fields=subjects,cancelled,locations,startTimeSlot,start,end,groups,type&access_token=" + token;
             HttpGet get = new HttpGet(url);
             HttpResponse response = client.execute(get);
 
             if (response.getStatusLine().getStatusCode() == 200) {
                 BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
                 return br.readLine();
-            }else return null;
-        }catch (IOException e){
+            } else return null;
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    private Schedule getScheduleByJSON(JSONObject jsonObject){
+    private Schedule getScheduleByJSON(JSONObject jsonObject) {
         try {
             Schedule scheduleItem = new Schedule();
             long unixStart = jsonObject.getLong("start");
@@ -195,7 +197,8 @@ public class ZermeloSync {
             Calendar calendarEnd = Utils.unixToCalendar(unixEnd);
 
             //Day
-            if(Utils.currentWeek() == calendarStart.get(Calendar.WEEK_OF_YEAR)) scheduleItem.setDay(calendarStart.get(Calendar.DAY_OF_WEEK));
+            if (Utils.currentWeek() == calendarStart.get(Calendar.WEEK_OF_YEAR))
+                scheduleItem.setDay(calendarStart.get(Calendar.DAY_OF_WEEK));
             else scheduleItem.setDay(calendarStart.get(Calendar.DAY_OF_WEEK) + 7);
 
             //Start (Readable string)
@@ -238,13 +241,13 @@ public class ZermeloSync {
             scheduleItem.setLocation(locationsString);
 
             //Cancelled
-            if(!jsonObject.isNull("cancelled"))
+            if (!jsonObject.isNull("cancelled"))
                 scheduleItem.setCancelled(jsonObject.getBoolean("cancelled"));
             else scheduleItem.setCancelled(false);
 
 
             //Timeslot
-            if(!jsonObject.isNull("startTimeSlot"))
+            if (!jsonObject.isNull("startTimeSlot"))
                 scheduleItem.setTimeslot(jsonObject.getInt("startTimeSlot"));
             else scheduleItem.setTimeslot(0);
 
@@ -252,7 +255,7 @@ public class ZermeloSync {
             scheduleItem.setType(jsonObject.getString("type"));
 
             return scheduleItem;
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             return new Schedule();
         }
@@ -272,7 +275,7 @@ public class ZermeloSync {
         try {
             HttpClient client = HttpClientBuilder.create().build();
 
-            HttpPost post = new HttpPost("https://"+BuildConfig.PREFIX+".zportal.nl/api/v2/oauth/token?");
+            HttpPost post = new HttpPost("https://" + BuildConfig.PREFIX + ".zportal.nl/api/v2/oauth/token?");
 
             List<NameValuePair> nameValuePair = new ArrayList<>(2);
             nameValuePair.add(new BasicNameValuePair("grant_type", "authorization_code"));
@@ -280,7 +283,7 @@ public class ZermeloSync {
 
             post.setEntity(new UrlEncodedFormEntity(nameValuePair));
             HttpResponse response = client.execute(post);
-            if(response.getStatusLine().getStatusCode() != 200){
+            if (response.getStatusLine().getStatusCode() != 200) {
                 Toast.makeText(context, R.string.invalid_code, Toast.LENGTH_LONG).show();
                 return false;
             }
@@ -303,11 +306,11 @@ public class ZermeloSync {
             spe.putBoolean("zermeloSync", true);
             spe.apply();
             return true;
-        }catch(JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(context, R.string.validation_error, Toast.LENGTH_LONG).show();
             return false;
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(context, R.string.validation_error, Toast.LENGTH_LONG).show();
             return false;

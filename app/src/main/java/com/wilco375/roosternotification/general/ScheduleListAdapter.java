@@ -13,7 +13,7 @@ import com.wilco375.roosternotification.Schedule;
 
 import java.util.List;
 
-public class ScheduleListAdapter extends BaseAdapter{
+public class ScheduleListAdapter extends BaseAdapter {
     private SharedPreferences sp;
     private LayoutInflater inflater;
     private List<Schedule> schedule;
@@ -41,7 +41,7 @@ public class ScheduleListAdapter extends BaseAdapter{
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        if(convertView == null)
+        if (convertView == null)
             convertView = inflater.inflate(R.layout.schedule_list, null);
 
         Schedule lesson = schedule.get(position);
@@ -51,8 +51,8 @@ public class ScheduleListAdapter extends BaseAdapter{
         TextView time = convertView.findViewById(R.id.time);
         timeslot.setText(String.valueOf(lesson.getTimeslot()));
         info.setText(getInfo(lesson));
-        time.setText(lesson.getStart()+" - "+lesson.getEnd());
-        if(lesson.getCancelled()){
+        time.setText(lesson.getStart() + " - " + lesson.getEnd());
+        if (lesson.getCancelled()) {
             info.setPaintFlags(info.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             info.setPaintFlags(0);
@@ -60,11 +60,11 @@ public class ScheduleListAdapter extends BaseAdapter{
         return convertView;
     }
 
-    private String getInfo(Schedule lesson){
+    private String getInfo(Schedule lesson) {
         String info = "";
-        if(!lesson.getSubject().equals("")) info = lesson.getSubjectAndGroup(sp);
-        if(!lesson.getType().equals("Les")) info += " ("+lesson.getType()+")";
-        if(!lesson.getLocation().equals("")) info += " - "+lesson.getLocation();
+        if (!lesson.getSubject().equals("")) info = lesson.getSubjectAndGroup(sp);
+        if (!lesson.getType().equals("Les")) info += " (" + lesson.getType() + ")";
+        if (!lesson.getLocation().equals("")) info += " - " + lesson.getLocation();
         return info;
     }
 }

@@ -47,7 +47,7 @@ public class HelpActivity extends AppCompatActivity {
 
         protected void onPostExecute(Bitmap result) {
             ImageView imageView = bmImage.get();
-            if(imageView != null) imageView.setImageBitmap(result);
+            if (imageView != null) imageView.setImageBitmap(result);
         }
     }
 }
