@@ -1,47 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.wilco375.roosternotification.activity.SettingsActivity">
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:layout_marginTop="5dp"
-        android:id="@+id/showNotificationCheckbox"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:text="@string/notify"/>
+    android:orientation="vertical"
+    tools:context=".activity.SettingsActivity">
 
-    <CheckBox
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:checked="true"
-        android:layout_marginTop="5dp"
-        android:id="@+id/showDayScheduleCheckbox"
-        android:layout_below="@id/showNotificationCheckbox"
-        android:text="@string/notify_day_schedule"/>
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:id="@+id/showCancelledNotificationCheckbox"
-        android:layout_below="@id/showDayScheduleCheckbox"
-        android:text="@string/notify_cancel"/>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:id="@+id/showGroupCheckbox"
-        android:layout_below="@id/showCancelledNotificationCheckbox"
-        android:text="@string/show_group"/>
-</RelativeLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_settings" />
+
+</LinearLayout>

@@ -34,4 +34,8 @@
     <string name="back">&lt;</string>
     <string name="forward">&gt;</string>
     <string name="divider">Divider</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_init">InitActivity</string>
+    <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 </resources>

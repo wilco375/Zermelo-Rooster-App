@@ -2,5 +2,4 @@
     android:minWidth="180dp"
     android:minHeight="180dp"
     android:updatePeriodMillis="3600000"
-    android:initialLayout="@layout/app_widget_lesdag">
-</appwidget-provider>
+    android:initialLayout="@layout/app_widget_lesdag"></appwidget-provider>

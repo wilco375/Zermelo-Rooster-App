@@ -2,5 +2,4 @@
     android:minWidth="110dp"
     android:minHeight="30dp"
     android:updatePeriodMillis="300000"
-    android:initialLayout="@layout/app_widget_lesuur">
-</appwidget-provider>
+    android:initialLayout="@layout/app_widget_lesuur"></appwidget-provider>

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
@@ -12,21 +14,21 @@ android {
         versionName "4.0.1"
     }
     flavorDimensions "school"
-    productFlavors{
-        jfc{
+    productFlavors {
+        jfc {
             dimension "school"
             buildConfigField "String", "PREFIX", '"jfc"'
             resValue "string", "app_name", "JFC Rooster App"
             resValue "string", "first_sync_message", "Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent. Het JFC is niet verantwoordelijk voor deze app"
         }
-        candea{
+        candea {
             dimension "school"
             applicationId "com.wilco375.candearoosternotificationapp"
             buildConfigField "String", "PREFIX", '"candea"'
             resValue "string", "app_name", "Candea Rooster App"
             resValue "string", "first_sync_message", "Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent. Het Candea is niet verantwoordelijk voor deze app"
         }
-        jpthijsse{
+        jpthijsse {
             dimension "school"
             applicationId "com.wilco375.jpthijsseroosternotification"
             buildConfigField "String", "PREFIX", '"jpthijsse"'
@@ -53,4 +55,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'cz.msebera.android:httpclient:4.4.1.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation 'com.github.garretyoder:Colorful:2.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support:design:27.1.1'
 }

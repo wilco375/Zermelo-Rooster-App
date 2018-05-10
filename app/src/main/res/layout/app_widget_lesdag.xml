@@ -5,7 +5,7 @@
     android:background="#FFFFFF"
     android:orientation="vertical"
     android:id="@+id/app_widget_lesdag_layout">
-    
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -15,7 +15,7 @@
         android:id="@+id/app_widget_lesdag_dag"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
-        android:paddingRight="5dp"/>
+        android:paddingRight="5dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -25,5 +25,5 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:lineSpacingExtra="5dp"
         android:layout_margin="10dp"
-        android:id="@+id/app_widget_lesdag_content"/>
+        android:id="@+id/app_widget_lesdag_content" />
 </RelativeLayout>
