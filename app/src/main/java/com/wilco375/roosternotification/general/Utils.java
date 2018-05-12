@@ -12,13 +12,12 @@ import android.net.NetworkInfo;
 import android.widget.Toast;
 
 import com.wilco375.roosternotification.R;
-import com.wilco375.roosternotification.Schedule;
 import com.wilco375.roosternotification.receiver.AutoStartUp;
 import com.wilco375.roosternotification.widget.LesdagWidgetProvider;
 import com.wilco375.roosternotification.widget.LesuurWidgetProvider;
 
 import java.util.Calendar;
-import java.util.List;
+import java.util.Date;
 
 public class Utils {
     //Networking
@@ -53,29 +52,47 @@ public class Utils {
     }
 
     //Time
+    private static long unixStartOfWeekCache = -1;
     public static long getUnixStartOfWeek() {
-        Calendar calendar = Calendar.getInstance();
-        if (calendar.get(Calendar.HOUR_OF_DAY) > 17)
-            calendar.add(Calendar.DAY_OF_WEEK, 1);
-        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-            calendar.add(Calendar.WEEK_OF_YEAR, 1);
+        if (unixStartOfWeekCache == -1) {
+            Calendar calendar = Calendar.getInstance();
+            if (calendar.get(Calendar.HOUR_OF_DAY) > 17)
+                calendar.add(Calendar.DAY_OF_WEEK, 1);
+            if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                calendar.add(Calendar.WEEK_OF_YEAR, 1);
+            }
+
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.clear(Calendar.MINUTE);
+            calendar.clear(Calendar.SECOND);
+            calendar.clear(Calendar.MILLISECOND);
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            unixStartOfWeekCache = calendar.getTimeInMillis() / 1000L;
         }
-
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.clear(Calendar.MINUTE);
-        calendar.clear(Calendar.SECOND);
-        calendar.clear(Calendar.MILLISECOND);
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-
-        return calendar.getTimeInMillis() / 1000L;
+        return unixStartOfWeekCache;
     }
 
-    public static int currentDay() {
+    public static long getUnixEndOfWeek() {
+        return getUnixStartOfWeek() + 7 * 24 * 60 * 60 - 1;
+    }
+
+    public static String currentDay() {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         if (calendar.get(Calendar.HOUR_OF_DAY) > 17) day += 1;
         if (day >= Calendar.SATURDAY || day == Calendar.SUNDAY) day = Calendar.MONDAY;
-        return day;
+        return dayIntToStr(day);
+    }
+
+    public static Date getCurrentScheduleDate() {
+        Calendar calendar = Calendar.getInstance();
+        int offset = 0;
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        if (calendar.get(Calendar.HOUR_OF_DAY) > 17) offset = 1;
+        if (day >= Calendar.SATURDAY) offset = 2;
+        if (day == Calendar.SUNDAY) offset = 1;
+        calendar.add(Calendar.HOUR, 24*offset);
+        return calendar.getTime();
     }
 
     public static int currentWeek() {
@@ -148,11 +165,6 @@ public class Utils {
         }
 
         return nextWeek ? "Volgende week " + dayStr.toLowerCase() : dayStr;
-    }
-
-    //Schedule
-    public static Schedule[] scheduleListToArray(List<Schedule> list) {
-        return list.toArray(new Schedule[list.size()]);
     }
 
     //String utils

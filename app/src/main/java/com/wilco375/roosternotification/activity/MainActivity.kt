@@ -5,31 +5,26 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.StrictMode
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
 import android.widget.Toast
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.R.layout.activity_main
-import com.wilco375.roosternotification.Schedule
+import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.general.ScheduleHandler
-import com.wilco375.roosternotification.general.ScheduleListAdapter
 import com.wilco375.roosternotification.general.Utils
 import com.wilco375.roosternotification.online.ZermeloSync
 import io.multimoon.colorful.CAppCompatActivity
 import io.multimoon.colorful.Colorful
 import io.multimoon.colorful.ThemeColor
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : CAppCompatActivity() {
     private var syncing = false
     private var day: Int = 0
 
     private lateinit var sp: SharedPreferences
-    private lateinit var scheduleList: ArrayList<ArrayList<Schedule>>
+    private lateinit var schedule: Schedule
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,14 +47,14 @@ class MainActivity : CAppCompatActivity() {
 
         getSchedule()
 
-        setupNavigation()
+        //setupNavigation()
     }
 
     /**
      * Check if first launch or first sync
      */
     private fun checkInit() {
-        if (sp.getString("token", "") == "") {
+        if (sp.getString("token", "") == "" || sp.getString("website", "") == "") {
             val i = Intent(this@MainActivity, InitActivity::class.java)
             finish()
             startActivity(i)
@@ -75,19 +70,7 @@ class MainActivity : CAppCompatActivity() {
      */
     fun getSchedule() {
         runOnUiThread({
-            val schedule = ScheduleHandler.getSchedule(this@MainActivity)
-            val DAY_MAX = Calendar.FRIDAY + 7
-
-            scheduleList = ArrayList()
-            // Add empty ArrayLists to scheduleList for each day of the week
-            for (i in 0..DAY_MAX) {
-                scheduleList.add(i, ArrayList())
-            }
-            for (lesson in schedule) {
-                scheduleList[lesson.day].add(lesson)
-            }
-
-            day = Utils.currentDay()
+            schedule = ScheduleHandler.getSchedule(this@MainActivity)
 
             setupSchedule()
         })
@@ -98,20 +81,23 @@ class MainActivity : CAppCompatActivity() {
      */
     private fun setupSchedule() {
         runOnUiThread({
-            val daySchedule = scheduleList[day]
-            Collections.sort<Schedule>(daySchedule, Schedule.ScheduleComparator())
+            val daySchedule = schedule[Date()]
+
+            for (item in daySchedule) {
+                println(item)
+            }
 
             //Set text to day
-            dayText.text = Utils.dayIntToStr(day)
+            //dayText.text = Utils.dayIntToStr(day)
 
-            dayListView.adapter = ScheduleListAdapter(daySchedule, sp, getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?)
+            //dayListView.adapter = ScheduleListAdapter(daySchedule, sp, getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?)
         })
     }
 
     /**
      * Setup navigation to go to previous/next day
      */
-    private fun setupNavigation() {
+    /*private fun setupNavigation() {
         prevDay.setOnClickListener({ _ ->
             if (day - 1 >= Calendar.MONDAY) {
                 if (day - 1 == Calendar.SUNDAY + 7)
@@ -135,14 +121,14 @@ class MainActivity : CAppCompatActivity() {
                 Toast.makeText(this@MainActivity, "Je kunt niet verder", Toast.LENGTH_LONG).show()
             }
         })
-    }
+    }*/
 
     /**
      * Sync schedule with Zermelo
      */
     private fun syncSchedule() {
         syncing = true
-        ZermeloSync().syncZermelo(application, this@MainActivity, true, false)
+        ZermeloSync().syncZermelo(application, true, false)
         Toast.makeText(application, "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show()
     }
 
