@@ -34,6 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
+        android:layout_marginTop="5dp"
         android:id="@+id/showCancelledNotificationCheckbox"
         android:layout_below="@id/showDayScheduleCheckbox"
         android:text="@string/notify_cancel" />
@@ -42,6 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="false"
+        android:layout_marginTop="5dp"
         android:id="@+id/showGroupCheckbox"
         android:layout_below="@id/showCancelledNotificationCheckbox"
         android:text="@string/show_group" />

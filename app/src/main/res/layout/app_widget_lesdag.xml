@@ -11,7 +11,7 @@
         android:layout_height="40dp"
         android:textColor="#fff"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:background="@color/themeColorPrimary"
+        android:background="?colorPrimary"
         android:id="@+id/app_widget_lesdag_dag"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"

@@ -21,10 +21,11 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     companion object {
-
         private val NOTIFICATION_ID = 1
 
         fun createNotification(context: Context) {
+            println("Creating notification")
+
             val sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE)
             val spe = sp.edit()
 

@@ -48,9 +48,9 @@ class ZermeloSync {
             val cancelledNotification = ArrayList<ScheduleItem>()
 
             // Get start of this week in unix
-            val start = Utils.unixStartOfWeek()
+            val start = Utils.unixStartOfWeek() - 14 * 24 * 3600
             // Set end two weeks later
-            val end = start + 12 * 24 * 60 * 60
+            val end = start + 14 * 24 * 60 * 60
 
             println("Getting JSON between $start and $end")
 

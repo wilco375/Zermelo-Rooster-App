@@ -1,12 +1,14 @@
 package com.wilco375.roosternotification.activity
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.StrictMode
 import android.view.*
+import android.widget.DatePicker
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -25,8 +27,10 @@ import io.multimoon.colorful.CAppCompatActivity
 import io.multimoon.colorful.Colorful
 import io.multimoon.colorful.ThemeColor
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class MainActivity : CAppCompatActivity() {
     private var syncing = false
@@ -86,6 +90,8 @@ class MainActivity : CAppCompatActivity() {
         })
     }
 
+    val realCurrentItem = 0
+
     /**
      * Show schedule in app
      */
@@ -93,6 +99,38 @@ class MainActivity : CAppCompatActivity() {
         schedulePagerAdapter = SchedulePagerAdapter(supportFragmentManager, schedule)
         scheduleViewPager = findViewById(R.id.scheduleViewPager)
         scheduleViewPager.adapter = schedulePagerAdapter
+        scheduleViewPager.currentItem = 14
+        today.hide()
+        today.setOnClickListener {
+            scheduleViewPager.currentItem = 14
+        }
+        scheduleViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {}
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+            override fun onPageSelected(position: Int) {
+                if (position != 14) {
+                    today.show()
+                } else {
+                    today.hide()
+                }
+            }
+        })
+        schedulePagerTitleStrip.setOnClickListener {
+            val now = Calendar.getInstance()
+            val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener {
+                view, selectedYear, selectedMonth, selectedDay ->
+                run {
+                    val calendar = Calendar.getInstance()
+                    calendar.set(selectedYear, selectedMonth, selectedDay)
+
+                    val today = Utils.currentScheduleDate()
+                    scheduleViewPager.currentItem = ((calendar.time.time - today.time) / (24 * 3600 * 1000)).toInt() + 14
+                }
+            }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH))
+            datePicker.show()
+        }
     }
 
     /**
@@ -141,14 +179,19 @@ class MainActivity : CAppCompatActivity() {
         override fun getItem(position: Int): Fragment {
             val fragment = ScheduleFragment()
             fragment.arguments = Bundle().apply {
-                val scheduleDay = schedule[Date(Utils.currentScheduleDate().time + position * 24 * 60 * 60 * 1000)]
+                val scheduleDay = schedule[Date(Utils.currentScheduleDate().time + (position - 14) * 24 * 60 * 60 * 1000)]
                 putParcelable("schedule", scheduleDay)
             }
             return fragment
         }
 
         override fun getCount(): Int {
-            return 14
+            return 28
+        }
+
+        override fun getPageTitle(position: Int): CharSequence? {
+            val date = Date(Utils.currentScheduleDate().time + (position - 14) * 24 * 60 * 60 * 1000)
+            return dateToText(date)
         }
     }
 
@@ -159,12 +202,7 @@ class MainActivity : CAppCompatActivity() {
             arguments?.takeIf { it.containsKey("schedule") }?.apply {
                 val scheduleDay = getParcelable<ScheduleDay>("schedule")
 
-                val dayFormatter = SimpleDateFormat("dd-MM", Locale.getDefault())
-                rootView.findViewById<TextView>(R.id.dayText).text =
-                        Utils.dayIntToStr(Calendar.getInstance().also { it.time = scheduleDay.day }.get(Calendar.DAY_OF_WEEK)) +
-                        " " + dayFormatter.format(scheduleDay.day)
-
-                if(!scheduleDay.getItems().isEmpty()) {
+                if (!scheduleDay.getItems().isEmpty()) {
                     rootView.findViewById<TextView>(R.id.noLessons).visibility = View.GONE
 
                     rootView.findViewById<ListView>(R.id.dayListView).adapter =
@@ -174,6 +212,14 @@ class MainActivity : CAppCompatActivity() {
                 }
             }
             return rootView
+        }
+    }
+
+    companion object {
+        private fun dateToText(date: Date): String {
+            val dayFormatter = SimpleDateFormat("dd-MM", Locale.getDefault())
+            return Utils.dayIntToStr(Calendar.getInstance().also { it.time = date }.get(Calendar.DAY_OF_WEEK)) +
+                    " " + dayFormatter.format(date)
         }
     }
 }
