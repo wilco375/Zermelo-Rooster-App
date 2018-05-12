@@ -1,30 +1,41 @@
 package com.wilco375.roosternotification.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.StrictMode
 import android.view.*
+import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.R.layout.activity_main
 import com.wilco375.roosternotification.`object`.Schedule
+import com.wilco375.roosternotification.`object`.ScheduleDay
 import com.wilco375.roosternotification.general.ScheduleHandler
+import com.wilco375.roosternotification.general.ScheduleListAdapter
 import com.wilco375.roosternotification.general.Utils
 import com.wilco375.roosternotification.online.ZermeloSync
 import io.multimoon.colorful.CAppCompatActivity
 import io.multimoon.colorful.Colorful
 import io.multimoon.colorful.ThemeColor
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : CAppCompatActivity() {
     private var syncing = false
-    private var day: Int = 0
 
     private lateinit var sp: SharedPreferences
     private lateinit var schedule: Schedule
+    private lateinit var schedulePagerAdapter: SchedulePagerAdapter
+    private lateinit var scheduleViewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,48 +91,10 @@ class MainActivity : CAppCompatActivity() {
      * Show schedule in app
      */
     private fun setupSchedule() {
-        runOnUiThread({
-            val daySchedule = schedule[Date()]
-
-            for (item in daySchedule) {
-                println(item)
-            }
-
-            //Set text to day
-            //dayText.text = Utils.dayIntToStr(day)
-
-            //dayListView.adapter = ScheduleListAdapter(daySchedule, sp, getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?)
-        })
+        schedulePagerAdapter = SchedulePagerAdapter(supportFragmentManager, schedule)
+        scheduleViewPager = findViewById(R.id.scheduleViewPager)
+        scheduleViewPager.adapter = schedulePagerAdapter
     }
-
-    /**
-     * Setup navigation to go to previous/next day
-     */
-    /*private fun setupNavigation() {
-        prevDay.setOnClickListener({ _ ->
-            if (day - 1 >= Calendar.MONDAY) {
-                if (day - 1 == Calendar.SUNDAY + 7)
-                    day = Calendar.FRIDAY
-                else
-                    day -= 1
-                setupSchedule()
-            } else {
-                Toast.makeText(this@MainActivity, "Je kunt niet verder terug", Toast.LENGTH_LONG).show()
-            }
-        })
-
-        nextDay.setOnClickListener({ _ ->
-            if (day + 1 <= Calendar.FRIDAY + 7) {
-                if (day + 1 == Calendar.SATURDAY)
-                    day = Calendar.MONDAY + 7
-                else
-                    day += 1
-                setupSchedule()
-            } else {
-                Toast.makeText(this@MainActivity, "Je kunt niet verder", Toast.LENGTH_LONG).show()
-            }
-        })
-    }*/
 
     /**
      * Sync schedule with Zermelo
@@ -163,5 +136,42 @@ class MainActivity : CAppCompatActivity() {
     override fun onResume() {
         super.onResume()
         setupSchedule()
+    }
+
+    class SchedulePagerAdapter(fragmentManager: FragmentManager, val schedule: Schedule) : FragmentStatePagerAdapter(fragmentManager) {
+        override fun getItem(position: Int): Fragment {
+            println("Getting item at $position")
+            val fragment = ScheduleFragment()
+            fragment.arguments = Bundle().apply {
+                val scheduleDay = schedule[Date(System.currentTimeMillis() + position * 24 * 60 * 60 * 1000)]
+                putParcelable("schedule", scheduleDay)
+            }
+            return fragment
+        }
+
+        override fun getCount(): Int {
+            return 14
+        }
+    }
+
+    class ScheduleFragment : Fragment() {
+        @SuppressLint("SetTextI18n")
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            val rootView: View = inflater.inflate(R.layout.fragment_schedule, container, false)
+            arguments?.takeIf { it.containsKey("schedule") }?.apply {
+                val scheduleDay = getParcelable<ScheduleDay>("schedule")
+
+                val dayFormatter = SimpleDateFormat("dd-MM", Locale.getDefault())
+                rootView.findViewById<TextView>(R.id.dayText).text =
+                        Utils.dayIntToStr(Calendar.getInstance().also { it.time = scheduleDay.day }.get(Calendar.DAY_OF_WEEK)) +
+                        " " + dayFormatter.format(scheduleDay.day)
+
+                rootView.findViewById<ListView>(R.id.dayListView).adapter =
+                        ScheduleListAdapter(scheduleDay,
+                                context!!.getSharedPreferences("Main", Context.MODE_PRIVATE),
+                                context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+            }
+            return rootView
+        }
     }
 }

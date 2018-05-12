@@ -10,7 +10,7 @@ class Schedule : Serializable {
      * Gets the schedule for a certain day
      */
     fun getScheduleByDay(day: Date) : ScheduleDay {
-        return scheduleDays.firstOrNull { it -> it.day.isOnSameDayAs(day) } ?: ScheduleDay()
+        return scheduleDays.firstOrNull { it -> it.day.isOnSameDayAs(day) } ?: ScheduleDay(day)
     }
 
     /**

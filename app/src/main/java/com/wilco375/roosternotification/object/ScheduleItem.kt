@@ -1,13 +1,15 @@
 package com.wilco375.roosternotification.`object`
 
 import android.content.SharedPreferences
+import android.os.Parcel
+import android.os.Parcelable
 import com.wilco375.roosternotification.general.Utils
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.Serializable
 import java.util.*
 
-class ScheduleItem : Serializable {
+class ScheduleItem : Serializable, Parcelable {
     val subject: String
     val group: String
     val location: String
@@ -92,5 +94,41 @@ class ScheduleItem : Serializable {
         return "$timeslot. $subject - $location"
     }
 
+    constructor(parcel: Parcel) {
+        subject = parcel.readString()
+        group = parcel.readString()
+        location = parcel.readString()
+        type = parcel.readString()
+        cancelled = parcel.readByte() > 0
+        start = Date(parcel.readLong())
+        end = Date(parcel.readLong())
+        timeslot = parcel.readInt()
+        day = Date(parcel.readLong())
+    }
 
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(subject)
+        parcel.writeString(group)
+        parcel.writeString(location)
+        parcel.writeString(type)
+        parcel.writeByte(if(cancelled) 1 else 0)
+        parcel.writeLong(start.time)
+        parcel.writeLong(end.time)
+        parcel.writeInt(timeslot)
+        parcel.writeLong(day.time)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<ScheduleItem> {
+        override fun createFromParcel(parcel: Parcel): ScheduleItem {
+            return ScheduleItem(parcel)
+        }
+
+        override fun newArray(size: Int): Array<ScheduleItem?> {
+            return arrayOfNulls(size)
+        }
+    }
 }
