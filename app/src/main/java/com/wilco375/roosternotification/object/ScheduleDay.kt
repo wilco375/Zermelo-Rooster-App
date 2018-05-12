@@ -1,24 +1,61 @@
 package com.wilco375.roosternotification.`object`
 
+import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.annotation.RestrictTo
 import java.io.Serializable
 import java.util.*
 
-class ScheduleDay(val day: Date = Date()) : Serializable, Parcelable {
-    val items = ArrayList<ScheduleItem>()
+class ScheduleDay : Serializable, Parcelable {
+    private val items = ArrayList<ScheduleItem>()
+    var day: Date = Date()
+        private set
 
-    constructor(parcel: Parcel) : this(Date(parcel.readLong())) {
+    constructor(day: Date = Date()) {
+        this.day = day
+    }
+
+    constructor(parcel: Parcel) {
+        day = Date(parcel.readLong())
         parcel.readList(items, ScheduleItem::class.java.classLoader)
     }
 
+    constructor(cursor: Cursor, day: Date) {
+        if(!cursor.isClosed && cursor.moveToNext()) {
+            do {
+                try {
+                    items.add(ScheduleItem(cursor))
+                } catch (e: IllegalStateException) {
+                    e.printStackTrace()
+                }
+            } while (cursor.moveToNext())
+            this.day = day
+        } else {
+            this.day = day
+        }
+    }
+
     fun addItem(scheduleItem: ScheduleItem) {
-        items.add(scheduleItem)
-        items.sortBy { it -> it.start }
+        if(isAccessedBy(Schedule::class.java)) {
+            items.add(scheduleItem)
+            items.sortBy { it -> it.start }
+        } else {
+            throw IllegalAccessError("Only Schedule is allowed to add items")
+        }
+    }
+
+    private fun isAccessedBy(`class`: Class<*>) : Boolean {
+        val stackTrace = Thread.currentThread().stackTrace
+        return !stackTrace.none { it -> it.className == `class`.name }
+    }
+
+    fun getItems() : List<ScheduleItem> {
+        return Collections.unmodifiableList(items)
     }
 
     operator fun iterator() : Iterator<ScheduleItem>
-            = items.iterator()
+            = getItems().iterator()
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(day.time)

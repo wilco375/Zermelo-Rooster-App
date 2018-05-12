@@ -8,7 +8,6 @@ import com.wilco375.roosternotification.general.Utils
 
 class BootComplete : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        //System.out.println("Intent message is "+intent.getAction());
         if (Intent.ACTION_BOOT_COMPLETED == intent.action || "START_ALARM" == intent.action) {
             Utils.setAlarm(context)
         }

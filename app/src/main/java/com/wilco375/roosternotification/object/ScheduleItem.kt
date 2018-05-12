@@ -1,6 +1,7 @@
 package com.wilco375.roosternotification.`object`
 
 import android.content.SharedPreferences
+import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import com.wilco375.roosternotification.general.Utils
@@ -14,6 +15,17 @@ class ScheduleItem : Serializable, Parcelable {
     val group: String
     val location: String
     val type: String
+    get() {
+        return when (field) {
+            "lesson" -> "Les"
+            "exam" -> "Toets"
+            "activity" -> "Activiteit"
+            "choice" -> "Keuze"
+            "talk" -> "Gesprek"
+            "other" -> "Anders"
+            else -> "Onbekend"
+        }
+    }
     val cancelled: Boolean
     val start: Date
     val end: Date
@@ -52,16 +64,20 @@ class ScheduleItem : Serializable, Parcelable {
         timeslot = jsonObject.takeUnless { jsonObject.isNull("startTimeSlot") }?.getInt("startTimeSlot") ?: 0
     }
 
-    constructor(subject: String, group: String, location: String, type: String, cancelled: Boolean, start: Date, end: Date, timeslot: Int) {
-        this.subject = subject
-        this.group = group
-        this.location = location
-        this.type = type
-        this.cancelled = cancelled
-        this.start = start
-        this.day = start
-        this.end = end
-        this.timeslot = timeslot
+    constructor(cursor: Cursor) {
+        if(!cursor.isClosed) {
+            subject = cursor.getString("subject")
+            group = cursor.getString("lessonGroup")
+            location = cursor.getString("location")
+            type = cursor.getString("type")
+            cancelled = cursor.getBoolean("cancelled")
+            start = cursor.getDate("start")
+            end = cursor.getDate("end")
+            timeslot = cursor.getInt("timeslot")
+            day = cursor.getDate("day")
+        } else {
+            throw IllegalArgumentException("Cursor is closed")
+        }
     }
 
     /**

@@ -39,7 +39,6 @@ class ZermeloSync {
 
     fun syncZermelo(context: Context, updateMainActivity: Boolean, copyClipboard: Boolean) {
         println("Syncing with zermelo")
-        println("Wifi connected? ${Utils.isWifiConnected(context)}")
 
         if (!Utils.isWifiConnected(context) && !updateMainActivity) return
 
@@ -54,7 +53,7 @@ class ZermeloSync {
             // Set end two weeks later
             val end = start + 12 * 24 * 60 * 60
 
-            println("Getting JSON")
+            println("Getting JSON between $start and $end")
 
             // Get schedule string
             sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE)
@@ -72,7 +71,7 @@ class ZermeloSync {
             try {
                 // Format to JSONArray
                 val jsonSchedule = JSONObject(scheduleString).getJSONObject("response").getJSONArray("data")
-                val schedule = Schedule()
+                val schedule = Schedule.getInstance(context)
 
                 // Loop trough all lessons and create an object array with all lessons
                 jsonSchedule.items().map { it -> ScheduleItem(it as JSONObject) }.forEach {
@@ -86,7 +85,7 @@ class ZermeloSync {
                 // TODO Fix cancelled notifications
 
                 // Save schedule
-                ScheduleHandler.setSchedule(context, schedule)
+                schedule.save()
 
                 // Update widgets
                 Utils.updateWidgets(context)

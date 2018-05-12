@@ -25,7 +25,7 @@ class ScheduleListAdapter(private val schedule: ScheduleDay, private val sp: Sha
     }
 
     override fun getCount(): Int {
-        return schedule.items.size
+        return schedule.getItems().size
     }
 
     @SuppressLint("SetTextI18n")
@@ -34,7 +34,7 @@ class ScheduleListAdapter(private val schedule: ScheduleDay, private val sp: Sha
         if (convertView == null)
             convertView = inflater.inflate(R.layout.schedule_list, null)
 
-        val scheduleItem = schedule.items.get(position)
+        val scheduleItem = schedule.getItems()[position]
 
         val timeslot = convertView!!.findViewById<TextView>(R.id.timeslot)
         val info = convertView.findViewById<TextView>(R.id.info)

@@ -56,10 +56,10 @@ public class Utils {
     public static long getUnixStartOfWeek() {
         if (unixStartOfWeekCache == -1) {
             Calendar calendar = Calendar.getInstance();
-            if (calendar.get(Calendar.HOUR_OF_DAY) > 17)
+            if (calendar.get(Calendar.HOUR_OF_DAY) > 17 || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
                 calendar.add(Calendar.DAY_OF_WEEK, 1);
-            if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                calendar.add(Calendar.WEEK_OF_YEAR, 1);
+            if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                calendar.add(Calendar.DAY_OF_WEEK, 2);
             }
 
             calendar.set(Calendar.HOUR_OF_DAY, 0);

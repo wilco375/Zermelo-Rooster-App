@@ -9,6 +9,7 @@ import android.text.SpannableString
 import android.text.style.StrikethroughSpan
 import android.widget.RemoteViews
 import com.wilco375.roosternotification.R
+import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.activity.MainActivity
 import com.wilco375.roosternotification.general.ScheduleHandler
 import com.wilco375.roosternotification.general.Utils
@@ -25,8 +26,8 @@ class LesuurWidgetProvider : AppWidgetProvider() {
             val dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
             if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) return
 
-            val schedule = ScheduleHandler.getSchedule(context)[Utils.getCurrentScheduleDate()]
-            if (schedule.items.isEmpty()) return
+            val schedule = Schedule.getInstance(context)[Utils.getCurrentScheduleDate()]
+            if (schedule.getItems().isEmpty()) return
 
             var subject = ""
             var location = ""

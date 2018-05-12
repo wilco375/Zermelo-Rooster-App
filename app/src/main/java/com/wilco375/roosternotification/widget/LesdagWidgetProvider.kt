@@ -9,6 +9,7 @@ import android.text.SpannableString
 import android.text.style.StrikethroughSpan
 import android.widget.RemoteViews
 import com.wilco375.roosternotification.R
+import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.activity.MainActivity
 import com.wilco375.roosternotification.general.ScheduleHandler
 import com.wilco375.roosternotification.general.Utils
@@ -31,7 +32,7 @@ class LesdagWidgetProvider : AppWidgetProvider() {
 
             var widgetText = ""
 
-            val schedule = ScheduleHandler.getSchedule(context)[Utils.getCurrentScheduleDate()]
+            val schedule = Schedule.getInstance(context)[Utils.getCurrentScheduleDate()]
             val strikethroughStartIndex = ArrayList<Int>()
             val strikethroughEndIndex = ArrayList<Int>()
 

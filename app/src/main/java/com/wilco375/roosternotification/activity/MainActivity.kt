@@ -81,7 +81,7 @@ class MainActivity : CAppCompatActivity() {
      */
     fun getSchedule() {
         runOnUiThread({
-            schedule = ScheduleHandler.getSchedule(this@MainActivity)
+            schedule = Schedule.getInstance(this@MainActivity)
 
             setupSchedule()
         })
@@ -140,7 +140,6 @@ class MainActivity : CAppCompatActivity() {
 
     class SchedulePagerAdapter(fragmentManager: FragmentManager, val schedule: Schedule) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getItem(position: Int): Fragment {
-            println("Getting item at $position")
             val fragment = ScheduleFragment()
             fragment.arguments = Bundle().apply {
                 val scheduleDay = schedule[Date(System.currentTimeMillis() + position * 24 * 60 * 60 * 1000)]
@@ -166,10 +165,14 @@ class MainActivity : CAppCompatActivity() {
                         Utils.dayIntToStr(Calendar.getInstance().also { it.time = scheduleDay.day }.get(Calendar.DAY_OF_WEEK)) +
                         " " + dayFormatter.format(scheduleDay.day)
 
-                rootView.findViewById<ListView>(R.id.dayListView).adapter =
-                        ScheduleListAdapter(scheduleDay,
-                                context!!.getSharedPreferences("Main", Context.MODE_PRIVATE),
-                                context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+                if(!scheduleDay.getItems().isEmpty()) {
+                    rootView.findViewById<TextView>(R.id.noLessons).visibility = View.GONE
+
+                    rootView.findViewById<ListView>(R.id.dayListView).adapter =
+                            ScheduleListAdapter(scheduleDay,
+                                    context!!.getSharedPreferences("Main", Context.MODE_PRIVATE),
+                                    context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+                }
             }
             return rootView
         }

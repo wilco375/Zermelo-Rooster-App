@@ -46,7 +46,7 @@ object ScheduleHandler {
     private fun readSchedule(context: Context): Schedule {
         try {
             val file = File("${context.filesDir}/schedule")
-            if (!file.exists()) return Schedule()
+            if (!file.exists()) return Schedule.getInstance(context)
             val fis = FileInputStream(file)
             val ois = ObjectInputStream(fis)
             val obj = ois.readObject()
@@ -59,6 +59,6 @@ object ScheduleHandler {
             e.printStackTrace()
         }
 
-        return Schedule()
+        return Schedule.getInstance(context)
     }
 }

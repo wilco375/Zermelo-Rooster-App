@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.wilco375.roosternotification"
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 25
         versionCode 34
         versionName "4.0.1"
     }

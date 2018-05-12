@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.wilco375.roosternotification.R
+import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.activity.MainActivity
 import com.wilco375.roosternotification.general.ScheduleHandler
 import com.wilco375.roosternotification.general.Utils
@@ -42,8 +43,8 @@ class AlarmReceiver : BroadcastReceiver() {
             if (!sp.getBoolean("notify", true)) return
 
             // Get schedule of current day
-            val schedule = ScheduleHandler.getSchedule(context)[Date()]
-            if (schedule.items.isEmpty()) return
+            val schedule = Schedule.getInstance(context)[Date()]
+            if (schedule.getItems().isEmpty()) return
 
             // Get all the notification texts
             var bigText = ""
