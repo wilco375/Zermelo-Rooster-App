@@ -19,7 +19,6 @@ import com.wilco375.roosternotification.exception.InvalidCodeException
 import com.wilco375.roosternotification.exception.InvalidWebsiteException
 import com.wilco375.roosternotification.exception.NoInternetException
 import com.wilco375.roosternotification.exception.UnknownAuthenticationException
-import com.wilco375.roosternotification.general.ScheduleHandler
 import com.wilco375.roosternotification.general.Utils
 import cz.msebera.android.httpclient.NameValuePair
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity

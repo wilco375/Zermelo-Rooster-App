@@ -18,7 +18,6 @@ import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.R.layout.activity_main
 import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.`object`.ScheduleDay
-import com.wilco375.roosternotification.general.ScheduleHandler
 import com.wilco375.roosternotification.general.ScheduleListAdapter
 import com.wilco375.roosternotification.general.Utils
 import com.wilco375.roosternotification.online.ZermeloSync
