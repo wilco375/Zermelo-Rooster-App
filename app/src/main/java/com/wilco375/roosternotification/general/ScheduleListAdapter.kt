@@ -29,8 +29,8 @@ class ScheduleListAdapter(private val schedule: ScheduleDay, private val sp: Sha
     }
 
     @SuppressLint("SetTextI18n")
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+    override fun getView(position: Int, convertViewParam: View?, parent: ViewGroup): View {
+        var convertView = convertViewParam
         if (convertView == null)
             convertView = inflater.inflate(R.layout.schedule_list, null)
 

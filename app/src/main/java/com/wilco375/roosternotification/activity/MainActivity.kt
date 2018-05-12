@@ -142,7 +142,7 @@ class MainActivity : CAppCompatActivity() {
         override fun getItem(position: Int): Fragment {
             val fragment = ScheduleFragment()
             fragment.arguments = Bundle().apply {
-                val scheduleDay = schedule[Date(System.currentTimeMillis() + position * 24 * 60 * 60 * 1000)]
+                val scheduleDay = schedule[Date(Utils.currentScheduleDate().time + position * 24 * 60 * 60 * 1000)]
                 putParcelable("schedule", scheduleDay)
             }
             return fragment

@@ -9,3 +9,9 @@ import android.database.DatabaseUtils
 fun String.escape(): String {
     return DatabaseUtils.sqlEscapeString(this)
 }
+
+fun String.replaceLast(substring: String, replacement: String): String {
+    val index = this.lastIndexOf(substring)
+    if (index == -1) return this
+    return this.substring(0, index) + replacement + this.substring(index + substring.length)
+}

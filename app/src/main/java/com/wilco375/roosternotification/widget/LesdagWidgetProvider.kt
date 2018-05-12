@@ -32,7 +32,7 @@ class LesdagWidgetProvider : AppWidgetProvider() {
 
             var widgetText = ""
 
-            val schedule = Schedule.getInstance(context)[Utils.getCurrentScheduleDate()]
+            val schedule = Schedule.getInstance(context)[Utils.currentScheduleDate()]
             val strikethroughStartIndex = ArrayList<Int>()
             val strikethroughEndIndex = ArrayList<Int>()
 

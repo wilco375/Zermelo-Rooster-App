@@ -27,7 +27,7 @@ fun Date.toCalendar() : Calendar {
  */
 fun Date.isThisWeek() : Boolean {
     val time = this.time
-    return time >= Utils.getUnixStartOfWeek() && time <= Utils.getUnixEndOfWeek()
+    return time >= Utils.unixStartOfWeek() && time <= Utils.unixEndOfWeek()
 }
 
 fun Date.startOfDay() : Date {

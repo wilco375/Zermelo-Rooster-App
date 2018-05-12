@@ -26,7 +26,7 @@ class LesuurWidgetProvider : AppWidgetProvider() {
             val dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
             if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) return
 
-            val schedule = Schedule.getInstance(context)[Utils.getCurrentScheduleDate()]
+            val schedule = Schedule.getInstance(context)[Utils.currentScheduleDate()]
             if (schedule.getItems().isEmpty()) return
 
             var subject = ""

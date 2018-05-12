@@ -8,6 +8,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.`object`.Schedule
+import com.wilco375.roosternotification.`object`.replaceLast
 import com.wilco375.roosternotification.activity.MainActivity
 import com.wilco375.roosternotification.general.ScheduleHandler
 import com.wilco375.roosternotification.general.Utils
@@ -88,7 +89,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 // Style that shows the entire day's schedule
                 val daySchedule = NotificationCompat.BigTextStyle()
                 daySchedule.setBigContentTitle(Utils.dayIntToStr(Calendar.getInstance().get(Calendar.DAY_OF_WEEK)))
-                        .bigText(Utils.replaceLast(bigText, "\n", ""))
+                        .bigText(bigText.replaceLast("\n", ""))
 
                 // Create main notification with daySchedule as extended notification
                 // TODO Add notification channel
