@@ -6,3 +6,4 @@
 /build
 /captures
 /app/*.apk
+/app/**/*.apk
