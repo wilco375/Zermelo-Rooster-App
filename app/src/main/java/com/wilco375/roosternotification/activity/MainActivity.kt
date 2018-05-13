@@ -3,19 +3,19 @@ package com.wilco375.roosternotification.activity
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.StrictMode
 import android.view.*
-import android.widget.DatePicker
-import android.widget.ListView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.textfield.TextInputEditText
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.R.layout.activity_main
 import com.wilco375.roosternotification.`object`.Schedule
@@ -35,6 +35,7 @@ import java.util.*
 
 class MainActivity : CAppCompatActivity() {
     private var syncing = false
+    private var username = "~me"
 
     private lateinit var sp: SharedPreferences
     private lateinit var schedule: Schedule
@@ -69,6 +70,7 @@ class MainActivity : CAppCompatActivity() {
      * Check if first launch or first sync
      */
     private fun checkInit() {
+        sp.edit().putString("token", "u35aav1qu355jhbtcbeghv538b").putString("website", "jfc.zportal.nl").apply() // STOPSHIP
         if (sp.getString("token", "") == "" || sp.getString("website", "") == "") {
             val i = Intent(this@MainActivity, InitActivity::class.java)
             finish()
@@ -85,7 +87,7 @@ class MainActivity : CAppCompatActivity() {
      */
     fun getSchedule() {
         runOnUiThread({
-            schedule = Schedule.getInstance(this@MainActivity)
+            schedule = Schedule.getInstance(this@MainActivity, username)
 
             setupSchedule()
         })
@@ -132,12 +134,30 @@ class MainActivity : CAppCompatActivity() {
         }
     }
 
+    private fun showUserDialog() {
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_user, LinearLayout(this))
+        val dialog = AlertDialog.Builder(this)
+        dialog.setTitle(R.string.user)
+        dialog.setView(view)
+        dialog.setPositiveButton(android.R.string.ok) { _, _ ->
+            val user = view.findViewById<TextInputEditText>(R.id.userId).text.toString()
+            this.username = user
+            syncSchedule()
+            getSchedule()
+        }
+        dialog.setNegativeButton(R.string.me) { _, _ ->
+            this.username = "~me"
+            getSchedule()
+        }
+        dialog.show()
+    }
+
     /**
      * Sync schedule with Zermelo
      */
     private fun syncSchedule() {
         syncing = true
-        ZermeloSync().syncZermelo(this, true, false)
+        ZermeloSync().syncZermelo(this, true, username)
         Toast.makeText(this, "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show()
     }
 
@@ -157,6 +177,10 @@ class MainActivity : CAppCompatActivity() {
         } else if (item.itemId == R.id.zermelo_sync) {
             // Sync schedule
             syncSchedule()
+
+            return true
+        } else if(item.itemId == R.id.user) {
+            showUserDialog()
 
             return true
         } else {

@@ -28,10 +28,13 @@
         android:id="@+id/info"
         android:textStyle="bold"
         android:textColor="#000"
-        android:paddingTop="5px"
-        android:paddingBottom="5px"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/timeslot"
-        android:layout_alignTop="@id/timeslot" />
+        android:layout_alignTop="@id/timeslot"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/timeslot" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,9 +43,11 @@
         android:text=""
         android:textColor="#000"
         android:id="@+id/time"
-        android:paddingTop="5px"
-        android:paddingBottom="5px"
+        android:paddingBottom="2dp"
         android:layout_toRightOf="@+id/timeslot"
-        android:layout_alignBottom="@id/timeslot" />
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/info"
+        android:layout_toEndOf="@+id/timeslot"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

@@ -40,7 +40,7 @@ class ScheduleDay : Serializable, Parcelable {
     fun addItem(scheduleItem: ScheduleItem) {
         if(isAccessedBy(Schedule::class.java)) {
             items.add(scheduleItem)
-            items.sortBy { it -> it.start }
+            items.sortBy { it.start }
         } else {
             throw IllegalAccessError("Only Schedule is allowed to add items")
         }
@@ -48,7 +48,7 @@ class ScheduleDay : Serializable, Parcelable {
 
     private fun isAccessedBy(`class`: Class<*>) : Boolean {
         val stackTrace = Thread.currentThread().stackTrace
-        return !stackTrace.none { it -> it.className == `class`.name }
+        return !stackTrace.none { it.className == `class`.name }
     }
 
     fun getItems() : List<ScheduleItem> {

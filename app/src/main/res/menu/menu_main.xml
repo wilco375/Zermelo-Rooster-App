@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.MainActivity">
     <item
+        android:id="@+id/user"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:title="@string/user"
+        android:icon="@drawable/ic_person_white_48dp" />
+    <item
         android:id="@+id/settings"
         android:orderInCategory="100"
         app:showAsAction="always"

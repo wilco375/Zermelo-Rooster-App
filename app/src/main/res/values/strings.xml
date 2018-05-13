@@ -43,4 +43,7 @@
     <string name="title_activity_help">HelpActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="no_lessons">Geen lessen gevonden</string>
+    <string name="user">Selecteer gebruiker</string>
+    <string name="user_id">Leerlingnummer of lerarenafkorting</string>
+    <string name="me">Mijn rooster</string>
 </resources>

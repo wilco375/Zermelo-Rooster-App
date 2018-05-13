@@ -4,8 +4,9 @@ import android.content.Context
 import com.wilco375.roosternotification.general.Config
 import java.io.Serializable
 import java.util.*
+import kotlin.collections.ArrayList
 
-class Schedule private constructor(context: Context): Serializable {
+class Schedule private constructor(context: Context, val username: String): Serializable {
     private val scheduleDays = ArrayList<ScheduleDay>()
     private var db = context.openOrCreateDatabase("Schedule", Context.MODE_PRIVATE, null)!!
 
@@ -16,18 +17,19 @@ class Schedule private constructor(context: Context): Serializable {
     }
 
     companion object {
-        private var instance: Schedule? = null
+        private var instances: ArrayList<Schedule> = ArrayList()
 
-        fun getInstance(context: Context): Schedule {
-            if (instance == null) {
-                instance = Schedule(context)
+        fun getInstance(context: Context, username: String = "~me"): Schedule {
+            if (instances.isEmpty() || !instances.any { it.username == username }) {
+                instances.add(Schedule(context, username))
             }
-            return instance!!
+            return instances.first { it.username == username }
         }
     }
 
     private fun createTables() {
         val lessonTable = "CREATE TABLE IF NOT EXISTS Lesson (" +
+                "   instance INTEGER," +
                 "   subject TEXT," +
                 "   lessonGroup TEXT," +
                 "   location TEXT," +
@@ -37,16 +39,15 @@ class Schedule private constructor(context: Context): Serializable {
                 "   end INTEGER," +
                 "   timeslot INTEGER," +
                 "   day INTEGER," +
-                "   PRIMARY KEY (subject, lessonGroup, start)" +
+                "   username TEXT," +
+                "   PRIMARY KEY (instance, username)" +
                 ")"
         db.execSQL(lessonTable)
 
         val notificationTable = "CREATE TABLE IF NOT EXISTS Notification (" +
-                "   subject TEXT," +
-                "   lessonGroup TEXT," +
-                "   start INTEGER," +
+                "   instance INTEGER," +
                 "   type TEXT," +
-                "   PRIMARY KEY (subject, lessonGroup, start, type)" +
+                "   PRIMARY KEY (instance, type)" +
                 ")"
         db.execSQL(notificationTable)
     }
@@ -57,7 +58,7 @@ class Schedule private constructor(context: Context): Serializable {
     fun getScheduleByDay(day: Date) : ScheduleDay {
         val startOfDay = day.startOfDay().time
         return ScheduleDay(
-                db.rawQuery("SELECT * FROM Lesson WHERE start >= $startOfDay AND end < ${startOfDay + 24*3600*1000}", null),
+                db.rawQuery("SELECT * FROM Lesson WHERE start >= $startOfDay AND end < ${startOfDay + 24*3600*1000} AND username == ${username.escape()} ORDER BY start ASC", null),
                 day
         )
     }
@@ -68,7 +69,7 @@ class Schedule private constructor(context: Context): Serializable {
      */
     fun addScheduleItem(item: ScheduleItem) {
         val date = item.start.toCalendar()
-        val day = scheduleDays.firstOrNull { it -> it.day.time == date.timeInMillis || it.day.toCalendar().isOnSameDayAs(date) }
+        val day = scheduleDays.firstOrNull { it.day.time == date.timeInMillis || it.day.toCalendar().isOnSameDayAs(date) }
         if(day != null) {
             // Day is already in the list
             day.addItem(item)
@@ -85,10 +86,10 @@ class Schedule private constructor(context: Context): Serializable {
     fun save() {
         for (scheduleDay in scheduleDays) {
             val startOfDay = scheduleDay.day.startOfDay().time
-            db.execSQL("DELETE FROM Lesson WHERE (start >= $startOfDay AND end < ${startOfDay + 24*3600*1000}) OR (end < ${startOfDay - Config.SYNC_WINDOW*24*3600*1000L})")
+            db.execSQL("DELETE FROM Lesson WHERE username = ${username.escape()} AND ((start >= $startOfDay AND end < ${startOfDay + 24*3600*1000}) OR (end < ${startOfDay - Config.SYNC_WINDOW*24*3600*1000L}))")
             for (item in scheduleDay) {
                 item.apply {
-                    db.execSQL("INSERT INTO Lesson VALUES (${subject.escape()}, ${group.escape()}, ${location.escape()}, ${type.escape()}, ${if(cancelled) 1 else 0}, ${start.time}, ${end.time}, $timeslot, ${day.time})")
+                    db.execSQL("INSERT INTO Lesson VALUES ($instance, ${subject.escape()}, ${group.escape()}, ${location.escape()}, ${type.escape()}, ${if(cancelled) 1 else 0}, ${start.time}, ${end.time}, $timeslot, ${day.time}, ${username.escape()})")
                 }
             }
         }
@@ -100,13 +101,13 @@ class Schedule private constructor(context: Context): Serializable {
      */
     fun isCancelledNotified(item: ScheduleItem): Boolean {
         // Check if it has been notified yet
-        val cursor = db.rawQuery("SELECT * FROM Notification WHERE subject = ${item.subject.escape()} AND lessonGroup = ${item.group.escape()} AND start = ${item.start.time} AND type = ${"cancelled".escape()}", null)
+        val cursor = db.rawQuery("SELECT * FROM Notification WHERE instance = ${item.instance} AND type = ${"cancelled".escape()}", null)
         val result = cursor.count > 0
         cursor.close()
 
         if(!result) {
             // Update database
-            db.execSQL("INSERT INTO Notification VALUES (${item.subject.escape()}, ${item.group.escape()}, ${item.start.time}, ${"cancelled".escape()})")
+            db.execSQL("INSERT INTO Notification VALUES (${item.instance}, ${"cancelled".escape()})")
         }
 
         return result
@@ -120,5 +121,5 @@ class Schedule private constructor(context: Context): Serializable {
             = getAllScheduleItems().iterator()
 
     fun getAllScheduleItems() : List<ScheduleItem>
-        = scheduleDays.map { it -> it.getItems() }.flatten()
+        = scheduleDays.map { it.getItems() }.flatten()
 }

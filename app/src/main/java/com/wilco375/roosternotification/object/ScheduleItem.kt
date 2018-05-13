@@ -11,6 +11,7 @@ import java.io.Serializable
 import java.util.*
 
 class ScheduleItem : Serializable, Parcelable {
+    val instance: Long
     val subject: String
     val group: String
     val location: String
@@ -35,17 +36,20 @@ class ScheduleItem : Serializable, Parcelable {
 
     @Throws(JSONException::class)
     constructor(jsonObject: JSONObject) {
+        // Instance
+        instance = jsonObject.getLong("appointmentInstance")
+
         //Subject
         val subjectsArray = jsonObject.getJSONArray("subjects")
-        subject = subjectsArray.items().joinToString("/") { it -> it.toString().toUpperCase() }
+        subject = subjectsArray.items().joinToString("/") { it.toString().toUpperCase() }
 
         //Group
         val groupsArray = jsonObject.getJSONArray("groups")
-        group = groupsArray.items().joinToString("/") { it -> it.toString().toUpperCase() }
+        group = groupsArray.items().joinToString("/") { it.toString().toUpperCase() }
 
         //Location
         val locationsArray = jsonObject.getJSONArray("locations")
-        location = locationsArray.items().joinToString("/") { it -> it.toString() }
+        location = locationsArray.items().joinToString("/") { it.toString() }
 
         // Type
         type = jsonObject.getString("type")
@@ -66,6 +70,7 @@ class ScheduleItem : Serializable, Parcelable {
 
     constructor(cursor: Cursor) {
         if(!cursor.isClosed) {
+            instance = cursor.getLong("instance")
             subject = cursor.getString("subject")
             group = cursor.getString("lessonGroup")
             location = cursor.getString("location")
@@ -111,6 +116,7 @@ class ScheduleItem : Serializable, Parcelable {
     }
 
     constructor(parcel: Parcel) {
+        instance = parcel.readLong()
         subject = parcel.readString()
         group = parcel.readString()
         location = parcel.readString()
@@ -123,6 +129,7 @@ class ScheduleItem : Serializable, Parcelable {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(instance)
         parcel.writeString(subject)
         parcel.writeString(group)
         parcel.writeString(location)

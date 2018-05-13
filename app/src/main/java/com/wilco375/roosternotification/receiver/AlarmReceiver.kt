@@ -31,7 +31,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
             //Sync with Zermelo
             if (sp.getInt("syncCount", 0) == 3) {
-                ZermeloSync().syncZermelo(context, false, false)
+                ZermeloSync().syncZermelo(context)
                 spe.putInt("timesSynced", sp.getInt("timesSynced", 0) + 1)
                 spe.putInt("syncCount", 0)
             } else {

@@ -11,7 +11,6 @@ import androidx.core.app.NotificationManagerCompat
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.`object`.ScheduleItem
-import com.wilco375.roosternotification.`object`.isThisWeek
 import com.wilco375.roosternotification.`object`.items
 import com.wilco375.roosternotification.activity.MainActivity
 import com.wilco375.roosternotification.exception.InvalidCodeException
@@ -31,13 +30,11 @@ import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import java.util.*
-import kotlin.collections.ArrayList
 
 class ZermeloSync {
     lateinit var sp: SharedPreferences
 
-    fun syncZermelo(context: Context, updateMainActivity: Boolean, copyClipboard: Boolean) {
+    fun syncZermelo(context: Context, updateMainActivity: Boolean = false, username: String = "~me",copyClipboard: Boolean = false) {
         if (!Utils.isWifiConnected(context) && !updateMainActivity) return
 
         Thread({
@@ -54,6 +51,7 @@ class ZermeloSync {
             // Get schedule string
             sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE)
             val scheduleString = getScheduleString(sp.getString("website", ""),
+                    username,
                     sp.getString("token", ""),
                     start, end) ?: return@Thread
 
@@ -66,28 +64,26 @@ class ZermeloSync {
             try {
                 // Format to JSONArray
                 val jsonSchedule = JSONObject(scheduleString).getJSONObject("response").getJSONArray("data")
-                val schedule = Schedule.getInstance(context)
+                val schedule = Schedule.getInstance(context, username)
 
                 // Loop trough all lessons and create an object array with all lessons
-                jsonSchedule.items().map { it -> ScheduleItem(it as JSONObject) }.forEach {
+                jsonSchedule.items().map { ScheduleItem(it as JSONObject) }.forEach {
                     schedule += it
-                    if(it.cancelled) {
+                    if(it.cancelled && username == "~me") {
                         cancelledItems.add(it)
                     }
                 }
 
                 // Notify cancelled lessons
-                println("${cancelledItems.size} cancelled items")
-                println("Checking if cancelled items is between ${Utils.unixStartOfWeek()} and ${Utils.unixEndOfWeek()}")
-                cancelNotification(cancelledItems.filter { it.isThisWeek() /*&& !schedule.isCancelledNotified(it)*/ }, context)
-
-                println("Saving schedule")
+                cancelNotification(cancelledItems.filter { it.isThisWeek() && !schedule.isCancelledNotified(it) }, context)
 
                 // Save schedule
                 schedule.save()
 
                 // Update widgets
-                Utils.updateWidgets(context)
+                if (username == "~me") {
+                    Utils.updateWidgets(context)
+                }
 
                 // Restart app if necessary
                 if (updateMainActivity && context is MainActivity) {
@@ -100,7 +96,8 @@ class ZermeloSync {
     }
 
     private fun cancelNotification(schedule: List<ScheduleItem>, context: Context) {
-        println("Sending cancelled notifications for ${schedule.size} items")
+        if(schedule.isEmpty()) return
+
         if (sp.getBoolean("notifyCancel", true)) {
             val builder = Utils.getNotificationBuilder(context, Utils.CURRENT_SCHEDULE)
                     .setSmallIcon(R.drawable.notification_logo)
@@ -134,10 +131,10 @@ class ZermeloSync {
     }
 
     @Nullable
-    private fun getScheduleString(website: String?, token: String?, start: Long, end: Long): String? {
+    private fun getScheduleString(website: String, username: String, token: String, start: Long, end: Long): String? {
         try {
             val client = HttpClientBuilder.create().build()
-            val url = "https://$website/api/v2/appointments?user=~me&start=$start&end=$end&valid=true&fields=subjects,cancelled,locations,startTimeSlot,start,end,groups,type&access_token=$token"
+            val url = "https://$website/api/v2/appointments?user=$username&start=$start&end=$end&valid=true&fields=appointmentInstance,subjects,cancelled,locations,startTimeSlot,start,end,groups,type&access_token=$token"
             val get = HttpGet(url)
             val response = client.execute(get)
 

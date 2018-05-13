@@ -9,6 +9,7 @@ import android.content.Intent
 class AutoStartUp : IntentService("AutoStartUp") {
 
     override fun onHandleIntent(intent: Intent?) {
+        println("Setting repeating rtc wakeup")
         AlarmReceiver.createNotification(this)
         val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
         val i = Intent(baseContext, AlarmReceiver::class.java)
