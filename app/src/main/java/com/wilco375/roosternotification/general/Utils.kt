@@ -1,10 +1,14 @@
 package com.wilco375.roosternotification.general
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.appwidget.AppWidgetManager
 import android.content.*
 import android.net.ConnectivityManager
+import android.os.Build
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.receiver.AutoStartUp
 import com.wilco375.roosternotification.widget.LesdagWidgetProvider
@@ -126,5 +130,26 @@ object Utils {
             clipboard?.primaryClip = clip
             if (toast) Toast.makeText(context, R.string.copied, Toast.LENGTH_SHORT).show()
         })
+    }
+
+    // Notification manager
+    val CURRENT_SCHEDULE = "current"
+    val LESSON_CANCELLED = "cancelled"
+    fun getNotificationBuilder(context: Context, forChannel: String) : NotificationCompat.Builder {
+        // Register notification channel
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val description = context.resources.getString(when(forChannel) {
+                CURRENT_SCHEDULE -> R.string.notify
+                LESSON_CANCELLED -> R.string.notify_cancel
+                else -> throw IllegalArgumentException("forChannel must be one of CURRENT_SCHEDULE and LESSON_CANCELLED")
+            })
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(forChannel, description, importance)
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Get builder
+        return NotificationCompat.Builder(context, forChannel)
     }
 }

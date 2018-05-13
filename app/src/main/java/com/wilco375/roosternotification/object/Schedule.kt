@@ -1,6 +1,7 @@
 package com.wilco375.roosternotification.`object`
 
 import android.content.Context
+import com.wilco375.roosternotification.general.Config
 import java.io.Serializable
 import java.util.*
 
@@ -84,7 +85,7 @@ class Schedule private constructor(context: Context): Serializable {
     fun save() {
         for (scheduleDay in scheduleDays) {
             val startOfDay = scheduleDay.day.startOfDay().time
-            db.execSQL("DELETE FROM Lesson WHERE start >= $startOfDay AND end < ${startOfDay + 24*3600*1000}")
+            db.execSQL("DELETE FROM Lesson WHERE (start >= $startOfDay AND end < ${startOfDay + 24*3600*1000}) OR (end < ${startOfDay - Config.SYNC_WINDOW*24*3600*1000L})")
             for (item in scheduleDay) {
                 item.apply {
                     db.execSQL("INSERT INTO Lesson VALUES (${subject.escape()}, ${group.escape()}, ${location.escape()}, ${type.escape()}, ${if(cancelled) 1 else 0}, ${start.time}, ${end.time}, $timeslot, ${day.time})")

@@ -92,13 +92,12 @@ class AlarmReceiver : BroadcastReceiver() {
                         .bigText(bigText.replaceLast("\n", ""))
 
                 // Create main notification with daySchedule as extended notification
-                // TODO Add notification channel
-                val builder = NotificationCompat.Builder(context)
+                val builder = Utils.getNotificationBuilder(context, Utils.CURRENT_SCHEDULE)
                         .setSmallIcon(R.drawable.notification_logo)
                         .setContentText(location)
                         .extend(NotificationCompat.WearableExtender()
                                 .addPage(
-                                        NotificationCompat.Builder(context)
+                                        Utils.getNotificationBuilder(context, Utils.CURRENT_SCHEDULE)
                                                 .setStyle(daySchedule).build()
                                 )
                         )

@@ -20,6 +20,7 @@ import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.R.layout.activity_main
 import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.`object`.ScheduleDay
+import com.wilco375.roosternotification.general.Config
 import com.wilco375.roosternotification.general.ScheduleListAdapter
 import com.wilco375.roosternotification.general.Utils
 import com.wilco375.roosternotification.online.ZermeloSync
@@ -90,8 +91,6 @@ class MainActivity : CAppCompatActivity() {
         })
     }
 
-    val realCurrentItem = 0
-
     /**
      * Show schedule in app
      */
@@ -99,10 +98,10 @@ class MainActivity : CAppCompatActivity() {
         schedulePagerAdapter = SchedulePagerAdapter(supportFragmentManager, schedule)
         scheduleViewPager = findViewById(R.id.scheduleViewPager)
         scheduleViewPager.adapter = schedulePagerAdapter
-        scheduleViewPager.currentItem = 14
+        scheduleViewPager.currentItem = Config.SYNC_WINDOW
         today.hide()
         today.setOnClickListener {
-            scheduleViewPager.currentItem = 14
+            scheduleViewPager.currentItem = Config.SYNC_WINDOW
         }
         scheduleViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
@@ -110,7 +109,7 @@ class MainActivity : CAppCompatActivity() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                if (position != 14) {
+                if (position != Config.SYNC_WINDOW) {
                     today.show()
                 } else {
                     today.hide()
@@ -120,13 +119,13 @@ class MainActivity : CAppCompatActivity() {
         schedulePagerTitleStrip.setOnClickListener {
             val now = Calendar.getInstance()
             val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener {
-                view, selectedYear, selectedMonth, selectedDay ->
+                _, selectedYear, selectedMonth, selectedDay ->
                 run {
                     val calendar = Calendar.getInstance()
                     calendar.set(selectedYear, selectedMonth, selectedDay)
 
                     val today = Utils.currentScheduleDate()
-                    scheduleViewPager.currentItem = ((calendar.time.time - today.time) / (24 * 3600 * 1000)).toInt() + 14
+                    scheduleViewPager.currentItem = ((calendar.time.time - today.time) / (24 * 3600 * 1000)).toInt() + Config.SYNC_WINDOW
                 }
             }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH))
             datePicker.show()
@@ -138,8 +137,8 @@ class MainActivity : CAppCompatActivity() {
      */
     private fun syncSchedule() {
         syncing = true
-        ZermeloSync().syncZermelo(application, true, false)
-        Toast.makeText(application, "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show()
+        ZermeloSync().syncZermelo(this, true, false)
+        Toast.makeText(this, "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -179,18 +178,18 @@ class MainActivity : CAppCompatActivity() {
         override fun getItem(position: Int): Fragment {
             val fragment = ScheduleFragment()
             fragment.arguments = Bundle().apply {
-                val scheduleDay = schedule[Date(Utils.currentScheduleDate().time + (position - 14) * 24 * 60 * 60 * 1000)]
+                val scheduleDay = schedule[Date(Utils.currentScheduleDate().time + (position - Config.SYNC_WINDOW) * 24 * 60 * 60 * 1000)]
                 putParcelable("schedule", scheduleDay)
             }
             return fragment
         }
 
         override fun getCount(): Int {
-            return 28
+            return 60
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            val date = Date(Utils.currentScheduleDate().time + (position - 14) * 24 * 60 * 60 * 1000)
+            val date = Date(Utils.currentScheduleDate().time + (position - Config.SYNC_WINDOW) * 24 * 60 * 60 * 1000)
             return dateToText(date)
         }
     }

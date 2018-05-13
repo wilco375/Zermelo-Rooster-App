@@ -23,7 +23,7 @@ class ScheduleItem : Serializable, Parcelable {
             "choice" -> "Keuze"
             "talk" -> "Gesprek"
             "other" -> "Anders"
-            else -> "Onbekend"
+            else -> field.capitalize()
         }
     }
     val cancelled: Boolean

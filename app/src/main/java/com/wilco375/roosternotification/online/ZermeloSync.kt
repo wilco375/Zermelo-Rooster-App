@@ -19,6 +19,7 @@ import com.wilco375.roosternotification.exception.InvalidCodeException
 import com.wilco375.roosternotification.exception.InvalidWebsiteException
 import com.wilco375.roosternotification.exception.NoInternetException
 import com.wilco375.roosternotification.exception.UnknownAuthenticationException
+import com.wilco375.roosternotification.general.Config
 import com.wilco375.roosternotification.general.Utils
 import cz.msebera.android.httpclient.NameValuePair
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity
@@ -37,20 +38,16 @@ class ZermeloSync {
     lateinit var sp: SharedPreferences
 
     fun syncZermelo(context: Context, updateMainActivity: Boolean, copyClipboard: Boolean) {
-        println("Syncing with zermelo")
-
         if (!Utils.isWifiConnected(context) && !updateMainActivity) return
 
-        println("Starting thread")
         Thread({
-            println("Thread started")
             // List of all the lessons that have been cancelled
             val cancelledNotification = ArrayList<ScheduleItem>()
 
             // Get start of this week in unix
-            val start = Utils.unixStartOfWeek() - 14 * 24 * 3600
+            val start = Utils.unixStartOfWeek() - Config.SYNC_WINDOW * 24 * 3600
             // Set end two weeks later
-            val end = start + 14 * 24 * 60 * 60
+            val end = start + Config.SYNC_WINDOW * 24 * 60 * 60
 
             println("Getting JSON between $start and $end")
 
@@ -61,7 +58,6 @@ class ZermeloSync {
                     start, end) ?: return@Thread
 
             println("Received JSON: $scheduleString")
-
 
             // If necessary copy string to clipboard
             if (copyClipboard && context is Activity)
@@ -91,8 +87,8 @@ class ZermeloSync {
 
                 // Restart app if necessary
                 if (updateMainActivity && context is MainActivity) {
-                    val mainActivity = context
-                    mainActivity.getSchedule()
+                    // TODO Is this working?
+                    context.getSchedule()
                 }
             } catch (e: JSONException) {
                 e.printStackTrace()
@@ -102,10 +98,9 @@ class ZermeloSync {
 
     private fun cancelNotification(schedule: ScheduleItem, context: Context) {
         if (sp.getBoolean("notifyCancel", true) && schedule.day.isThisWeek()) {
-            // TODO Add channel
-            val builder = NotificationCompat.Builder(context)
+            val builder = Utils.getNotificationBuilder(context, Utils.CURRENT_SCHEDULE)
                     .setSmallIcon(R.drawable.notification_logo)
-                    .setContentTitle(String.format(context.getResources().getString(R.string.hour_cancelled_on), schedule.getDay().toLowerCase()))
+                    .setContentTitle(String.format(context.resources.getString(R.string.hour_cancelled_on), schedule.getDay().toLowerCase()))
                     .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java), 0))
 
             if (schedule.timeslot != 0)

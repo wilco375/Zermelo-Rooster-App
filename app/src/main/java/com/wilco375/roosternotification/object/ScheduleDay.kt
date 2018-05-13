@@ -34,6 +34,7 @@ class ScheduleDay : Serializable, Parcelable {
         } else {
             this.day = day
         }
+        cursor.close()
     }
 
     fun addItem(scheduleItem: ScheduleItem) {
