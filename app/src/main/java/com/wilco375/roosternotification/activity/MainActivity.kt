@@ -71,9 +71,15 @@ class MainActivity : CAppCompatActivity() {
      */
     private fun checkInit() {
         if (sp.getString("token", "") == "" || sp.getString("website", "") == "") {
-            val i = Intent(this@MainActivity, InitActivity::class.java)
-            finish()
-            startActivity(i)
+            if(sp.getString("token", "") != null) {
+                // Coming from old app version
+                sp.edit().putString("website", "jfc.zportal.nl").apply()
+                syncSchedule()
+            } else {
+                val i = Intent(this@MainActivity, InitActivity::class.java)
+                finish()
+                startActivity(i)
+            }
         } else if (sp.getBoolean("firstSync", true)) {
             syncSchedule()
 
