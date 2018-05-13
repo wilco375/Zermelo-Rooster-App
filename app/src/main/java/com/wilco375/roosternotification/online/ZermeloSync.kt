@@ -100,7 +100,7 @@ class ZermeloSync {
 
         if (sp.getBoolean("notifyCancel", true)) {
             val builder = Utils.getNotificationBuilder(context, Utils.CURRENT_SCHEDULE)
-                    .setSmallIcon(R.drawable.notification_logo)
+                    .setSmallIcon(R.drawable.notification)
                     .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java), 0))
             val spe = sp.edit()
             val notificationManagerCompat = NotificationManagerCompat.from(context)
