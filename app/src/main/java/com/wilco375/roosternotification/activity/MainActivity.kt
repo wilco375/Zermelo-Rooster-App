@@ -70,7 +70,6 @@ class MainActivity : CAppCompatActivity() {
      * Check if first launch or first sync
      */
     private fun checkInit() {
-        sp.edit().putString("token", "u35aav1qu355jhbtcbeghv538b").putString("website", "jfc.zportal.nl").apply() // STOPSHIP
         if (sp.getString("token", "") == "" || sp.getString("website", "") == "") {
             val i = Intent(this@MainActivity, InitActivity::class.java)
             finish()
