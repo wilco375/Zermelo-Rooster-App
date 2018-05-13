@@ -12,6 +12,7 @@ import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.activity.MainActivity
 import com.wilco375.roosternotification.general.Utils
+import io.multimoon.colorful.Colorful
 import java.util.*
 
 class LesuurWidgetProvider : AppWidgetProvider() {
@@ -48,6 +49,7 @@ class LesuurWidgetProvider : AppWidgetProvider() {
 
             val views = RemoteViews(context.packageName, R.layout.app_widget_lesuur)
             views.setOnClickPendingIntent(R.id.app_widget_lesuur_layout, pendingIntent)
+            views.setInt(R.id.app_widget_lesuur_layout, "setBackgroundColor", Colorful().getPrimaryColor().getColorPack().normal().asInt())
 
             if (!(subject == "" && location == "") && !cancelled) {
                 if (timeslot != 0)

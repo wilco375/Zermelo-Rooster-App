@@ -71,7 +71,7 @@ class MainActivity : CAppCompatActivity() {
      */
     private fun checkInit() {
         if (sp.getString("token", "") == "" || sp.getString("website", "") == "") {
-            if(sp.getString("token", "") != null) {
+            if(sp.getString("token", "") != "") {
                 // Coming from old app version
                 sp.edit().putString("website", "jfc.zportal.nl").apply()
                 syncSchedule()

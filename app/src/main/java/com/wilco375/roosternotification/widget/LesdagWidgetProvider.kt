@@ -12,6 +12,7 @@ import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.activity.MainActivity
 import com.wilco375.roosternotification.general.Utils
+import io.multimoon.colorful.Colorful
 import java.util.*
 
 class LesdagWidgetProvider : AppWidgetProvider() {
@@ -28,6 +29,7 @@ class LesdagWidgetProvider : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, R.layout.app_widget_lesdag)
             views.setOnClickPendingIntent(R.id.app_widget_lesdag_layout, pendingIntent)
             views.setTextViewText(R.id.app_widget_lesdag_dag, Utils.currentDay())
+            views.setInt(R.id.app_widget_lesdag_dag, "setBackgroundColor", Colorful().getPrimaryColor().getColorPack().normal().asInt())
 
             var widgetText = ""
 
