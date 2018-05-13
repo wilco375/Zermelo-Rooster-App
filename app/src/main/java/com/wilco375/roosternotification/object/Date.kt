@@ -26,7 +26,7 @@ fun Date.toCalendar() : Calendar {
  * Checks if the date is in the current week
  */
 fun Date.isThisWeek() : Boolean {
-    val time = this.time
+    val time = this.time / 1000
     return time >= Utils.unixStartOfWeek() && time <= Utils.unixEndOfWeek()
 }
 

@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.annotation.Nullable
-import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.`object`.Schedule
@@ -33,6 +32,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ZermeloSync {
     lateinit var sp: SharedPreferences
@@ -42,12 +42,12 @@ class ZermeloSync {
 
         Thread({
             // List of all the lessons that have been cancelled
-            val cancelledNotification = ArrayList<ScheduleItem>()
+            val cancelledItems = ArrayList<ScheduleItem>()
 
             // Get start of this week in unix
             val start = Utils.unixStartOfWeek() - Config.SYNC_WINDOW * 24 * 3600
             // Set end two weeks later
-            val end = start + Config.SYNC_WINDOW * 24 * 60 * 60
+            val end = start + 2 * Config.SYNC_WINDOW * 24 * 3600
 
             println("Getting JSON between $start and $end")
 
@@ -72,12 +72,16 @@ class ZermeloSync {
                 jsonSchedule.items().map { it -> ScheduleItem(it as JSONObject) }.forEach {
                     schedule += it
                     if(it.cancelled) {
-                        cancelledNotification.add(it)
+                        cancelledItems.add(it)
                     }
                 }
 
                 // Notify cancelled lessons
-                // TODO Fix cancelled notifications
+                println("${cancelledItems.size} cancelled items")
+                println("Checking if cancelled items is between ${Utils.unixStartOfWeek()} and ${Utils.unixEndOfWeek()}")
+                cancelNotification(cancelledItems.filter { it.isThisWeek() /*&& !schedule.isCancelledNotified(it)*/ }, context)
+
+                println("Saving schedule")
 
                 // Save schedule
                 schedule.save()
@@ -87,7 +91,6 @@ class ZermeloSync {
 
                 // Restart app if necessary
                 if (updateMainActivity && context is MainActivity) {
-                    // TODO Is this working?
                     context.getSchedule()
                 }
             } catch (e: JSONException) {
@@ -96,32 +99,36 @@ class ZermeloSync {
         }).start()
     }
 
-    private fun cancelNotification(schedule: ScheduleItem, context: Context) {
-        if (sp.getBoolean("notifyCancel", true) && schedule.day.isThisWeek()) {
+    private fun cancelNotification(schedule: List<ScheduleItem>, context: Context) {
+        println("Sending cancelled notifications for ${schedule.size} items")
+        if (sp.getBoolean("notifyCancel", true)) {
             val builder = Utils.getNotificationBuilder(context, Utils.CURRENT_SCHEDULE)
                     .setSmallIcon(R.drawable.notification_logo)
-                    .setContentTitle(String.format(context.resources.getString(R.string.hour_cancelled_on), schedule.getDay().toLowerCase()))
                     .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java), 0))
-
-            if (schedule.timeslot != 0)
-                builder.setContentText("${schedule.timeslot}. ${schedule.subject}")
-            else
-                builder.setContentText(schedule.subject)
-
-            val notification = builder.build()
+            val spe = sp.edit()
             val notificationManagerCompat = NotificationManagerCompat.from(context)
 
-            val calendar = Calendar.getInstance()
+            if(schedule.size < 5) {
+                for (item in schedule) {
+                    // Under 5 cancelled lessons, show separate notifications
+                    builder.setContentTitle(String.format(context.resources.getString(R.string.hour_cancelled_on), item.getDay().toLowerCase()))
 
-            val currentNotString = intStr(calendar.get(Calendar.YEAR)) + intStr(Utils.currentWeek()) + schedule.day.time + intStr(schedule.timeslot) + schedule.subject
-            if (schedule.day.time > System.currentTimeMillis()) {
-                // TODO Check if no notification has been sent for this cancellation yet
+                    if (item.timeslot != 0)
+                        builder.setContentText("${item.timeslot}. ${item.subject}")
+                    else
+                        builder.setContentText(item.subject)
+
+                    val notId = sp.getInt("notId", 2)
+                    spe.putInt("notId", notId + 1).apply()
+                    notificationManagerCompat.notify(notId, builder.build())
+                }
+            } else {
+                // Over 5 cancelled lessons, show a notification with a summary
+                builder.setContentTitle(String.format(context.resources.getString(R.string.hours_cancelled_count), schedule.size))
+                        .setContentText(context.resources.getString(R.string.check_app_for_info))
                 val notId = sp.getInt("notId", 2)
-                val spe = sp.edit()
-                spe.putInt("notId", notId + 1)
-                spe.putString("prevNots", sp.getString("prevNots", "")!! + currentNotString)
-                spe.apply()
-                notificationManagerCompat.notify(notId, notification)
+                spe.putInt("notId", notId + 1).apply()
+                notificationManagerCompat.notify(notId, builder.build())
             }
         }
     }

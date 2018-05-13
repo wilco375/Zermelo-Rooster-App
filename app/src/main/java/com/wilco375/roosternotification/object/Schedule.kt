@@ -95,6 +95,23 @@ class Schedule private constructor(context: Context): Serializable {
         scheduleDays.clear()
     }
 
+    /**
+     * Check if the user has been sent a notification yet for a certain item
+     */
+    fun isCancelledNotified(item: ScheduleItem): Boolean {
+        // Check if it has been notified yet
+        val cursor = db.rawQuery("SELECT * FROM Notification WHERE subject = ${item.subject.escape()} AND lessonGroup = ${item.group.escape()} AND start = ${item.start.time} AND type = ${"cancelled".escape()}", null)
+        val result = cursor.count > 0
+        cursor.close()
+
+        if(!result) {
+            // Update database
+            db.execSQL("INSERT INTO Notification VALUES (${item.subject.escape()}, ${item.group.escape()}, ${item.start.time}, ${"cancelled".escape()})")
+        }
+
+        return result
+    }
+
     operator fun plusAssign(item: ScheduleItem) = addScheduleItem(item)
 
     operator fun get(day: Date) = getScheduleByDay(day)
