@@ -5,13 +5,12 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 'android-P'
     buildToolsVersion '27.0.3'
-
     defaultConfig {
         applicationId "com.wilco375.roosternotification"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 35
-        versionName "5.0-beta1"
+        versionName "5.0"
     }
     buildTypes {
         release {
