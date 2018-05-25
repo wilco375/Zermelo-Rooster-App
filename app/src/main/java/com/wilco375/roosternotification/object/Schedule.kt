@@ -89,7 +89,7 @@ class Schedule private constructor(context: Context, val username: String): Seri
             db.execSQL("DELETE FROM Lesson WHERE username = ${username.escape()} AND ((start >= $startOfDay AND end < ${startOfDay + 24*3600*1000}) OR (end < ${startOfDay - Config.SYNC_WINDOW*24*3600*1000L}))")
             for (item in scheduleDay) {
                 item.apply {
-                    db.execSQL("INSERT INTO Lesson VALUES ($instance, ${subject.escape()}, ${group.escape()}, ${location.escape()}, ${type.escape()}, ${if(cancelled) 1 else 0}, ${start.time}, ${end.time}, $timeslot, ${day.time}, ${username.escape()})")
+                    db.execSQL("REPLACE INTO Lesson VALUES ($instance, ${subject.escape()}, ${group.escape()}, ${location.escape()}, ${type.escape()}, ${if(cancelled) 1 else 0}, ${start.time}, ${end.time}, $timeslot, ${day.time}, ${username.escape()})")
                 }
             }
         }
@@ -107,7 +107,7 @@ class Schedule private constructor(context: Context, val username: String): Seri
 
         if(!result) {
             // Update database
-            db.execSQL("INSERT INTO Notification VALUES (${item.instance}, ${"cancelled".escape()})")
+            db.execSQL("REPLACE INTO Notification VALUES (${item.instance}, ${"cancelled".escape()})")
         }
 
         return result
