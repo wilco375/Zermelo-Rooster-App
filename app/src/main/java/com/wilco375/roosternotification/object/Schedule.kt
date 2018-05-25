@@ -52,9 +52,8 @@ class Schedule private constructor(context: Context, val username: String): Seri
         db.execSQL(notificationTable)
 
         val namesTable = "CREATE TABLE IF NOT EXISTS Names (" +
+                "   code TEXT PRIMARY KEY" +
                 "   name TEXT" +
-                "   code TEXT" +
-                "   PRIMARY KEY (name, code)" +
                 ")"
         db.execSQL(namesTable)
     }
@@ -118,6 +117,16 @@ class Schedule private constructor(context: Context, val username: String): Seri
         }
 
         return result
+    }
+
+    /**
+     * Add a name to the database
+     * @param code student number or employee code
+     * @param name readable name
+     */
+    fun addName(code: String, name: String) {
+        // Update database
+        db.execSQL("REPLACE INTO Name VALUES (${code.escape()}, ${name.escape()})")
     }
 
     operator fun plusAssign(item: ScheduleItem) = addScheduleItem(item)
