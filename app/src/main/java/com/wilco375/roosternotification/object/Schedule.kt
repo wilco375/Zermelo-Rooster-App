@@ -25,6 +25,14 @@ class Schedule private constructor(context: Context, val username: String): Seri
             }
             return instances.first { it.username == username }
         }
+
+        @Throws(IllegalStateException::class)
+        fun getInstance() : Schedule {
+            if (instances.isEmpty()) {
+                throw IllegalStateException("No instances are available and context is needed to create a new instance")
+            }
+            return instances[0]
+        }
     }
 
     private fun createTables() {
@@ -51,8 +59,8 @@ class Schedule private constructor(context: Context, val username: String): Seri
                 ")"
         db.execSQL(notificationTable)
 
-        val namesTable = "CREATE TABLE IF NOT EXISTS Names (" +
-                "   code TEXT PRIMARY KEY" +
+        val namesTable = "CREATE TABLE IF NOT EXISTS Name (" +
+                "   code TEXT PRIMARY KEY," +
                 "   name TEXT" +
                 ")"
         db.execSQL(namesTable)
@@ -127,6 +135,16 @@ class Schedule private constructor(context: Context, val username: String): Seri
     fun addName(code: String, name: String) {
         // Update database
         db.execSQL("REPLACE INTO Name VALUES (${code.escape()}, ${name.escape()})")
+    }
+
+    fun getNames(): List<Pair<String, String>> {
+        val cursor = db.rawQuery("SELECT * FROM Name", null)
+        val result = ArrayList<Pair<String, String>>()
+        while (cursor.moveToNext()) {
+            result.add(Pair(cursor.getString(0), cursor.getString(1)))
+        }
+        cursor.close()
+        return result
     }
 
     operator fun plusAssign(item: ScheduleItem) = addScheduleItem(item)
