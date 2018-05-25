@@ -50,6 +50,13 @@ class Schedule private constructor(context: Context, val username: String): Seri
                 "   PRIMARY KEY (instance, type)" +
                 ")"
         db.execSQL(notificationTable)
+
+        val namesTable = "CREATE TABLE IF NOT EXISTS Names (" +
+                "   name TEXT" +
+                "   code TEXT" +
+                "   PRIMARY KEY (name, code)" +
+                ")"
+        db.execSQL(namesTable)
     }
 
     /**
