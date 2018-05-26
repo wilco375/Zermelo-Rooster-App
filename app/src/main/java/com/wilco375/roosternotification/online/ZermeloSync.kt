@@ -100,8 +100,6 @@ class ZermeloSync {
     }
 
     private fun syncNamesForSchools(schools: Set<String>, website: String, token: String) {
-        println("Syncing names")
-        val start = System.currentTimeMillis()
         val database = Schedule.getInstance()
         val types = arrayOf("isEmployee", "isStudent")
 
@@ -125,13 +123,13 @@ class ZermeloSync {
                                             if (field == "code") {
                                                 code = value
                                             } else {
-                                                name += "$value "
+                                                name += " $value"
                                             }
                                         }
                                     }
                                 }
                                 if (name.isEmpty()) name = " "
-                                if (code != null) database.addName(code, name.substring(1, name.length - 1))
+                                if (code != null) database.addName(code, name.substring(1, name.length))
                             }
                         }
                     } catch (e: JSONException) {
@@ -149,8 +147,6 @@ class ZermeloSync {
                 }
             } while (status == 403 && fields.size > 1)
         }
-
-        println(database.getNames())
     }
 
     private fun cancelNotification(schedule: List<ScheduleItem>, context: Context) {

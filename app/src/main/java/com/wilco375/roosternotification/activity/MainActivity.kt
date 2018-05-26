@@ -11,6 +11,7 @@ import android.os.StrictMode
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -20,6 +21,7 @@ import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.R.layout.activity_main
 import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.`object`.ScheduleDay
+import com.wilco375.roosternotification.general.AutoCompleteStringAdapter
 import com.wilco375.roosternotification.general.Config
 import com.wilco375.roosternotification.general.ScheduleListAdapter
 import com.wilco375.roosternotification.general.Utils
@@ -144,8 +146,15 @@ class MainActivity : CAppCompatActivity() {
         val dialog = AlertDialog.Builder(this)
         dialog.setTitle(R.string.user)
         dialog.setView(view)
+        val userTextView = view.findViewById<AppCompatAutoCompleteTextView>(R.id.userId)
+        val names = Schedule.getInstance(this, "~me").getNames().map { it -> "${it.second} (${it.first})" }
+        userTextView.setAdapter(AutoCompleteStringAdapter(this, names))
+        userTextView.setOnItemClickListener { _, _, position, _ ->
+            val item = userTextView.adapter.getItem(position) as String
+            userTextView.setText(item.substringAfterLast('(').substringBeforeLast(')'), TextView.BufferType.NORMAL)
+        }
         dialog.setPositiveButton(android.R.string.ok) { _, _ ->
-            val user = view.findViewById<TextInputEditText>(R.id.userId).text.toString()
+            val user = userTextView.text.toString()
             this.username = user
             syncSchedule()
             getSchedule()

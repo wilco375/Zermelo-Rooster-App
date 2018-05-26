@@ -138,7 +138,7 @@ class Schedule private constructor(context: Context, val username: String): Seri
     }
 
     fun getNames(): List<Pair<String, String>> {
-        val cursor = db.rawQuery("SELECT * FROM Name", null)
+        val cursor = db.rawQuery("SELECT * FROM Name ORDER BY code ASC", null)
         val result = ArrayList<Pair<String, String>>()
         while (cursor.moveToNext()) {
             result.add(Pair(cursor.getString(0), cursor.getString(1)))
