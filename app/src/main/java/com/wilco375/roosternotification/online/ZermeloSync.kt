@@ -105,35 +105,18 @@ class ZermeloSync {
 
         for (type in types) {
             var status: Int
-            val fields = arrayListOf("firstName", "prefix", "lastName", "code")
+            val fields = arrayListOf("firstName", "prefix", "lastName")
             do {
-                val url = "https://$website/api/v2/users?archived=false&$type=true&schoolInSchoolYear=${schools.joinToString(",")}&fields=${fields.joinToString(",")}&access_token=$token"
+                val url = "https://$website/api/v2/users?archived=false&$type=true&schoolInSchoolYear=${schools.joinToString(",")}&fields=${fields.joinToString(",")},code&access_token=$token"
                 try {
                     val json: String = getUrl(url)
-                    try {
-                        val data = JSONObject(json).getJSONObject("response").getJSONArray("data")
-                        for (item in data.items()) {
-                            if (item is JSONObject) {
-                                var name = ""
-                                var code: String? = null
-                                for (field in fields) {
-                                    if (item.has(field) && !item.isNull(field)) {
-                                        val value = item.getString(field)
-                                        if (value.isNotEmpty()) {
-                                            if (field == "code") {
-                                                code = value
-                                            } else {
-                                                name += " $value"
-                                            }
-                                        }
-                                    }
-                                }
-                                if (name.isEmpty()) name = " "
-                                if (code != null) database.addName(code, name.substring(1, name.length))
-                            }
+                    val data = JSONObject(json).getJSONObject("response").getJSONArray("data")
+                    for (item in data.items()) {
+                        if (item is JSONObject) {
+                            val name = fields.map { field -> item.optString(field, "") }.filter { it.isNotEmpty() && it != "null" }.joinToString(" ")
+                            val code = item.optString("code", "")
+                            if (code.isNotEmpty()) database.addName(code, name)
                         }
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
                     }
                     status = 200
                 } catch (e: Exception) {
@@ -145,7 +128,7 @@ class ZermeloSync {
                         e.printStackTrace()
                     }
                 }
-            } while (status == 403 && fields.size > 1)
+            } while (status == 403 && fields.size > 0)
         }
     }
 

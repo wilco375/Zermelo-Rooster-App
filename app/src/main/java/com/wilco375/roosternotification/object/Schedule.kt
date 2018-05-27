@@ -59,6 +59,7 @@ class Schedule private constructor(context: Context, val username: String): Seri
                 ")"
         db.execSQL(notificationTable)
 
+        db.execSQL("DROP TABLE Name") // STOPSHIP
         val namesTable = "CREATE TABLE IF NOT EXISTS Name (" +
                 "   code TEXT PRIMARY KEY," +
                 "   name TEXT" +
