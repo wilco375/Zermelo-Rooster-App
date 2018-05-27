@@ -6,7 +6,7 @@ import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Schedule private constructor(context: Context, val username: String): Serializable {
+class Schedule private constructor(context: Context, val username: String) : Serializable {
     private val scheduleDays = ArrayList<ScheduleDay>()
     private var db = context.openOrCreateDatabase("Schedule", Context.MODE_PRIVATE, null)!!
 
@@ -27,7 +27,7 @@ class Schedule private constructor(context: Context, val username: String): Seri
         }
 
         @Throws(IllegalStateException::class)
-        fun getInstance() : Schedule {
+        fun getInstance(): Schedule {
             if (instances.isEmpty()) {
                 throw IllegalStateException("No instances are available and context is needed to create a new instance")
             }
@@ -70,10 +70,10 @@ class Schedule private constructor(context: Context, val username: String): Seri
     /**
      * Gets the schedule for a certain day
      */
-    fun getScheduleByDay(day: Date) : ScheduleDay {
+    fun getScheduleByDay(day: Date): ScheduleDay {
         val startOfDay = day.startOfDay().time
         return ScheduleDay(
-                db.rawQuery("SELECT * FROM Lesson WHERE start >= $startOfDay AND end < ${startOfDay + 24*3600*1000} AND username == ${username.escape()} ORDER BY start ASC", null),
+                db.rawQuery("SELECT * FROM Lesson WHERE start >= $startOfDay AND end < ${startOfDay + 24 * 3600 * 1000} AND username == ${username.escape()} ORDER BY start ASC", null),
                 day
         )
     }
@@ -85,7 +85,7 @@ class Schedule private constructor(context: Context, val username: String): Seri
     fun addScheduleItem(item: ScheduleItem) {
         val date = item.start.toCalendar()
         val day = scheduleDays.firstOrNull { it.day.time == date.timeInMillis || it.day.toCalendar().isOnSameDayAs(date) }
-        if(day != null) {
+        if (day != null) {
             // Day is already in the list
             day.addItem(item)
             // Set day to same date as other items in that day so it will be faster to match next time
@@ -101,10 +101,10 @@ class Schedule private constructor(context: Context, val username: String): Seri
     fun save() {
         for (scheduleDay in scheduleDays) {
             val startOfDay = scheduleDay.day.startOfDay().time
-            db.execSQL("DELETE FROM Lesson WHERE username = ${username.escape()} AND ((start >= $startOfDay AND end < ${startOfDay + 24*3600*1000}) OR (end < ${startOfDay - Config.SYNC_WINDOW*24*3600*1000L}))")
+            db.execSQL("DELETE FROM Lesson WHERE username = ${username.escape()} AND ((start >= $startOfDay AND end < ${startOfDay + 24 * 3600 * 1000}) OR (end < ${startOfDay - Config.SYNC_WINDOW * 24 * 3600 * 1000L}))")
             for (item in scheduleDay) {
                 item.apply {
-                    db.execSQL("REPLACE INTO Lesson VALUES ($instance, ${subject.escape()}, ${group.escape()}, ${location.escape()}, ${type.escape()}, ${if(cancelled) 1 else 0}, ${start.time}, ${end.time}, $timeslot, ${day.time}, ${username.escape()})")
+                    db.execSQL("REPLACE INTO Lesson VALUES ($instance, ${subject.escape()}, ${group.escape()}, ${location.escape()}, ${type.escape()}, ${if (cancelled) 1 else 0}, ${start.time}, ${end.time}, $timeslot, ${day.time}, ${username.escape()})")
                 }
             }
         }
@@ -120,7 +120,7 @@ class Schedule private constructor(context: Context, val username: String): Seri
         val result = cursor.count > 0
         cursor.close()
 
-        if(!result) {
+        if (!result) {
             // Update database
             db.execSQL("REPLACE INTO Notification VALUES (${item.instance}, ${"cancelled".escape()})")
         }
@@ -152,9 +152,7 @@ class Schedule private constructor(context: Context, val username: String): Seri
 
     operator fun get(day: Date) = getScheduleByDay(day)
 
-    operator fun iterator() : Iterator<ScheduleItem>
-            = getAllScheduleItems().iterator()
+    operator fun iterator(): Iterator<ScheduleItem> = getAllScheduleItems().iterator()
 
-    fun getAllScheduleItems() : List<ScheduleItem>
-        = scheduleDays.map { it.getItems() }.flatten()
+    fun getAllScheduleItems(): List<ScheduleItem> = scheduleDays.map { it.getItems() }.flatten()
 }

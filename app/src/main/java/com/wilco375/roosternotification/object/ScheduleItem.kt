@@ -16,17 +16,17 @@ class ScheduleItem : Serializable, Parcelable {
     val group: String
     val location: String
     val type: String
-    get() {
-        return when (field) {
-            "lesson" -> "Les"
-            "exam" -> "Toets"
-            "activity" -> "Activiteit"
-            "choice" -> "Keuze"
-            "talk" -> "Gesprek"
-            "other" -> "Anders"
-            else -> field.capitalize()
+        get() {
+            return when (field) {
+                "lesson" -> "Les"
+                "exam" -> "Toets"
+                "activity" -> "Activiteit"
+                "choice" -> "Keuze"
+                "talk" -> "Gesprek"
+                "other" -> "Anders"
+                else -> field.capitalize()
+            }
         }
-    }
     val cancelled: Boolean
     val start: Date
     val end: Date
@@ -69,7 +69,7 @@ class ScheduleItem : Serializable, Parcelable {
     }
 
     constructor(cursor: Cursor) {
-        if(!cursor.isClosed) {
+        if (!cursor.isClosed) {
             instance = cursor.getLong("instance")
             subject = cursor.getString("subject")
             group = cursor.getString("lessonGroup")
@@ -88,8 +88,7 @@ class ScheduleItem : Serializable, Parcelable {
     /**
      * Returns a human readable day of the week on which the scheduled item takes place
      */
-    fun getDay() : String
-        = Utils.dayIntToStr(day.toCalendar().get(Calendar.DAY_OF_WEEK))
+    fun getDay(): String = Utils.dayIntToStr(day.toCalendar().get(Calendar.DAY_OF_WEEK))
 
     /**
      * Checks if the scheduled item takes place this week
@@ -134,7 +133,7 @@ class ScheduleItem : Serializable, Parcelable {
         parcel.writeString(group)
         parcel.writeString(location)
         parcel.writeString(type)
-        parcel.writeByte(if(cancelled) 1 else 0)
+        parcel.writeByte(if (cancelled) 1 else 0)
         parcel.writeLong(start.time)
         parcel.writeLong(end.time)
         parcel.writeInt(timeslot)

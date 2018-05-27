@@ -2,7 +2,9 @@ package com.wilco375.roosternotification
 
 import android.app.Application
 import android.content.Context
-import io.multimoon.colorful.*
+import io.multimoon.colorful.Defaults
+import io.multimoon.colorful.ThemeColor
+import io.multimoon.colorful.initColorful
 
 class RoosterApp : Application() {
     override fun onCreate() {

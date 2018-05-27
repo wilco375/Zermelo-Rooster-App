@@ -3,20 +3,21 @@ package com.wilco375.roosternotification.activity
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.StrictMode
 import android.view.*
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.textfield.TextInputEditText
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.R.layout.activity_main
 import com.wilco375.roosternotification.`object`.Schedule
@@ -73,7 +74,7 @@ class MainActivity : CAppCompatActivity() {
      */
     private fun checkInit() {
         if (sp.getString("token", "") == "" || sp.getString("website", "") == "") {
-            if(sp.getString("token", "") != "") {
+            if (sp.getString("token", "") != "") {
                 // Coming from old app version
                 sp.edit().putString("website", "jfc.zportal.nl").apply()
                 syncSchedule()
@@ -127,8 +128,7 @@ class MainActivity : CAppCompatActivity() {
         })
         schedulePagerTitleStrip.setOnClickListener {
             val now = Calendar.getInstance()
-            val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener {
-                _, selectedYear, selectedMonth, selectedDay ->
+            val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
                 run {
                     val calendar = Calendar.getInstance()
                     calendar.set(selectedYear, selectedMonth, selectedDay)
@@ -193,7 +193,7 @@ class MainActivity : CAppCompatActivity() {
             syncSchedule()
 
             return true
-        } else if(item.itemId == R.id.user) {
+        } else if (item.itemId == R.id.user) {
             showUserDialog()
 
             return true

@@ -138,10 +138,10 @@ object Utils {
     // Notification manager
     const val CURRENT_SCHEDULE = "current"
     const val LESSON_CANCELLED = "cancelled"
-    fun getNotificationBuilder(context: Context, forChannel: String) : NotificationCompat.Builder {
+    fun getNotificationBuilder(context: Context, forChannel: String): NotificationCompat.Builder {
         // Register notification channel
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val description = context.resources.getString(when(forChannel) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val description = context.resources.getString(when (forChannel) {
                 CURRENT_SCHEDULE -> R.string.notify
                 LESSON_CANCELLED -> R.string.notify_cancel
                 else -> throw IllegalArgumentException("forChannel must be one of CURRENT_SCHEDULE and LESSON_CANCELLED")

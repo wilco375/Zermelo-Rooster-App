@@ -24,8 +24,8 @@ class AutoCompleteStringAdapter(context: Context, var items: List<String>) : Arr
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 var results = items
                 if (constraint != null) {
-                     val lowerConstraint = constraint.toString().toLowerCase()
-                     results = results.filter { it -> it.toLowerCase().contains(lowerConstraint) }
+                    val lowerConstraint = constraint.toString().toLowerCase()
+                    results = results.filter { it -> it.toLowerCase().contains(lowerConstraint) }
                 }
                 val filterResults = FilterResults()
                 filterResults.values = results

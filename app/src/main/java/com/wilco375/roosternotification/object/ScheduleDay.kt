@@ -3,7 +3,6 @@ package com.wilco375.roosternotification.`object`
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.annotation.RestrictTo
 import java.io.Serializable
 import java.util.*
 
@@ -22,7 +21,7 @@ class ScheduleDay : Serializable, Parcelable {
     }
 
     constructor(cursor: Cursor, day: Date) {
-        if(!cursor.isClosed && cursor.moveToNext()) {
+        if (!cursor.isClosed && cursor.moveToNext()) {
             do {
                 try {
                     items.add(ScheduleItem(cursor))
@@ -38,7 +37,7 @@ class ScheduleDay : Serializable, Parcelable {
     }
 
     fun addItem(scheduleItem: ScheduleItem) {
-        if(isAccessedBy(Schedule::class.java)) {
+        if (isAccessedBy(Schedule::class.java)) {
             items.add(scheduleItem)
             items.sortBy { it.start }
         } else {
@@ -46,17 +45,16 @@ class ScheduleDay : Serializable, Parcelable {
         }
     }
 
-    private fun isAccessedBy(`class`: Class<*>) : Boolean {
+    private fun isAccessedBy(`class`: Class<*>): Boolean {
         val stackTrace = Thread.currentThread().stackTrace
         return !stackTrace.none { it.className == `class`.name }
     }
 
-    fun getItems() : List<ScheduleItem> {
+    fun getItems(): List<ScheduleItem> {
         return Collections.unmodifiableList(items)
     }
 
-    operator fun iterator() : Iterator<ScheduleItem>
-            = getItems().iterator()
+    operator fun iterator(): Iterator<ScheduleItem> = getItems().iterator()
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(day.time)

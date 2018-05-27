@@ -8,7 +8,7 @@ import java.util.*
  * @param other date to compare to
  * @return true if dates are on the same day
  */
-fun Date.isOnSameDayAs(other: Date) : Boolean {
+fun Date.isOnSameDayAs(other: Date): Boolean {
     return this.toCalendar().isOnSameDayAs(other.toCalendar())
 }
 
@@ -16,7 +16,7 @@ fun Date.isOnSameDayAs(other: Date) : Boolean {
  * Returns a calendar with this date as the time
  * @return calendar
  */
-fun Date.toCalendar() : Calendar {
+fun Date.toCalendar(): Calendar {
     val calendar = Calendar.getInstance()
     calendar.time = this
     return calendar
@@ -25,12 +25,12 @@ fun Date.toCalendar() : Calendar {
 /**
  * Checks if the date is in the current week
  */
-fun Date.isThisWeek() : Boolean {
+fun Date.isThisWeek(): Boolean {
     val time = this.time / 1000
     return time >= Utils.unixStartOfWeek() && time <= Utils.unixEndOfWeek()
 }
 
-fun Date.startOfDay() : Date {
+fun Date.startOfDay(): Date {
     val calendar = Calendar.getInstance()
     calendar.time = this
     calendar.set(Calendar.HOUR_OF_DAY, 0)
@@ -40,6 +40,6 @@ fun Date.startOfDay() : Date {
     return calendar.time
 }
 
-fun Date.endOfDay() : Date {
-    return Date(startOfDay().time + 24*3600*1000 - 1)
+fun Date.endOfDay(): Date {
+    return Date(startOfDay().time + 24 * 3600 * 1000 - 1)
 }

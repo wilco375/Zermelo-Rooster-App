@@ -32,7 +32,7 @@ class InitActivity : CAppCompatActivity() {
         zermeloConfirm.setOnClickListener({
             // Check website
             var website = zermeloSite.text.toString()
-            if(!website.endsWith(".zportal.nl")) {
+            if (!website.endsWith(".zportal.nl")) {
                 if (website != "" && !website.contains(".")) {
                     website += ".zportal.nl"
                 } else {

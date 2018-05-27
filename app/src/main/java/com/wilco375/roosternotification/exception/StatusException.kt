@@ -6,6 +6,7 @@ class StatusException : Exception {
     constructor(status: Int) : super() {
         this.status = status
     }
+
     constructor(status: Int, message: String?) : super(message) {
         this.status = status
     }

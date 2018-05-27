@@ -11,7 +11,6 @@ import androidx.core.app.NotificationManagerCompat
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.`object`.ScheduleItem
-import com.wilco375.roosternotification.`object`.escape
 import com.wilco375.roosternotification.`object`.items
 import com.wilco375.roosternotification.activity.MainActivity
 import com.wilco375.roosternotification.exception.*
