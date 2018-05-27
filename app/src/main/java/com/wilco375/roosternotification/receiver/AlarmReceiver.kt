@@ -24,6 +24,8 @@ class AlarmReceiver : BroadcastReceiver() {
         private val NOTIFICATION_ID = 1
 
         fun createNotification(context: Context) {
+            println("Creating notifications")
+
             val sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE)
             val spe = sp.edit()
 

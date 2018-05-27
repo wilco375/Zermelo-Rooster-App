@@ -1,8 +1,6 @@
 package com.wilco375.roosternotification.general
 
-import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.app.*
 import android.appwidget.AppWidgetManager
 import android.content.*
 import android.net.ConnectivityManager
@@ -10,7 +8,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.wilco375.roosternotification.R
-import com.wilco375.roosternotification.receiver.AutoStartUp
+import com.wilco375.roosternotification.receiver.AlarmReceiver
 import com.wilco375.roosternotification.widget.LesdagWidgetProvider
 import com.wilco375.roosternotification.widget.LesuurWidgetProvider
 import java.util.*
@@ -68,8 +66,13 @@ object Utils {
 
     // Set alarm
     fun setAlarm(context: Context) {
-        val autoStartUp = Intent(context, AutoStartUp::class.java)
-        context.startService(autoStartUp)
+        Thread {
+            AlarmReceiver.createNotification(context)
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+            val i = Intent(context, AlarmReceiver::class.java)
+            val pendingIntent = PendingIntent.getBroadcast(context, 0, i, PendingIntent.FLAG_CANCEL_CURRENT)
+            alarmManager?.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 300000, pendingIntent)
+        }.start()
     }
 
     // Update widgets
@@ -133,8 +136,8 @@ object Utils {
     }
 
     // Notification manager
-    val CURRENT_SCHEDULE = "current"
-    val LESSON_CANCELLED = "cancelled"
+    const val CURRENT_SCHEDULE = "current"
+    const val LESSON_CANCELLED = "cancelled"
     fun getNotificationBuilder(context: Context, forChannel: String) : NotificationCompat.Builder {
         // Register notification channel
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

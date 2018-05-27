@@ -23,6 +23,7 @@
     <string name="first_sync_message">Aan meldingen van uitvallende uren zijn geen rechten verbonden. Controleer dus altijd op Zermelo of een uur inderdaad uitvalt. Dit is dus ook geen reden waarom je niet naar een les gegaan bent. Je school is niet verantwoordelijk voor deze app</string>
 
     <string name="zermelo_sync">Zermelo sychronisatie</string>
+    <string name="zermelo_syncing">Rooster aan het synchroniseren...</string>
     <string name="zermelo_code">Vul hier de Zermelo website van je school en een Zermelo \'Koppel App\' code in om te synchroniseren met Zermelo (dit is NIET je leerlingnummer):</string>
     <string name="zermelo_site">Website - [school].zportal.nl</string>
     <string name="zermelo_connect_app_code">Code</string>

@@ -47,7 +47,8 @@
 
         <service
             android:name=".receiver.AutoStartUp"
-            android:exported="false" />
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <activity
             android:name=".activity.MainActivity"

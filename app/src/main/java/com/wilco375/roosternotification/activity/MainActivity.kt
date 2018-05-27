@@ -172,7 +172,7 @@ class MainActivity : CAppCompatActivity() {
     private fun syncSchedule() {
         syncing = true
         ZermeloSync().syncZermelo(this, true, username)
-        Toast.makeText(this, "Rooster aan het synchroniseren...", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, R.string.zermelo_syncing, Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
