@@ -15,7 +15,7 @@ class RoosterApp : Application() {
         if (website.startsWith("candea")) {
             color = ThemeColor.ORANGE
         } else if (website.startsWith("jpthijsse")) {
-            color = ThemeColor.YELLOW
+            color = ThemeColor.GREEN
         }
         val defaults = Defaults(
                 primaryColor = color,
