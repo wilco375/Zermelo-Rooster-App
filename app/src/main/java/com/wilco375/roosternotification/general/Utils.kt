@@ -4,6 +4,7 @@ import android.app.*
 import android.appwidget.AppWidgetManager
 import android.content.*
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -55,12 +56,22 @@ object Utils {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
 
         val activeNetwork = cm?.activeNetworkInfo
-        return activeNetwork?.isConnectedOrConnecting ?: false
+        return activeNetwork?.isConnected ?: false
     }
 
     fun isWifiConnected(context: Context): Boolean {
-        val connManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        val wifi = connManager?.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+        if (Build.VERSION.SDK_INT < 28) {
+            return isWifiConnectedCompat(context)
+        } else {
+            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+            return cm?.getNetworkCapabilities(cm.activeNetwork)?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
+        }
+    }
+
+    @Suppress("Deprecation")
+    private fun isWifiConnectedCompat(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val wifi = cm?.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
         return wifi?.isConnected ?: false
     }
 
