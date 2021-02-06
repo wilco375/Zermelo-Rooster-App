@@ -17,7 +17,7 @@ class ScheduleDay : Serializable, Parcelable {
 
     constructor(parcel: Parcel) {
         day = Date(parcel.readLong())
-        parcel.readList(items, ScheduleItem::class.java.classLoader)
+        parcel.readList(items as List<*>, ScheduleItem::class.java.classLoader)
     }
 
     constructor(cursor: Cursor, day: Date) {
@@ -58,7 +58,7 @@ class ScheduleDay : Serializable, Parcelable {
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(day.time)
-        parcel.writeList(items)
+        parcel.writeList(items as List<*>)
     }
 
     override fun describeContents(): Int {

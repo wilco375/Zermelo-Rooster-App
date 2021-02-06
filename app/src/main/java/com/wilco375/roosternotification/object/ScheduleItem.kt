@@ -116,10 +116,10 @@ class ScheduleItem : Serializable, Parcelable {
 
     constructor(parcel: Parcel) {
         instance = parcel.readLong()
-        subject = parcel.readString()
-        group = parcel.readString()
-        location = parcel.readString()
-        type = parcel.readString()
+        subject = parcel.readString()!!
+        group = parcel.readString()!!
+        location = parcel.readString()!!
+        type = parcel.readString()!!
         cancelled = parcel.readByte() > 0
         start = Date(parcel.readLong())
         end = Date(parcel.readLong())

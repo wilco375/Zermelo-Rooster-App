@@ -34,12 +34,12 @@ class SettingsActivity : CAppCompatActivity() {
         showCancelledNotificationCheckbox.isChecked = sp.getBoolean("notifyCancel", true)
         showDayScheduleCheckbox.isChecked = sp.getBoolean("notifyDaySchedule", true)
 
-        showGroupCheckbox.setOnCheckedChangeListener({ _, isChecked -> sp.edit().putBoolean("group", isChecked).apply() })
+        showGroupCheckbox.setOnCheckedChangeListener { _, isChecked -> sp.edit().putBoolean("group", isChecked).apply() }
 
-        showNotificationCheckbox.setOnCheckedChangeListener({ _, isChecked -> sp.edit().putBoolean("notify", isChecked).apply() })
+        showNotificationCheckbox.setOnCheckedChangeListener { _, isChecked -> sp.edit().putBoolean("notify", isChecked).apply() }
 
-        showCancelledNotificationCheckbox.setOnCheckedChangeListener({ _, isChecked -> sp.edit().putBoolean("notifyCancel", isChecked).apply() })
+        showCancelledNotificationCheckbox.setOnCheckedChangeListener { _, isChecked -> sp.edit().putBoolean("notifyCancel", isChecked).apply() }
 
-        showDayScheduleCheckbox.setOnCheckedChangeListener({ _, isChecked -> sp.edit().putBoolean("notifyDaySchedule", isChecked).apply() })
+        showDayScheduleCheckbox.setOnCheckedChangeListener { _, isChecked -> sp.edit().putBoolean("notifyDaySchedule", isChecked).apply() }
     }
 }

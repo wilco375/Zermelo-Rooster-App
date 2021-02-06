@@ -138,12 +138,12 @@ object Utils {
 
     // Copy to clipboard
     fun copyText(activity: Activity, context: Context, title: String, content: String, toast: Boolean) {
-        activity.runOnUiThread({
+        activity.runOnUiThread {
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
             val clip = ClipData.newPlainText(title, content)
-            clipboard?.primaryClip = clip
+            clipboard?.setPrimaryClip(clip)
             if (toast) Toast.makeText(context, R.string.copied, Toast.LENGTH_SHORT).show()
-        })
+        }
     }
 
     // Notification manager

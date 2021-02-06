@@ -11,7 +11,7 @@ class RoosterApp : Application() {
         super.onCreate()
 
         var color = ThemeColor.BLUE
-        val website = getSharedPreferences("Main", Context.MODE_PRIVATE).getString("website", "")
+        val website = getSharedPreferences("Main", Context.MODE_PRIVATE).getString("website", "")!!
         if (website.startsWith("candea")) {
             color = ThemeColor.ORANGE
         } else if (website.startsWith("jpthijsse")) {

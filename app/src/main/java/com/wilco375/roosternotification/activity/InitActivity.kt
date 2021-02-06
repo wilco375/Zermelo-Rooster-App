@@ -29,7 +29,7 @@ class InitActivity : CAppCompatActivity() {
      * Launch MainActivity after entering code or launch HelpActivity on button click
      */
     private fun setupInit() {
-        zermeloConfirm.setOnClickListener({
+        zermeloConfirm.setOnClickListener {
             // Check website
             var website = zermeloSite.text.toString()
             if (!website.endsWith(".zportal.nl")) {
@@ -50,11 +50,11 @@ class InitActivity : CAppCompatActivity() {
                             .setTitle(R.string.first_sync_title)
                             .setMessage(R.string.first_sync_message)
                             .setCancelable(true)
-                            .setNeutralButton(android.R.string.ok, { _, _ ->
+                            .setNeutralButton(android.R.string.ok) { _, _ ->
                                 val i = Intent(this@InitActivity, MainActivity::class.java)
                                 finish()
                                 startActivity(i)
-                            })
+                            }
                             .show()
                 }
             } catch (e: InvalidWebsiteException) {
@@ -66,12 +66,12 @@ class InitActivity : CAppCompatActivity() {
             } catch (e: UnknownAuthenticationException) {
                 Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
             }
-        })
+        }
 
-        zermeloCodeHelp.setOnClickListener({ _ ->
+        zermeloCodeHelp.setOnClickListener {
             val i = Intent(application, HelpActivity::class.java)
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(i)
-        })
+        }
     }
 }

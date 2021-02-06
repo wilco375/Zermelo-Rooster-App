@@ -94,11 +94,11 @@ class MainActivity : CAppCompatActivity() {
      * Get schedule from storage
      */
     fun getSchedule() {
-        runOnUiThread({
+        runOnUiThread {
             schedule = Schedule.getInstance(this@MainActivity, username)
 
             setupSchedule()
-        })
+        }
     }
 
     /**
@@ -147,7 +147,7 @@ class MainActivity : CAppCompatActivity() {
         dialog.setTitle(R.string.user)
         dialog.setView(view)
         val userTextView = view.findViewById<AppCompatAutoCompleteTextView>(R.id.userId)
-        val names = Schedule.getInstance(this, "~me").getNames().map { it -> "${it.second} (${it.first})" }
+        val names = Schedule.getInstance(this, "~me").getNames().map { "${it.second} (${it.first})" }
         userTextView.setAdapter(AutoCompleteStringAdapter(this, names))
         userTextView.setOnItemClickListener { _, _, position, _ ->
             val item = userTextView.adapter.getItem(position) as String
@@ -239,7 +239,7 @@ class MainActivity : CAppCompatActivity() {
             arguments?.takeIf { it.containsKey("schedule") }?.apply {
                 val scheduleDay = getParcelable<ScheduleDay>("schedule")
 
-                if (!scheduleDay.getItems().isEmpty()) {
+                if (scheduleDay?.getItems()?.isNotEmpty() == true) {
                     rootView.findViewById<TextView>(R.id.noLessons).visibility = View.GONE
 
                     rootView.findViewById<ListView>(R.id.dayListView).adapter =

@@ -34,7 +34,7 @@ class ZermeloSync {
     fun syncZermelo(context: Context, updateMainActivity: Boolean = false, username: String = "~me", copyClipboard: Boolean = false) {
         if (!updateMainActivity && !Utils.isWifiConnected(context)) return
 
-        Thread({
+        Thread {
             // List of all the lessons that have been cancelled
             val cancelledItems = ArrayList<ScheduleItem>()
 
@@ -48,9 +48,9 @@ class ZermeloSync {
 
             // Get schedule string
             sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE)
-            val scheduleString = getScheduleString(sp.getString("website", ""),
+            val scheduleString = getScheduleString(sp.getString("website", "")!!,
                     username,
-                    sp.getString("token", ""),
+                    sp.getString("token", "")!!,
                     start, end) ?: return@Thread
 
             // If necessary copy string to clipboard
@@ -86,7 +86,7 @@ class ZermeloSync {
                 jsonSchedule.items()
                         .filter { (it as JSONObject).has("branchOfSchool") }
                         .forEach { schools.add((it as JSONObject).getString("branchOfSchool")) }
-                syncNamesForSchools(schools, sp.getString("website", ""), sp.getString("token", ""))
+                syncNamesForSchools(schools, sp.getString("website", "")!!, sp.getString("token", "")!!)
 
                 // Restart app if necessary
                 if (updateMainActivity && context is MainActivity) {
@@ -95,7 +95,7 @@ class ZermeloSync {
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
-        }).start()
+        }.start()
     }
 
     private fun syncNamesForSchools(schools: Set<String>, website: String, token: String) {
