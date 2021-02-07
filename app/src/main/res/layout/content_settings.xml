@@ -57,4 +57,15 @@
         android:theme="@style/CheckBoxStyle"
         android:textColor="@color/textColor"
         android:text="@string/show_group" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:layout_marginTop="5dp"
+        android:id="@+id/useDarkModeCheckbox"
+        android:layout_below="@id/showGroupCheckbox"
+        android:theme="@style/CheckBoxStyle"
+        android:textColor="@color/textColor"
+        android:text="@string/use_dark_mode" />
 </RelativeLayout>

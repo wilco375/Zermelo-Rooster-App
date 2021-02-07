@@ -12,6 +12,8 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -57,6 +59,17 @@ class MainActivity : CAppCompatActivity() {
 
         //Get SharedPreferences
         sp = getSharedPreferences("Main", Context.MODE_PRIVATE)
+
+        // Check dark mode
+        if (sp.contains("useDarkMode")) {
+            AppCompatDelegate.setDefaultNightMode(
+                    if (sp.getBoolean("useDarkMode", false)) {
+                        AppCompatDelegate.MODE_NIGHT_YES
+                    } else {
+                        AppCompatDelegate.MODE_NIGHT_NO
+                    }
+            )
+        }
 
         //Set alarm
         Utils.setAlarm(this)
