@@ -17,6 +17,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:hint="@string/user_id"
+            android:textColor="@color/textColor"
             android:id="@+id/userId"
             />
     </com.google.android.material.textfield.TextInputLayout>

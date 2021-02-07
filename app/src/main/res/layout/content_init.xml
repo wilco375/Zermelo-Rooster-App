@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/backgroundColor"
     tools:context="com.wilco375.roosternotification.activity.InitActivity">
 
     <LinearLayout
@@ -21,6 +22,7 @@
             android:layout_height="wrap_content"
             android:text="@string/zermelo_code"
             android:id="@+id/zermeloText"
+            android:textColor="@color/textColorSecondary"
             android:layout_marginBottom="8dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -32,17 +34,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/zermelo_site"
+                android:textColor="@color/textColor"
                 android:id="@+id/zermeloSite"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/zermelo_connect_app_code"
+                android:textColor="@color/textColor"
                 android:id="@+id/zermeloCode"
                 android:inputType="number"
                 />
@@ -54,7 +59,7 @@
             android:text="@string/zermelo_where"
             android:layout_marginTop="3dp"
             android:id="@+id/zermeloCodeHelp"
-            android:textColor="@color/md_blue_500" />
+            android:textColor="@color/themeColorPrimary" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

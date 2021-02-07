@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,9 +9,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/backgroundColor"
     tools:context="com.wilco375.roosternotification.activity.SettingsActivity">
 
-    <CheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
@@ -19,32 +21,40 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:theme="@style/CheckBoxStyle"
+        android:textColor="@color/textColor"
         android:text="@string/notify" />
 
-    <CheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
         android:layout_marginTop="5dp"
         android:id="@+id/showDayScheduleCheckbox"
         android:layout_below="@id/showNotificationCheckbox"
+        android:theme="@style/CheckBoxStyle"
+        android:textColor="@color/textColor"
         android:text="@string/notify_day_schedule" />
 
-    <CheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
         android:layout_marginTop="5dp"
         android:id="@+id/showCancelledNotificationCheckbox"
         android:layout_below="@id/showDayScheduleCheckbox"
+        android:theme="@style/CheckBoxStyle"
+        android:textColor="@color/textColor"
         android:text="@string/notify_cancel" />
 
-    <CheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="false"
         android:layout_marginTop="5dp"
         android:id="@+id/showGroupCheckbox"
         android:layout_below="@id/showCancelledNotificationCheckbox"
+        android:theme="@style/CheckBoxStyle"
+        android:textColor="@color/textColor"
         android:text="@string/show_group" />
 </RelativeLayout>
