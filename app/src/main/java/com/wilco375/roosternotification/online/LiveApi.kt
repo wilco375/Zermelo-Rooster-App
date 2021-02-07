@@ -19,6 +19,9 @@ import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class LiveApi(private val website: String) : Api {
 
@@ -51,6 +54,7 @@ class LiveApi(private val website: String) : Api {
                                         .map { field -> item.optString(field, "") }
                                         .filter { it.isNotBlank() && it != "null" }
                                         .joinToString(" ")
+                                        .capitalize(Locale.getDefault())
 
                                 names[code] = name
                             }

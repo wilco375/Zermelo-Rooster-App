@@ -63,8 +63,30 @@
         android:layout_height="wrap_content"
         android:checked="false"
         android:layout_marginTop="5dp"
-        android:id="@+id/useDarkModeCheckbox"
+        android:id="@+id/teacherCheckbox"
         android:layout_below="@id/showGroupCheckbox"
+        android:theme="@style/CheckBoxStyle"
+        android:textColor="@color/textColor"
+        android:text="@string/teacher" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:layout_marginTop="5dp"
+        android:id="@+id/teacherFullCheckbox"
+        android:layout_below="@id/teacherCheckbox"
+        android:theme="@style/CheckBoxStyle"
+        android:textColor="@color/textColor"
+        android:text="@string/teacher_full" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:layout_marginTop="5dp"
+        android:id="@+id/useDarkModeCheckbox"
+        android:layout_below="@id/teacherFullCheckbox"
         android:theme="@style/CheckBoxStyle"
         android:textColor="@color/textColor"
         android:text="@string/use_dark_mode" />

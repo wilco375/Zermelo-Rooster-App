@@ -33,7 +33,9 @@
     <string name="notify">Geef meldingen van lesuren</string>
     <string name="notify_day_schedule">Laat dagrooster zien in meldingen</string>
     <string name="notify_cancel">Geef meldingen van uitval</string>
-    <string name="show_group">Laat clusters/klassen zien (voor leraren)</string>
+    <string name="show_group">Laat clusters/klassen zien</string>
+    <string name="teacher">Laat docenten zien</string>
+    <string name="teacher_full">Laat volledige naam docenten zien wanneer beschikbaar</string>
     <string name="use_dark_mode">Gebruik donker thema</string>
     <string name="schedule">Rooster</string>
     <string name="first_day_of_week">Maandag</string>

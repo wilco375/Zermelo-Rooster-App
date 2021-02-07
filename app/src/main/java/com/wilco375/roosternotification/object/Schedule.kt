@@ -1,20 +1,16 @@
 package com.wilco375.roosternotification.`object`
 
 import android.content.Context
+import android.database.Cursor
 import com.wilco375.roosternotification.general.Config
+import com.wilco375.roosternotification.general.DatabaseProvider
 import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
 
 class Schedule private constructor(context: Context, val username: String) : Serializable {
     private val scheduleDays = ArrayList<ScheduleDay>()
-    private var db = context.openOrCreateDatabase("Schedule", Context.MODE_PRIVATE, null)!!
-
-    init {
-        db.enableWriteAheadLogging()
-
-        createTables()
-    }
+    private var db = DatabaseProvider.getDatabase(context)
 
     companion object {
         private var instances: ArrayList<Schedule> = ArrayList()
@@ -33,37 +29,6 @@ class Schedule private constructor(context: Context, val username: String) : Ser
             }
             return instances[0]
         }
-    }
-
-    private fun createTables() {
-        val lessonTable = "CREATE TABLE IF NOT EXISTS Lesson (" +
-                "   instance INTEGER," +
-                "   subject TEXT," +
-                "   lessonGroup TEXT," +
-                "   location TEXT," +
-                "   type TEXT," +
-                "   cancelled INTEGER," +
-                "   start INTEGER," +
-                "   end INTEGER," +
-                "   timeslot INTEGER," +
-                "   day INTEGER," +
-                "   username TEXT," +
-                "   PRIMARY KEY (instance, username)" +
-                ")"
-        db.execSQL(lessonTable)
-
-        val notificationTable = "CREATE TABLE IF NOT EXISTS Notification (" +
-                "   instance INTEGER," +
-                "   type TEXT," +
-                "   PRIMARY KEY (instance, type)" +
-                ")"
-        db.execSQL(notificationTable)
-
-        val namesTable = "CREATE TABLE IF NOT EXISTS Name (" +
-                "   code TEXT PRIMARY KEY," +
-                "   name TEXT" +
-                ")"
-        db.execSQL(namesTable)
     }
 
     /**
@@ -103,7 +68,7 @@ class Schedule private constructor(context: Context, val username: String) : Ser
             db.execSQL("DELETE FROM Lesson WHERE username = ${username.escape()} AND ((start >= $startOfDay AND end < ${startOfDay + 24 * 3600 * 1000}) OR (end < ${startOfDay - Config.SYNC_WINDOW * 24 * 3600 * 1000L}))")
             for (item in scheduleDay) {
                 item.apply {
-                    db.execSQL("REPLACE INTO Lesson VALUES ($instance, ${subject.escape()}, ${group.escape()}, ${location.escape()}, ${type.escape()}, ${if (cancelled) 1 else 0}, ${start.time}, ${end.time}, $timeslot, ${day.time}, ${username.escape()})")
+                    db.execSQL("REPLACE INTO Lesson VALUES ($instance, ${subject.escape()}, ${group.escape()}, ${location.escape()}, ${type.escape()}, ${if (cancelled) 1 else 0}, ${start.time}, ${end.time}, $timeslot, ${day.time}, ${username.escape()}, ${teacher.escape()}, ${teacherFull.escape()})")
                 }
             }
         }

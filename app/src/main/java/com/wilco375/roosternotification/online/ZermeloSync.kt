@@ -46,13 +46,33 @@ class ZermeloSync(private val context: Context) {
                 // Format to JSONArray
                 val schedule = Schedule.getInstance(context, username)
 
+                // Sync names for all the school branches in the schedule
+                jsonSchedule.items()
+                        .filter { (it as JSONObject).has("branchOfSchool") }
+                        .forEach { schools.add((it as JSONObject).getString("branchOfSchool")) }
+
+                val database = Schedule.getInstance()
+                val names = Api(website).getNames(token, schools)
+                        .mapKeys { it.key.toUpperCase(Locale.getDefault()) }
+                names.forEach { database.addName(it.key, it.value) }
+
                 // Loop trough all lessons and create an object array with all lessons
                 jsonSchedule.items()
                         .map { ScheduleItem(it as JSONObject) }.forEach {
+                            // Add item to schedule
                             schedule += it
+
+                            // If the item is cancelled add it to the cancelled items list
                             if (it.cancelled && username == "~me") {
                                 cancelledItems.add(it)
                             }
+
+                            // Get the full teacher name
+                            it.teacherFull = it.teacher
+                                    .split("/")
+                                    .joinToString("/") {
+                                        code -> names.getOrElse(code, { code })
+                                    }
                         }
 
                 // Notify cancelled lessons
@@ -65,15 +85,6 @@ class ZermeloSync(private val context: Context) {
                 if (username == "~me") {
                     Utils.updateWidgets(context)
                 }
-
-                // Sync names for all the school branches in the schedule
-                jsonSchedule.items()
-                        .filter { (it as JSONObject).has("branchOfSchool") }
-                        .forEach { schools.add((it as JSONObject).getString("branchOfSchool")) }
-
-                val database = Schedule.getInstance()
-                val names = Api(website).getNames(token, schools)
-                names.forEach { database.addName(it.key, it.value) }
 
                 // Restart app if necessary
                 if (updateMainActivity && context is MainActivity) {

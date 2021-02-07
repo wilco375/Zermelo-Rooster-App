@@ -77,8 +77,6 @@ class MainActivity : CAppCompatActivity() {
         checkInit()
 
         getSchedule()
-
-        //setupNavigation()
     }
 
     /**

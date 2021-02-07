@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:text="@string/no_lessons"
         android:gravity="center"
+        android:textColor="@color/textColor"
         android:id="@+id/noLessons"/>
 
     <ListView

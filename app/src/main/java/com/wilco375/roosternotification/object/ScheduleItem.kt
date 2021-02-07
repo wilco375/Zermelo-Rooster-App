@@ -24,13 +24,15 @@ class ScheduleItem : Serializable, Parcelable {
                 "choice" -> "Keuze"
                 "talk" -> "Gesprek"
                 "other" -> "Anders"
-                else -> field.capitalize()
+                else -> field.capitalize(Locale.getDefault())
             }
         }
     val cancelled: Boolean
     val start: Date
     val end: Date
     val timeslot: Int
+    val teacher: String
+    var teacherFull: String
     // Date on the same day as start
     var day: Date
 
@@ -39,15 +41,21 @@ class ScheduleItem : Serializable, Parcelable {
         // Instance
         instance = jsonObject.getLong("appointmentInstance")
 
-        //Subject
+        // Subject
         val subjectsArray = jsonObject.getJSONArray("subjects")
-        subject = subjectsArray.items().joinToString("/") { it.toString().toUpperCase() }
+        subject = subjectsArray.items().joinToString("/") { it.toString().toUpperCase(Locale.getDefault()) }
 
-        //Group
+        // Group
         val groupsArray = jsonObject.getJSONArray("groups")
-        group = groupsArray.items().joinToString("/") { it.toString().toUpperCase() }
+        group = groupsArray.items().joinToString("/") { it.toString().toUpperCase(Locale.getDefault()) }
 
-        //Location
+        // Teacher
+        val teachersArray = jsonObject.getJSONArray("teachers")
+        teacher = teachersArray.items().joinToString("/") { it.toString().toUpperCase(Locale.getDefault()) }
+
+        teacherFull = teacher
+
+        // Location
         val locationsArray = jsonObject.getJSONArray("locations")
         location = locationsArray.items().joinToString("/") { it.toString() }
 
@@ -73,6 +81,8 @@ class ScheduleItem : Serializable, Parcelable {
             instance = cursor.getLong("instance")
             subject = cursor.getString("subject")
             group = cursor.getString("lessonGroup")
+            teacher = cursor.getString("teacher")
+            teacherFull = cursor.getString("teacherFull")
             location = cursor.getString("location")
             type = cursor.getString("type")
             cancelled = cursor.getBoolean("cancelled")
@@ -97,17 +107,20 @@ class ScheduleItem : Serializable, Parcelable {
 
     fun getSummary(sp: SharedPreferences): String {
         var info = ""
-        if (subject != "") info = getSubjectAndGroup(sp)
+        if (subject.isNotBlank()) info = getSubjectAndGroup(sp)
         if (type != "Les") info += " ($type)"
-        if (location != "") info += " - $location"
+        if (location.isNotBlank()) info += " - $location"
+        if (sp.getBoolean("teacherFull", false) && teacherFull.isNotBlank()) info += " - $teacherFull"
+        else if (sp.getBoolean("teacher", false) && teacher.isNotBlank()) info += " - $teacher"
         return info
     }
 
     fun getSubjectAndGroup(sp: SharedPreferences): String {
-        return if (sp.getBoolean("group", false) && this.group != "")
-            this.subject + "-" + this.group
-        else
-            this.subject
+        var text = this.subject
+        if (sp.getBoolean("group", false) && this.group.isNotBlank()) {
+            text += "-${this.group}"
+        }
+        return text
     }
 
     override fun toString(): String {
@@ -118,6 +131,8 @@ class ScheduleItem : Serializable, Parcelable {
         instance = parcel.readLong()
         subject = parcel.readString()!!
         group = parcel.readString()!!
+        teacher = parcel.readString()!!
+        teacherFull = parcel.readString()!!
         location = parcel.readString()!!
         type = parcel.readString()!!
         cancelled = parcel.readByte() > 0
@@ -131,6 +146,8 @@ class ScheduleItem : Serializable, Parcelable {
         parcel.writeLong(instance)
         parcel.writeString(subject)
         parcel.writeString(group)
+        parcel.writeString(teacher)
+        parcel.writeString(teacherFull)
         parcel.writeString(location)
         parcel.writeString(type)
         parcel.writeByte(if (cancelled) 1 else 0)
