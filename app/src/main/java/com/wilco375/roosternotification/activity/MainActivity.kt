@@ -127,7 +127,7 @@ class MainActivity : CAppCompatActivity() {
         })
         schedulePagerTitleStrip.setOnClickListener {
             val now = Calendar.getInstance()
-            val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
+            val datePicker = DatePickerDialog(this, R.style.CalendarDialogStyle, DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
                 run {
                     val calendar = Calendar.getInstance()
                     calendar.set(selectedYear, selectedMonth, selectedDay)

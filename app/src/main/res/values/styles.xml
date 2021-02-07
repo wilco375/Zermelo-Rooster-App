@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/themeColorPrimary</item>
@@ -30,5 +30,17 @@
     <style name="CheckBoxStyle" parent="Theme.AppCompat">
         <item name="colorAccent">@color/themeColorPrimary</item>
         <item name="android:textColorSecondary">@color/textColor</item>
+    </style>
+
+    <style name="CalendarDialogStyle" parent="android:Theme.DeviceDefault.Dialog">
+        <item name="android:colorControlActivated" tools:targetApi="lollipop">@color/themeColorPrimary</item>
+        <item name="android:colorControlHighlight" tools:targetApi="lollipop">@color/themeColorPrimary</item>
+        <item name="android:buttonBarPositiveButtonStyle" tools:targetApi="lollipop">@style/ButtonStyle</item>
+        <item name="android:buttonBarNeutralButtonStyle" tools:targetApi="lollipop">@style/ButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle" tools:targetApi="lollipop">@style/ButtonStyle</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/themeColorPrimary</item>
     </style>
 </resources>

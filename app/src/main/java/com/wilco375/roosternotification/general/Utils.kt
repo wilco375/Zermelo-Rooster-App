@@ -3,6 +3,7 @@ package com.wilco375.roosternotification.general
 import android.app.*
 import android.appwidget.AppWidgetManager
 import android.content.*
+import android.content.res.Configuration
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -165,5 +166,13 @@ object Utils {
 
         // Get builder
         return NotificationCompat.Builder(context, forChannel)
+    }
+
+    fun isNightModeEnabled(context: Context): Boolean {
+        val mode = context.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
+        return when (mode) {
+            Configuration.UI_MODE_NIGHT_YES -> true
+            else -> false
+        }
     }
 }
