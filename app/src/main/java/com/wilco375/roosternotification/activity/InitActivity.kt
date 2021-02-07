@@ -1,10 +1,9 @@
 package com.wilco375.roosternotification.activity
 
-import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.exception.InvalidCodeException
 import com.wilco375.roosternotification.exception.InvalidWebsiteException
@@ -43,10 +42,10 @@ class InitActivity : CAppCompatActivity() {
 
             // Check code and get API token
             val code = zermeloCode.text.toString().replace(" ", "")
-            val sp = getSharedPreferences("Main", Context.MODE_PRIVATE)
             try {
-                if (ZermeloSync.authenticate(website, code, baseContext, sp)) {
-                    AlertDialog.Builder(this@InitActivity)
+                val zermeloSync = ZermeloSync(this)
+                if (zermeloSync.authenticate(website, code)) {
+                    MaterialAlertDialogBuilder(this@InitActivity)
                             .setTitle(R.string.first_sync_title)
                             .setMessage(R.string.first_sync_message)
                             .setCancelable(true)

@@ -12,12 +12,12 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.R.layout.activity_main
 import com.wilco375.roosternotification.`object`.Schedule
@@ -34,7 +34,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class MainActivity : CAppCompatActivity() {
     private var syncing = false
@@ -143,7 +142,7 @@ class MainActivity : CAppCompatActivity() {
 
     private fun showUserDialog() {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_user, LinearLayout(this))
-        val dialog = AlertDialog.Builder(this)
+        val dialog = MaterialAlertDialogBuilder(this)
         dialog.setTitle(R.string.user)
         dialog.setView(view)
         val userTextView = view.findViewById<AppCompatAutoCompleteTextView>(R.id.userId)
@@ -171,7 +170,7 @@ class MainActivity : CAppCompatActivity() {
      */
     private fun syncSchedule() {
         syncing = true
-        ZermeloSync().syncZermelo(this, true, username)
+        ZermeloSync(this).syncZermelo(true, username)
         Toast.makeText(this, R.string.zermelo_syncing, Toast.LENGTH_LONG).show()
     }
 
