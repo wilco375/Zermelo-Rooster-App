@@ -7,71 +7,77 @@ import android.content.Context
 import android.content.Intent
 import android.text.SpannableString
 import android.text.style.StrikethroughSpan
+import android.view.View
 import android.widget.RemoteViews
+import android.widget.TextView
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.activity.MainActivity
 import com.wilco375.roosternotification.general.Utils
 import io.multimoon.colorful.Colorful
+import java.text.SimpleDateFormat
 import java.util.*
 
 class LesuurWidgetProvider : AppWidgetProvider() {
+    private val hourFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
 
         for (appWidgetId in appWidgetIds) {
-            val sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE)
+            val mainActivityIntent = Intent(context, MainActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(context, 0, mainActivityIntent, 0)
+            val views = RemoteViews(context.packageName, R.layout.app_widget_lesuur)
 
-            val dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
-            if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) return
+            views.setOnClickPendingIntent(R.id.app_widget_lesdag_layout, pendingIntent)
 
             val schedule = Schedule.getInstance(context)[Utils.currentScheduleDate()]
-            if (schedule.getItems().isEmpty()) return
 
-            var subject = ""
-            var location = ""
-            var timeslot = 0
-            var cancelled = false
-            //Get 15 minutes before current time
+            // Get 15 minutes before current time
             val currentTime = Calendar.getInstance().also { it.add(Calendar.MINUTE, 15) }.time
+            var upcomingItem = schedule.getItems().firstOrNull()
             for (lesson in schedule) {
                 if (currentTime >= lesson.start && currentTime <= lesson.end) {
-                    subject = lesson.getSubjectAndGroup(sp)
-                    location = lesson.location
-                    timeslot = timeslot
-                    cancelled = lesson.cancelled
+                    upcomingItem = lesson
                 }
             }
 
-            val intent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
-
-            val views = RemoteViews(context.packageName, R.layout.app_widget_lesuur)
-            views.setOnClickPendingIntent(R.id.app_widget_lesuur_layout, pendingIntent)
-            views.setInt(R.id.app_widget_lesuur_layout, "setBackgroundColor", Colorful().getPrimaryColor().getColorPack().normal().asInt())
-
-            if (!(subject == "" && location == "") && !cancelled) {
-                if (timeslot != 0)
-                    views.setTextViewText(R.id.app_widget_lesuur_title, "$timeslot: $subject")
-                else
-                    views.setTextViewText(R.id.app_widget_lesuur_title, subject)
-
-                views.setTextViewText(R.id.app_widget_lesuur_text, location)
-            } else if (cancelled) {
-                val spannableString1: SpannableString
-                if (timeslot != 0)
-                    spannableString1 = SpannableString("$timeslot: $subject")
-                else
-                    spannableString1 = SpannableString(subject)
-                val spannableString2 = SpannableString(location)
-                spannableString1.setSpan(StrikethroughSpan(), 0, spannableString1.toString().length, 0)
-                spannableString2.setSpan(StrikethroughSpan(), 0, spannableString2.toString().length, 0)
-                views.setTextViewText(R.id.app_widget_lesuur_title, spannableString1)
-                views.setTextViewText(R.id.app_widget_lesuur_text, spannableString2)
+            val sp = Utils.getSharedPreferences(context)
+            val teacher = sp.getBoolean("teacher", false)
+            val teacherFull = sp.getBoolean("teacherFull", false)
+            if (!teacher && !teacherFull) {
+                views.setViewVisibility(R.id.app_widget_lesdag_teacher, View.GONE)
             } else {
-                views.setTextViewText(R.id.app_widget_lesuur_title, "")
-                views.setTextViewText(R.id.app_widget_lesuur_text, "")
+                views.setViewVisibility(R.id.app_widget_lesdag_teacher, View.VISIBLE)
+            }
+
+            val primaryColor = Colorful().getPrimaryColor().getColorPack().normal().asInt()
+
+            views.setImageViewBitmap(R.id.app_widget_lesdag_location_bg,
+                    Utils.getRoundedSquareBitmap(50.0, 6.0, primaryColor)
+            )
+
+            if (upcomingItem != null) {
+                var summary = upcomingItem.getSubjectAndGroup(sp)
+                if (upcomingItem.timeslot != 0) {
+                    summary = "${upcomingItem.timeslot}. " + summary
+                }
+                if (upcomingItem.type != "Les") summary += " (${upcomingItem.type})"
+                views.setTextViewText(R.id.app_widget_lesdag_subject, summary)
+
+                if (teacherFull) {
+                    views.setTextViewText(R.id.app_widget_lesdag_teacher, upcomingItem.teacherFull)
+                } else if (teacher) {
+                    views.setTextViewText(R.id.app_widget_lesdag_teacher, upcomingItem.teacher)
+                }
+                views.setTextViewText(R.id.app_widget_lesdag_time,
+                        "${hourFormat.format(upcomingItem.start)} - ${hourFormat.format(upcomingItem.end)}")
+                views.setTextViewText(R.id.app_widget_lesdag_location, upcomingItem.location)
+            } else {
+                views.setTextViewText(R.id.app_widget_lesdag_subject, "")
+                views.setTextViewText(R.id.app_widget_lesdag_teacher, "")
+                views.setTextViewText(R.id.app_widget_lesdag_time, "")
+                views.setTextViewText(R.id.app_widget_lesdag_location, "")
             }
 
             appWidgetManager.updateAppWidget(appWidgetId, views)

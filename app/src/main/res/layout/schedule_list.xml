@@ -12,7 +12,7 @@
         android:id="@+id/timeslot"
         android:textColor="#fff"
         android:gravity="center"
-        android:background="@drawable/round_corners"
+        android:background="@drawable/primary_round_corners"
         android:layout_marginLeft="0dp"
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"

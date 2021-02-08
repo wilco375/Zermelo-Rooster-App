@@ -20,7 +20,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 class ZermeloSync(private val context: Context) {
-    private val sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE)
+    private val sp = Utils.getSharedPreferences(context)
 
     fun syncZermelo(updateMainActivity: Boolean = false, username: String = "~me") {
         if (!updateMainActivity && !Utils.isWifiConnected(context)) return

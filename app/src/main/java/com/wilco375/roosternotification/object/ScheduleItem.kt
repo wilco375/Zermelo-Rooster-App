@@ -105,13 +105,18 @@ class ScheduleItem : Serializable, Parcelable {
      */
     fun isThisWeek() = day.isThisWeek()
 
-    fun getSummary(sp: SharedPreferences): String {
+    /**
+     * Get a summary of the schedule item containing (depending on preferences and available info) name, type, location and teacher
+     * @param sp app shared preferences
+     * @param short if true, return a short version of the summary without the teacher
+     */
+    fun getSummary(sp: SharedPreferences, short: Boolean = false): String {
         var info = ""
         if (subject.isNotBlank()) info = getSubjectAndGroup(sp)
         if (type != "Les") info += " ($type)"
         if (location.isNotBlank()) info += " - $location"
-        if (sp.getBoolean("teacherFull", false) && teacherFull.isNotBlank()) info += " - $teacherFull"
-        else if (sp.getBoolean("teacher", false) && teacher.isNotBlank()) info += " - $teacher"
+        if (!short && sp.getBoolean("teacherFull", false) && teacherFull.isNotBlank()) info += " - $teacherFull"
+        else if (!short && sp.getBoolean("teacher", false) && teacher.isNotBlank()) info += " - $teacher"
         return info
     }
 

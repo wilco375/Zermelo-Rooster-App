@@ -1,5 +1,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="110dp"
-    android:minHeight="30dp"
-    android:updatePeriodMillis="300000"
+    android:minWidth="100dp"
+    android:minHeight="100dp"
+    android:updatePeriodMillis="60000"
+    android:previewImage="@drawable/hour_widget"
+    android:resizeMode="horizontal|vertical"
     android:initialLayout="@layout/app_widget_lesuur"></appwidget-provider>

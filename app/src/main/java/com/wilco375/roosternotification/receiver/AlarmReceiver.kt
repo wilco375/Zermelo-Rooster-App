@@ -24,9 +24,7 @@ class AlarmReceiver : BroadcastReceiver() {
         private val NOTIFICATION_ID = 1
 
         fun createNotification(context: Context) {
-            println("Creating notifications")
-
-            val sp = context.getSharedPreferences("Main", Context.MODE_PRIVATE)
+            val sp = Utils.getSharedPreferences(context)
             val spe = sp.edit()
 
             //Sync with Zermelo

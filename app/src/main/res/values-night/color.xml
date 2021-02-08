@@ -4,6 +4,8 @@
     <color name="themeColorPrimaryDark">#1976D2</color>
     <color name="themeColorPrimaryAlpha">#802196F3</color>
     <color name="backgroundColor">#202124</color>
+    <color name="backgroundOpaqueColor">#88202124</color>
     <color name="textColor">@android:color/primary_text_dark</color>
     <color name="textColorSecondary">@android:color/secondary_text_dark</color>
+    <color name="widgetTextColor">@color/textColor</color>
 </resources>

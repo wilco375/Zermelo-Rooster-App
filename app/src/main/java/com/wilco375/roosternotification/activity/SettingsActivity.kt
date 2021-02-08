@@ -29,7 +29,7 @@ class SettingsActivity : CAppCompatActivity() {
      * Save settings to SharedPreferences when changed
      */
     private fun setupSettings() {
-        sp = getSharedPreferences("Main", Context.MODE_PRIVATE)
+        sp = Utils.getSharedPreferences(this)
 
         showGroupCheckbox.isChecked = sp.getBoolean("group", false)
         showNotificationCheckbox.isChecked = sp.getBoolean("notify", true)
@@ -47,9 +47,15 @@ class SettingsActivity : CAppCompatActivity() {
 
         showDayScheduleCheckbox.setOnCheckedChangeListener { _, isChecked -> sp.edit().putBoolean("notifyDaySchedule", isChecked).apply() }
 
-        teacherCheckbox.setOnCheckedChangeListener { _, isChecked -> sp.edit().putBoolean("teacher", isChecked).apply() }
+        teacherCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            sp.edit().putBoolean("teacher", isChecked).apply()
+            Utils.updateWidgets(this)
+        }
 
-        teacherFullCheckbox.setOnCheckedChangeListener { _, isChecked -> sp.edit().putBoolean("teacherFull", isChecked).apply() }
+        teacherFullCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            sp.edit().putBoolean("teacherFull", isChecked).apply()
+            Utils.updateWidgets(this)
+        }
 
         useDarkModeCheckbox.setOnCheckedChangeListener { _, isChecked ->
             sp.edit().putBoolean("useDarkMode", isChecked).apply()
@@ -60,6 +66,7 @@ class SettingsActivity : CAppCompatActivity() {
                         AppCompatDelegate.MODE_NIGHT_NO
                     }
             )
+            Utils.updateWidgets(this)
         }
     }
 }

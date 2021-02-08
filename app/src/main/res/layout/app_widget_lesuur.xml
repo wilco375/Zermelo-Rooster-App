@@ -1,24 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/AppTheme"
-    android:padding="5dp"
-    android:background="?colorPrimary"
+    android:id="@+id/app_widget_lesdag_hour"
     android:orientation="vertical"
-    android:id="@+id/app_widget_lesuur_layout">
-
+    android:background="@drawable/background_round_corners"
+    android:padding="16dp"
+    android:layout_weight="1">
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#fff"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/app_widget_lesuur_title" />
-
+        android:textColor="@color/textColor"
+        android:text="DU"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:id="@+id/app_widget_lesdag_subject"/>
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#fff"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/app_widget_lesuur_text" />
+        android:text="Docent"
+        android:textColor="@color/textColor"
+        android:id="@+id/app_widget_lesdag_teacher" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9:00 - 11:00"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/textColor"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:id="@+id/app_widget_lesdag_time"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Lokaal"
+        android:textColor="@color/textColor"
+        android:layout_marginTop="16dp"
+        android:id="@+id/app_widget_lesdag_location_label"/>
+    <RelativeLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/app_widget_lesdag_location_label"
+        android:layout_gravity="center">
+        <ImageView
+            android:id="@+id/app_widget_lesdag_location_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/app_widget_lesdag_location"
+            android:text="111"
+            android:textSize="18sp"
+            android:textColor="#fff"/>
+    </RelativeLayout>
 </LinearLayout>

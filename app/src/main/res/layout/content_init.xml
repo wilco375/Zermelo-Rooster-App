@@ -59,7 +59,7 @@
             android:text="@string/zermelo_where"
             android:layout_marginTop="3dp"
             android:id="@+id/zermeloCodeHelp"
-            android:textColor="@color/themeColorPrimary" />
+            android:textColor="?attr/colorPrimary" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

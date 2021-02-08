@@ -58,7 +58,7 @@ class MainActivity : CAppCompatActivity() {
         StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
 
         //Get SharedPreferences
-        sp = getSharedPreferences("Main", Context.MODE_PRIVATE)
+        sp = Utils.getSharedPreferences(this)
 
         // Check dark mode
         if (sp.contains("useDarkMode")) {

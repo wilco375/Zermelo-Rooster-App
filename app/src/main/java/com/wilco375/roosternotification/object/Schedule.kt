@@ -6,28 +6,39 @@ import com.wilco375.roosternotification.general.Config
 import com.wilco375.roosternotification.general.DatabaseProvider
 import java.io.Serializable
 import java.util.*
+import java.util.concurrent.locks.ReentrantLock
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class Schedule private constructor(context: Context, val username: String) : Serializable {
     private val scheduleDays = ArrayList<ScheduleDay>()
     private var db = DatabaseProvider.getDatabase(context)
 
     companion object {
-        private var instances: ArrayList<Schedule> = ArrayList()
+        private var instances: HashMap<String, Schedule> = HashMap()
+        private var instanceLock = ReentrantLock()
 
         fun getInstance(context: Context, username: String = "~me"): Schedule {
-            if (instances.isEmpty() || !instances.any { it.username == username }) {
-                instances.add(Schedule(context, username))
+            instanceLock.lock()
+            if (!instances.containsKey(username)) {
+                instances[username] = Schedule(context, username)
             }
-            return instances.first { it.username == username }
+            val instance = instances[username]!!
+            instanceLock.unlock()
+            return instance
         }
 
         @Throws(IllegalStateException::class)
         fun getInstance(): Schedule {
+            instanceLock.lock()
             if (instances.isEmpty()) {
+                instanceLock.unlock()
                 throw IllegalStateException("No instances are available and context is needed to create a new instance")
+            } else {
+                val instance = instances.values.first()
+                instanceLock.unlock()
+                return instance
             }
-            return instances[0]
         }
     }
 

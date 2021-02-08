@@ -24,7 +24,7 @@
         <receiver android:name=".receiver.AlarmReceiver" />
         <receiver
             android:name=".widget.LesdagWidgetProvider"
-            android:label="Dagrooster Widget">
+            android:label="Dag- en uurrooster Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -32,6 +32,17 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_lesdag" />
+        </receiver>
+        <receiver
+            android:name=".widget.Lesdag2WidgetProvider"
+            android:label="Dagrooster Widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_lesdag_2" />
         </receiver>
         <receiver
             android:name=".widget.LesuurWidgetProvider"
@@ -78,6 +89,11 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
+
+        <service
+            android:name=".widget.ScheduleListSmallService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.wilco375.roosternotification
 
 import android.app.Application
 import android.content.Context
+import com.wilco375.roosternotification.general.Utils
 import io.multimoon.colorful.Defaults
 import io.multimoon.colorful.ThemeColor
 import io.multimoon.colorful.initColorful
@@ -10,18 +11,12 @@ class RoosterApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        var color = ThemeColor.BLUE
-        val website = getSharedPreferences("Main", Context.MODE_PRIVATE).getString("website", "")!!
-        if (website.startsWith("candea")) {
-            color = ThemeColor.ORANGE
-        } else if (website.startsWith("jpthijsse")) {
-            color = ThemeColor.GREEN
-        }
         val defaults = Defaults(
-                primaryColor = color,
-                accentColor = color,
-                useDarkTheme = false,
+                primaryColor = ThemeColor.BLUE,
+                accentColor = ThemeColor.BLUE,
+                useDarkTheme = Utils.isNightModeEnabled(this),
                 translucent = false)
         initColorful(this, defaults)
+        Utils.updateColorful(this)
     }
 }

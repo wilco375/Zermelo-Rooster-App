@@ -4,6 +4,8 @@ import android.app.*
 import android.appwidget.AppWidgetManager
 import android.content.*
 import android.content.res.Configuration
+import android.content.res.Resources
+import android.graphics.*
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -13,7 +15,11 @@ import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.receiver.AlarmReceiver
 import com.wilco375.roosternotification.widget.LesdagWidgetProvider
 import com.wilco375.roosternotification.widget.LesuurWidgetProvider
+import io.multimoon.colorful.Colorful
+import io.multimoon.colorful.ThemeColor
 import java.util.*
+import kotlin.math.roundToInt
+
 
 object Utils {
 
@@ -174,5 +180,49 @@ object Utils {
             Configuration.UI_MODE_NIGHT_YES -> true
             else -> false
         }
+    }
+
+    fun getSharedPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences("Main", Context.MODE_PRIVATE)
+    }
+
+    fun updateColorful(context: Context) {
+        var color = ThemeColor.BLUE
+        val website = Utils.getSharedPreferences(context).getString("website", "")!!
+        if (website.startsWith("candea")) {
+            color = ThemeColor.ORANGE
+        } else if (website.startsWith("jpthijsse")) {
+            color = ThemeColor.GREEN
+        }
+
+        Colorful().edit()
+                .setPrimaryColor(color)
+                .setAccentColor(color)
+                .apply(context)
+    }
+
+    fun dpToPx(dp: Double): Int {
+        return (dp * Resources.getSystem().displayMetrics.density).roundToInt()
+    }
+
+    /**
+     * Generate a square with rounded corners as a bitmap
+     * @param context
+     * @param size size of the square in dp
+     * @param borderRadius border radius of the square in dp
+     * @param color color of the square
+     */
+    fun getRoundedSquareBitmap(size: Double, borderRadius: Double, color: Int): Bitmap {
+        val sizePx = dpToPx(size)
+        val borderRadiusPx = dpToPx(borderRadius)
+
+        val bitmap = Bitmap.createBitmap(sizePx, sizePx, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.color = color
+        val rect = RectF(0.0f, 0.0f, sizePx.toFloat(), sizePx.toFloat())
+        canvas.drawRoundRect(rect, borderRadiusPx.toFloat(), borderRadiusPx.toFloat(), paint)
+
+        return bitmap
     }
 }

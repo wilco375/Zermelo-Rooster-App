@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/AppTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/app_widget_lesdag_layout"
+    android:layout_weight="1"
+    android:background="@drawable/background_round_corners"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/widgetTextColor"
+        android:background="@null"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/app_widget_lesdag_dag"
+        android:gravity="center_vertical"
+        android:text="Weekdag"
+        android:layout_marginBottom="4dp"
+        />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/app_widget_lesdag_dag"
+        android:divider="@null"
+        android:id="@+id/app_widget_lesdag_content"
+        android:listSelector="@android:color/transparent"
+        tools:listitem="@layout/schedule_list_small" />
+</RelativeLayout>
