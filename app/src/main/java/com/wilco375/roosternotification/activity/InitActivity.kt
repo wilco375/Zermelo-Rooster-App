@@ -1,10 +1,8 @@
 package com.wilco375.roosternotification.activity
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.exception.InvalidCodeException
@@ -14,8 +12,6 @@ import com.wilco375.roosternotification.exception.UnknownAuthenticationException
 import com.wilco375.roosternotification.general.Utils
 import com.wilco375.roosternotification.online.ZermeloSync
 import io.multimoon.colorful.CAppCompatActivity
-import io.multimoon.colorful.Defaults
-import io.multimoon.colorful.initColorful
 import kotlinx.android.synthetic.main.activity_init.*
 import kotlinx.android.synthetic.main.content_init.*
 

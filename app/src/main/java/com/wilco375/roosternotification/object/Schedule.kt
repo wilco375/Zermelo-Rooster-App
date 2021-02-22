@@ -1,7 +1,6 @@
 package com.wilco375.roosternotification.`object`
 
 import android.content.Context
-import android.database.Cursor
 import com.wilco375.roosternotification.general.Config
 import com.wilco375.roosternotification.general.DatabaseProvider
 import java.io.Serializable

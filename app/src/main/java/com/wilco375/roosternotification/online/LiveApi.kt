@@ -1,7 +1,5 @@
 package com.wilco375.roosternotification.online
 
-import android.widget.Toast
-import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.`object`.items
 import com.wilco375.roosternotification.exception.InvalidCodeException
 import com.wilco375.roosternotification.exception.InvalidWebsiteException

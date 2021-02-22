@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.receiver.AlarmReceiver
+import com.wilco375.roosternotification.widget.Lesdag2WidgetProvider
 import com.wilco375.roosternotification.widget.LesdagWidgetProvider
 import com.wilco375.roosternotification.widget.LesuurWidgetProvider
 import io.multimoon.colorful.Colorful
@@ -96,12 +97,13 @@ object Utils {
     // Update widgets
     fun updateWidgets(context: Context) {
         val ids = AppWidgetManager.getInstance(context).getAppWidgetIds(ComponentName(context, LesdagWidgetProvider::class.java))
-        val lesdagWidget = LesdagWidgetProvider()
-        lesdagWidget.onUpdate(context, AppWidgetManager.getInstance(context), ids)
+        LesdagWidgetProvider().onUpdate(context, AppWidgetManager.getInstance(context), ids)
 
         val ids2 = AppWidgetManager.getInstance(context).getAppWidgetIds(ComponentName(context, LesuurWidgetProvider::class.java))
-        val lesuurWidget = LesuurWidgetProvider()
-        lesuurWidget.onUpdate(context, AppWidgetManager.getInstance(context), ids2)
+        LesuurWidgetProvider().onUpdate(context, AppWidgetManager.getInstance(context), ids2)
+
+        val ids3 = AppWidgetManager.getInstance(context).getAppWidgetIds(ComponentName(context, Lesdag2WidgetProvider::class.java))
+        Lesdag2WidgetProvider().onUpdate(context, AppWidgetManager.getInstance(context), ids3)
     }
 
     fun currentDay(): String {
@@ -186,19 +188,49 @@ object Utils {
         return context.getSharedPreferences("Main", Context.MODE_PRIVATE)
     }
 
-    fun updateColorful(context: Context) {
-        var color = ThemeColor.BLUE
-        val website = Utils.getSharedPreferences(context).getString("website", "")!!
-        if (website.startsWith("candea")) {
-            color = ThemeColor.ORANGE
-        } else if (website.startsWith("jpthijsse")) {
-            color = ThemeColor.GREEN
+    fun getColorfulColor(sp: SharedPreferences): ThemeColor {
+        var color = sp.getString("theme_color", "")!!
+        if (color.isBlank()) {
+            val website = sp.getString("website", "")!!
+            color = when {
+                website.startsWith("candea") -> ThemeColor.YELLOW.name
+                website.startsWith("jpthijsse") -> ThemeColor.GREEN.name
+                else -> ThemeColor.BLUE.name
+            }
         }
 
-        Colorful().edit()
+        return getColorfulColorByName(color)
+    }
+
+    private fun getColorfulColorByName(name: String): ThemeColor {
+        var themeColor = ThemeColor.BLUE
+        for (c in ThemeColor.values()) {
+            if (c.name == name) {
+                themeColor = c
+            }
+        }
+        return themeColor
+    }
+
+    fun updateColorful(context: Context, newColor: String? = null) {
+        val color = if (newColor != null) {
+            getColorfulColorByName(newColor)
+        } else {
+            getColorfulColor(getSharedPreferences(context))
+        }
+
+        println("Updating color to "+color.name)
+
+        val edit = Colorful().edit()
                 .setPrimaryColor(color)
                 .setAccentColor(color)
-                .apply(context)
+        if (newColor != null && context is Activity) {
+            edit.apply(context) {
+                context.recreate()
+            }
+        } else {
+            edit.apply(context)
+        }
     }
 
     fun dpToPx(dp: Double): Int {

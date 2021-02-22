@@ -1,7 +1,6 @@
 package com.wilco375.roosternotification
 
 import android.app.Application
-import android.content.Context
 import com.wilco375.roosternotification.general.Utils
 import io.multimoon.colorful.Defaults
 import io.multimoon.colorful.ThemeColor

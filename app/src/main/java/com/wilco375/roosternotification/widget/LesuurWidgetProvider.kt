@@ -5,13 +5,11 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.text.SpannableString
-import android.text.style.StrikethroughSpan
 import android.view.View
 import android.widget.RemoteViews
-import android.widget.TextView
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.`object`.Schedule
+import com.wilco375.roosternotification.`object`.ScheduleItem
 import com.wilco375.roosternotification.activity.MainActivity
 import com.wilco375.roosternotification.general.Utils
 import io.multimoon.colorful.Colorful
@@ -33,14 +31,9 @@ class LesuurWidgetProvider : AppWidgetProvider() {
 
             val schedule = Schedule.getInstance(context)[Utils.currentScheduleDate()]
 
-            // Get 15 minutes before current time
+            // Get first upcoming lesson with and offset of 15 minutes
             val currentTime = Calendar.getInstance().also { it.add(Calendar.MINUTE, 15) }.time
-            var upcomingItem = schedule.getItems().firstOrNull()
-            for (lesson in schedule) {
-                if (currentTime >= lesson.start && currentTime <= lesson.end) {
-                    upcomingItem = lesson
-                }
-            }
+            val upcomingItem = schedule.getItems().firstOrNull { currentTime <= it.end }
 
             val sp = Utils.getSharedPreferences(context)
             val teacher = sp.getBoolean("teacher", false)
@@ -58,6 +51,9 @@ class LesuurWidgetProvider : AppWidgetProvider() {
             )
 
             if (upcomingItem != null) {
+                views.setViewVisibility(R.id.has_content, View.VISIBLE)
+                views.setViewVisibility(R.id.no_content, View.GONE)
+
                 var summary = upcomingItem.getSubjectAndGroup(sp)
                 if (upcomingItem.timeslot != 0) {
                     summary = "${upcomingItem.timeslot}. " + summary
@@ -74,10 +70,8 @@ class LesuurWidgetProvider : AppWidgetProvider() {
                         "${hourFormat.format(upcomingItem.start)} - ${hourFormat.format(upcomingItem.end)}")
                 views.setTextViewText(R.id.app_widget_lesdag_location, upcomingItem.location)
             } else {
-                views.setTextViewText(R.id.app_widget_lesdag_subject, "")
-                views.setTextViewText(R.id.app_widget_lesdag_teacher, "")
-                views.setTextViewText(R.id.app_widget_lesdag_time, "")
-                views.setTextViewText(R.id.app_widget_lesdag_location, "")
+                views.setViewVisibility(R.id.has_content, View.GONE)
+                views.setViewVisibility(R.id.no_content, View.VISIBLE)
             }
 
             appWidgetManager.updateAppWidget(appWidgetId, views)

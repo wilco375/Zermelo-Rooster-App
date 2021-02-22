@@ -5,17 +5,11 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.view.View
 import android.widget.RemoteViews
-import android.widget.TextView
 import com.wilco375.roosternotification.R
-import com.wilco375.roosternotification.`object`.Schedule
 import com.wilco375.roosternotification.activity.MainActivity
 import com.wilco375.roosternotification.general.Utils
 import io.multimoon.colorful.Colorful
-import io.multimoon.colorful.Defaults
-import io.multimoon.colorful.ThemeColor
-import io.multimoon.colorful.initColorful
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,6 +32,7 @@ class Lesdag2WidgetProvider : AppWidgetProvider() {
 
             val serviceIntent = Intent(context, ScheduleListSmallService::class.java)
             views.setRemoteAdapter(R.id.app_widget_lesdag_content, serviceIntent)
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.app_widget_lesdag_content)
 
             views.setPendingIntentTemplate(R.id.app_widget_lesdag_content, pendingIntent)
 

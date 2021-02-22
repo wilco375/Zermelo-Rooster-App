@@ -6,57 +6,75 @@
     android:id="@+id/app_widget_lesdag_hour"
     android:orientation="vertical"
     android:background="@drawable/background_round_corners"
-    android:padding="16dp"
+    android:padding="14dp"
     android:layout_weight="1">
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/textColor"
-        android:text="DU"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:id="@+id/app_widget_lesdag_subject"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Docent"
-        android:textColor="@color/textColor"
-        android:id="@+id/app_widget_lesdag_teacher" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="9:00 - 11:00"
-        android:layout_marginTop="6dp"
-        android:textColor="@color/textColor"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:id="@+id/app_widget_lesdag_time"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Lokaal"
-        android:textColor="@color/textColor"
-        android:layout_marginTop="16dp"
-        android:id="@+id/app_widget_lesdag_location_label"/>
-    <RelativeLayout
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/app_widget_lesdag_location_label"
-        android:layout_gravity="center">
-        <ImageView
-            android:id="@+id/app_widget_lesdag_location_bg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"/>
+        android:orientation="vertical"
+        android:id="@+id/has_content">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:id="@+id/app_widget_lesdag_location"
-            android:text="111"
-            android:textSize="18sp"
-            android:textColor="#fff"/>
-    </RelativeLayout>
+            android:textColor="@color/textColor"
+            android:text="DU"
+            android:textSize="20sp"
+            android:id="@+id/app_widget_lesdag_subject"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Docent"
+            android:textColor="@color/textColor"
+            android:id="@+id/app_widget_lesdag_teacher" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9:00 - 11:00"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/textColor"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:id="@+id/app_widget_lesdag_time"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Lokaal"
+            android:textColor="@color/textColor"
+            android:layout_marginTop="6dp"
+            android:id="@+id/app_widget_lesdag_location_label"/>
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/app_widget_lesdag_location_label"
+            android:layout_gravity="center">
+            <ImageView
+                android:id="@+id/app_widget_lesdag_location_bg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:id="@+id/app_widget_lesdag_location"
+                android:text="111"
+                android:textSize="18sp"
+                android:textColor="#fff"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/no_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:text="@string/no_upcoming_lesson" />
+    </LinearLayout>
 </LinearLayout>

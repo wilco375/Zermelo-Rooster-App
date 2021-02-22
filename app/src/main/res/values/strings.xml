@@ -37,6 +37,7 @@
     <string name="teacher">Laat docenten zien</string>
     <string name="teacher_full">Laat volledige naam docenten zien wanneer beschikbaar</string>
     <string name="use_dark_mode">Gebruik donker thema</string>
+    <string name="theme_color">Thema kleur</string>
     <string name="schedule">Rooster</string>
     <string name="first_day_of_week">Maandag</string>
     <string name="back">&lt;</string>
@@ -47,6 +48,7 @@
     <string name="title_activity_help">HelpActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="no_lessons">Geen lessen gevonden</string>
+    <string name="no_upcoming_lesson">Geen aankomende les</string>
     <string name="user">Toon ander rooster</string>
     <string name="user_id">Leerlingnummer of lerarenafkorting</string>
     <string name="me">Mijn rooster</string>
