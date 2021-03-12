@@ -1,10 +1,12 @@
 package com.wilco375.roosternotification.activity
 
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import com.wilco375.roosternotification.R
 import com.wilco375.roosternotification.general.Utils
@@ -14,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.content_settings.*
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class SettingsActivity : CAppCompatActivity() {
 
@@ -111,6 +114,11 @@ class SettingsActivity : CAppCompatActivity() {
 
         themeColorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (Utils.isNightModeEnabled(this@SettingsActivity)) {
+                    (adapterView?.getChildAt(0) as TextView?)?.setTextColor(Color.WHITE)
+                } else {
+                    (adapterView?.getChildAt(0) as TextView?)?.setTextColor(Color.BLACK)
+                }
                 if (currentColor != colors[position]) {
                     currentColor = colors[position]
                     sp.edit().putString("theme_color", colors[position]).apply()
