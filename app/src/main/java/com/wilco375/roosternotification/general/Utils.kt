@@ -53,6 +53,7 @@ object Utils {
         var offset = 0
         val day = calendar.get(Calendar.DAY_OF_WEEK)
         if (calendar.get(Calendar.HOUR_OF_DAY) > 17) offset = 1
+        if (day == Calendar.FRIDAY && calendar.get(Calendar.HOUR_OF_DAY) > 17) offset = 3
         if (day >= Calendar.SATURDAY) offset = 2
         if (day == Calendar.SUNDAY) offset = 1
         calendar.add(Calendar.HOUR, 24 * offset)
